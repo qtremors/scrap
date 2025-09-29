@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tremors // Terminal</title>
+    
+    <link rel="icon" type="image/svg+xml" href="assets/alien.svg">
+    <link rel="stylesheet" href="index1.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="background-effects">
+        <div class="grid"></div>
+    </div>
+
+    <div class="terminal-window">
+        <header class="terminal-header">
+            <div class="header-buttons">
+                <span class="dot red"></span>
+                <span class="dot yellow"></span>
+                <span class="dot green"></span>
+            </div>
+            <div class="header-title">tremors@portfolio:~</div>
+            <nav class="terminal-nav">
+                <a href="#home" class="nav-item active">/home</a>
+                <a href="#about" class="nav-item">/about</a>
+                <a href="#skills" class="nav-item">/skills</a>
+                <a href="#portfolio" class="nav-item">/work</a>
+                <a href="#contact" class="nav-item">/contact</a>
+            </nav>
+        </header>
+
+        <main class="terminal-body">
+            <section id="home" class="terminal-section">
+                <div class="hero-content">
+                    <img src="assets/aman.png" alt="Profile Photo of Aman" class="hero-avatar">
+                    <div class="hero-text">
+                        <h1 class="line-1">Aman Singh</h1>
+                        <p class="line-2">> Junior Python Developer</p>
+                        <div class="hero-actions">
+                             <a href="assets/Aman_Singh.pdf" download="Aman_Singh.pdf" class="btn btn-primary" aria-label="Download my resume">
+                                <span>Download CV</span>
+                            </a>
+                            <a href="#portfolio" class="btn btn-secondary">
+                                <span>View Work</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="terminal-section">
+                <h2>[ About Me ]</h2>
+                <div class="about-text">
+                    <p>> I am a Computer Science Engineering graduate specializing in Python and Django. My professional experience includes a 6-month internship as a Junior Developer, where I contributed to real-world web applications and strengthened my problem-solving skills.</p>
+                    <p>> My approach to software development is built on a foundation of pragmatic problem-solving and a methodical debugging process. I am committed to writing clean, maintainable code and implementing best practices to ensure quality and security. While my expertise is in crafting backend logic, I have a strong appreciation for user experience and intuitive design, always keeping the end-user in mind.</p>
+                    <p>> While my immediate goal is to excel as a Python dev, I am actively learning AI/ML in my personal time and plan to transition into that field after building a solid foundation in software engineering. I am eager to join a forward-thinking team where I can contribute to challenging projects and continue to grow as a developer.</p>
+                </div>
+            </section>
+
+            <section id="skills" class="terminal-section">
+                <h2>[ Skillset Matrix ]</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h3>// Frontend Development</h3>
+                        <ul>
+                            <li>HTML5</li>
+                            <li>CSS3</li>
+                            <li>JavaScript</li>
+                            <li>React</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>// Backend & Databases</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>Django</li>
+                            <li>FastAPI</li>
+                            <li>Node.js</li>
+                            <li>MySQL</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>// Libraries & AI/ML</h3>
+                        <ul>
+                            <li>Numpy</li>
+                            <li>Pandas</li>
+                            <li>TensorFlow</li>
+                            <li>PyTorch</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>// Platforms & Tools</h3>
+                        <ul>
+                            <li>Git</li>
+                            <li>VS Code</li>
+                            <li>Jupyter</li>
+                            <li>Docker</li>
+                            <li>Windows / Linux</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="portfolio" class="terminal-section">
+                <h2>[ Project Directory ]</h2>
+                <div class="portfolio-grid">
+                    <article class="portfolio-card">
+                        <img src="assets/algoviz-preview.jpg" alt="Algorithm Visualizer Project Preview" class="card-image">
+                        <div class="card-content">
+                            <h3>Algorithm Visualizer</h3>
+                            <p>A full-stack app for real-time, interactive algorithm visualizations using React (TypeScript) and FastAPI (Python).</p>
+                             <div class="tech-tags">
+                                <span>React</span><span>TypeScript</span><span>Python</span><span>FastAPI</span>
+                            </div>
+                            <div class="card-links">
+                                <a href="https://tremors-algoviz.netlify.app" target="_blank" rel="noopener noreferrer">Live Site &rarr;</a>
+                                <a href="https://github.com/qtremors/algorithm-visualizer" target="_blank" rel="noopener noreferrer">Source Code &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="portfolio-card">
+                        <img src="assets/plant-disease-detector-preview.jpg" alt="Plant Disease Detector Project Preview" class="card-image">
+                        <div class="card-content">
+                            <h3>Plant Disease Detector</h3>
+                            <p>A Django and TensorFlow web app that classifies plant diseases from leaf images, allowing users to upload an image and get health predictions.</p>
+                            <div class="tech-tags">
+                                <span>Django</span><span>TensorFlow</span><span>Pillow</span><span>NumPy</span><span>Plotly</span>
+                            </div>
+                            <div class="card-links">
+                                <a href="construction.html">Live Site &rarr;</a>
+                                <a href="https://github.com/qtremors/plant-disease-detector" target="_blank" rel="noopener noreferrer">Source Code &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+
+                     <article class="portfolio-card">
+                        <img src="assets/eshopper-preview.jpg" alt="E-commerce Project Preview" class="card-image">
+                        <div class="card-content">
+                            <h3>E-commerce Website</h3>
+                            <p>A fully functional e-commerce site built with Python and Django, using the "EShopper" template and offering a complete storefront.</p>
+                             <div class="tech-tags">
+                                <span>Django</span><span>HTML</span><span>CSS</span><span>JS</span><span>SQL</span>
+                            </div>
+                            <div class="card-links">
+                                <a href="https://tremors.pythonanywhere.com/" target="_blank" rel="noopener noreferrer">Live Site &rarr;</a>
+                                <a href="https://github.com/qtremors/eshopper" target="_blank" rel="noopener noreferrer">Source Code &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="portfolio-card">
+                        <img src="assets/nexus-preview.png" alt="Nexus Preview" class="card-image">
+                        <div class="card-content">
+                            <h3>Nexus</h3>
+                            <p>A creative landing page designed to navigate through my digital universe by deploying a fleet of spaceships from the space station.</p>
+                            <div class="tech-tags">
+                                <span>NextJs</span><span>React</span><span>Framer-Motion</span><span>tsParticles</span>
+                            </div>
+                            <div class="card-links">
+                                <a href="https://tremors.vercel.app" target="_blank" rel="noopener noreferrer">Live Site &rarr;</a>
+                                <a href="https://github.com/qtremors/nexus" target="_blank" rel="noopener noreferrer">Source Code &rarr;</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            
+            <section id="contact" class="terminal-section">
+                <h2>[ Get In Touch ]</h2>
+                <p class="contact-intro">> I'm currently looking for new opportunities. My inbox is always open, whether you have a question or just want to say hi.</p>
+                <div class="social-links">
+                     <a href="https://github.com/qtremors" aria-label="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
+                     <a href="mailto:singhamankumar207@gmail.com" aria-label="Email">Email</a>
+                     <a href="https://www.linkedin.com/in/aman-singh-0a1938301" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+                </div>
+            </section>
+            
+            <footer class="terminal-footer">
+                <p>Status: 200 OK | &copy; 2025 Tremors | Session End</p>
+            </footer>
+        </main>
+    </div>
+    
+    <script src="index1.js"></script>
+</body>
+</html>
