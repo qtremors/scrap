@@ -2,7 +2,7 @@
 
 A unique, scroll-based showcase for my abandoned, scrapped, and forgotten web project ideas. This project visualizes discarded concepts as a scattered pile of papers that you can scroll through in a 3D-like environment.
 
-📄 **Website: [`https://qtremors.github.io/scrap`]((https://qtremors.github.io/scrap))**
+📄 **Website: [`https://qtremors.github.io/scrap`](https://qtremors.github.io/scrap)**
 
 ## The Concept
 
