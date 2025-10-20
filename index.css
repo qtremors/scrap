@@ -56,12 +56,11 @@ body {
     color: #00bb2d;
 }
 
-/* --- NEW STYLES ADDED BELOW --- */
 
 .project-card .project-note {
-    font-family: 'Courier New', Courier, monospace; /* Changed to match other text */
+    font-family: 'Courier New', Courier, monospace;
     font-size: 0.7rem;
-    color: #333; /* Plain dark text */
+    color: #333;
     margin: 0.5rem 0 0 0;
     white-space: pre-wrap; 
     word-break: break-word;
@@ -69,6 +68,6 @@ body {
 
 .project-card .project-note::before {
     content: "NOTE: ";
-    color: #d1002c; /* Match the title color */
+    color: #d1002c;
     font-family: 'Courier New', Courier, monospace;
 }

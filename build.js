@@ -3,44 +3,42 @@ const path = require('path');
 
 const rootDir = __dirname;
 const templatePath = path.join(rootDir, '_template.html');
-const outputPath = path.join(rootDir, 'index.html'); // This is the file GitHub Pages will serve
+const outputPath = path.join(rootDir, 'index.html');
 
 function getProjectItems() {
     return fs.readdirSync(rootDir, { withFileTypes: true })
         .filter(dirent => 
-            dirent.isDirectory() &&                  // Must be a directory
-            !dirent.name.startsWith('_') &&          // Ignore _scrapped
-            !dirent.name.startsWith('.')             // Ignore .git, .github
+            dirent.isDirectory() &&
+            !dirent.name.startsWith('_') &&
+            !dirent.name.startsWith('.')
         )
         .map(dirent => dirent.name)
-        .sort(); // Sort alphabetically
+        .sort();
 }
 
 function generateCardHTML(folderName) {
     let title = folderName.replace(/[-_]/g, ' ');
-    let note = ''; // Default to empty string
+    let note = '';
     let linkPath = `./${folderName}/index.html`;
 
-    // Handle directory case
+
     const metaPath = path.join(rootDir, folderName, 'meta.json');
     if (fs.existsSync(metaPath)) {
         try {
             const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
             if (meta.title) title = meta.title;
-            if (meta.note) note = meta.note; // Get the note text
+            if (meta.note) note = meta.note;
             if (meta.mainFile) linkPath = `./${folderName}/${meta.mainFile}`;
         } catch (e) {
             console.warn(`Could not parse meta.json for ${folderName}: ${e.message}`);
         }
-    } else if (folderName === 'index4') { 
-        // Fallback for your specific case
+    } else if (folderName === 'index4') {
         note = 'This requires a running server for the json data';
     } else if (!fs.existsSync(path.join(rootDir, folderName, 'index.html'))) {
         console.warn(`No index.html or meta.json found for ${folderName}. Skipping.`);
-        return null; // Skip this folder
+        return null;
     }
 
-    // Create the note HTML only if a note exists
     const noteHTML = note ? `<p class="project-note">${note}</p>` : '';
 
     return `
@@ -51,7 +49,7 @@ function generateCardHTML(folderName) {
     </a>`;
 }
 
-// --- Main Build Process ---
+
 try {
     console.log('Starting build...');
     
@@ -59,7 +57,7 @@ try {
 
     const projectLinks = projectItems
         .map(generateCardHTML)
-        .filter(Boolean) // Remove any nulls
+        .filter(Boolean)
         .join('\n');
 
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
