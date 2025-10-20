@@ -55,3 +55,20 @@ body {
     content: "PATH: ";
     color: #00bb2d;
 }
+
+/* --- NEW STYLES ADDED BELOW --- */
+
+.project-card .project-note {
+    font-family: 'Courier New', Courier, monospace; /* Changed to match other text */
+    font-size: 0.7rem;
+    color: #333; /* Plain dark text */
+    margin: 0.5rem 0 0 0;
+    white-space: pre-wrap; 
+    word-break: break-word;
+}
+
+.project-card .project-note::before {
+    content: "NOTE: ";
+    color: #d1002c; /* Match the title color */
+    font-family: 'Courier New', Courier, monospace;
+}
