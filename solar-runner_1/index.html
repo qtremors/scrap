@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Runner</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="ui-container">
+        <div id="score-container">
+            Score: <span id="score-status">0</span>
+            <span id="multiplier-status">(x1)</span>
+        </div>
+        <div id="energy-bar-container">
+            <div id="energy-bar"></div>
+        </div>
+    </div>
+    <div id="controls-guide">
+        <p><b>Arrow Keys:</b> Move | <b>Stay in the Light!</b></p>
+    </div>
+
+    <div id="ui-overlay">
+        <div id="loading-screen">LOADING...</div>
+        <div id="pause-screen" class="hidden">PAUSED</div>
+        <div id="game-over-screen" class="hidden">
+            <h2>RUN ENDED</h2>
+            <p>Final Score: <span id="final-score">0</span></p>
+            <button id="restart-button">Restart</button>
+            <p class="restart-hint">Press 'Enter' to try again</p>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Flare</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #canvas {
+            display: block;
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        #ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        #score, #multiplier {
+            font-size: 24px;
+            text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+        }
+        #energy-container {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 20px;
+            border: 2px solid #0ff;
+            border-radius: 5px;
+            background-color: rgba(0, 255, 255, 0.1);
+        }
+        #energy-bar {
+            width: 100%;
+            height: 100%;
+            background-color: #0ff;
+            box-shadow: 0 0 10px #0ff, 0 0 15px #0ff;
+            transition: width 0.1s linear;
+        }
+        .title-text {
+            font-size: 64px;
+            margin: 0;
+            text-shadow: 0 0 10px #f0f, 0 0 20px #f0f;
+        }
+        .info-text {
+            font-size: 20px;
+            margin: 20px;
+            max-width: 500px;
+            line-height: 1.5;
+            text-shadow: 0 0 5px #fff;
+        }
+        .action-button {
+            font-size: 24px;
+            padding: 10px 20px;
+            background-color: transparent;
+            border: 2px solid #0ff;
+            color: #0ff;
+            cursor: pointer;
+            text-shadow: 0 0 5px #0ff;
+            transition: background-color 0.3s, color 0.3s;
+            pointer-events: all;
+        }
+        .action-button:hover {
+            background-color: #0ff;
+            color: #000;
+        }
+        #game-over h1 {
+            text-shadow: 0 0 10px #f00, 0 0 20px #f00;
+        }
+        #high-score {
+            font-size: 24px;
+            margin-top: 10px;
+            color: #f0f;
+            text-shadow: 0 0 5px #f0f;
+        }
+    </style>
+</head>
+<body>
+    <div id="ui">
+        <div id="hud">
+            <div id="score">Score: 0</div>
+            <div id="multiplier">x1</div>
+        </div>
+        <div id="energy-container">
+            <div id="energy-bar"></div>
+        </div>
+    </div>
+
+    <div id="start-screen" class="overlay">
+        <h1 class="title-text">STELLAR FLARE</h1>
+        <p class="info-text">
+            Use the ARROW KEYS to navigate your ship.<br>
+            Stay in the light of the star to recharge your energy.<br>
+            Flying in shadows drains energy. Avoid asteroids.<br>
+            Collect glowing tetrahedrons to increase your score multiplier.
+        </p>
+        <button id="start-button" class="action-button">START GAME</button>
+    </div>
+
+    <div id="pause-screen" class="overlay" style="display: none;">
+        <h1 class="title-text">PAUSED</h1>
+        <p class="info-text">Press 'P' to resume</p>
+    </div>
+
+    <div id="game-over" class="overlay" style="display: none;">
+        <h1 class="title-text">GAME OVER</h1>
+        <div id="final-score" class="info-text">Score: 0</div>
+        <div id="high-score" class="info-text">High Score: 0</div>
+        <button id="restart-button" class="action-button">RESTART</button>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.164.1/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.164.1/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
+
+        // --- SCENE SETUP ---
+        let scene, camera, renderer, sun;
+        let gameState = 'START';
+
+        // --- GAME OBJECTS ---
+        let playerShip;
+        const obstacles = [];
+        const pickups = [];
+        const OBSTACLE_COUNT = 50;
+        const PICKUP_COUNT = 20;
+
+        // --- GAMEPLAY PARAMS ---
+        let score = 0;
+        let multiplier = 1;
+        let energy = 100;
+        let highScore = 0;
+        const worldSpeed = 2;
+        const farPlane = 4000;
+
+        // --- CONTROLS ---
+        const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+        const playerTargetPosition = new THREE.Vector3();
+        const playerMoveBounds = { x: 20, y: 10 };
+
+        // --- UI ELEMENTS ---
+        const hudEl = document.getElementById('hud');
+        const scoreEl = document.getElementById('score');
+        const multiplierEl = document.getElementById('multiplier');
+        const energyBarEl = document.getElementById('energy-bar');
+        const startScreenEl = document.getElementById('start-screen');
+        const pauseScreenEl = document.getElementById('pause-screen');
+        const gameOverEl = document.getElementById('game-over');
+        const finalScoreEl = document.getElementById('final-score');
+        const highScoreEl = document.getElementById('high-score');
+        const startButton = document.getElementById('start-button');
+        const restartButton = document.getElementById('restart-button');
+
+        // --- AUDIO ---
+        let audioCtx, masterGain, hummer, hummerGain;
+        let isAudioInitialized = false;
+
+        // --- RAYCASTING ---
+        const raycaster = new THREE.Raycaster();
+        const sunDirection = new THREE.Vector3();
+
+        function init() {
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000005);
+            scene.fog = new THREE.Fog(0x000005, farPlane / 2, farPlane);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, farPlane);
+            camera.position.set(0, 5, 15);
+            camera.lookAt(0, 0, 0);
+
+            const ambient = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambient);
+
+            sun = new THREE.DirectionalLight(0xffffff, 4);
+            sun.position.set(100, 200, 300);
+            sun.castShadow = true;
+            sun.shadow.camera.left = -100; sun.shadow.camera.right = 100;
+            sun.shadow.camera.top = 100; sun.shadow.camera.bottom = -100;
+            sun.shadow.camera.near = 1; sun.shadow.camera.far = 1000;
+            sun.shadow.mapSize.width = 2048; sun.shadow.mapSize.height = 2048;
+            scene.add(sun);
+            sunDirection.copy(sun.position).normalize().negate();
+
+            const textureLoader = new THREE.TextureLoader();
+            const flareTexture = textureLoader.load('https://unpkg.com/three@0.164.1/examples/textures/lensflare/lensflare0.png');
+            const flareTexture2 = textureLoader.load('https://unpkg.com/three@0.164.1/examples/textures/lensflare/lensflare3.png');
+            const lensflare = new Lensflare();
+            lensflare.addElement(new LensflareElement(flareTexture, 700, 0, sun.color));
+            lensflare.addElement(new LensflareElement(flareTexture2, 60, 0.6));
+            lensflare.addElement(new LensflareElement(flareTexture2, 70, 0.7));
+            lensflare.addElement(new LensflareElement(flareTexture2, 120, 0.9));
+            lensflare.addElement(new LensflareElement(flareTexture2, 70, 1));
+            sun.add(lensflare);
+
+            const playerGeo = new THREE.ConeGeometry(1, 3, 8);
+            const playerMat = new THREE.MeshPhongMaterial({ color: 0x00ffff, emissive: 0x00ffff, emissiveIntensity: 0.5 });
+            playerShip = new THREE.Mesh(playerGeo, playerMat);
+            playerShip.rotation.x = Math.PI / 2;
+            playerShip.castShadow = true;
+            playerShip.userData.boundingSphere = new THREE.Sphere(playerShip.position, 1);
+            scene.add(playerShip);
+
+            const obstacleGeo = new THREE.IcosahedronGeometry(1, 0);
+            const obstacleMat = new THREE.MeshPhongMaterial({ color: 0xcccccc, flatShading: true });
+            for (let i = 0; i < OBSTACLE_COUNT; i++) {
+                const obstacle = new THREE.Mesh(obstacleGeo, obstacleMat);
+                obstacle.castShadow = true; obstacle.receiveShadow = true;
+                obstacle.userData.boundingSphere = new THREE.Sphere();
+                obstacles.push(obstacle);
+                scene.add(obstacle);
+            }
+
+            const pickupGeo = new THREE.TetrahedronGeometry(0.8, 0);
+            const pickupMat = new THREE.MeshBasicMaterial({ color: 0xffff00, wireframe: true });
+            for (let i = 0; i < PICKUP_COUNT; i++) {
+                const pickup = new THREE.Mesh(pickupGeo, pickupMat);
+                pickup.userData.boundingSphere = new THREE.Sphere();
+                pickups.push(pickup);
+                scene.add(pickup);
+            }
+            
+            highScore = localStorage.getItem('stellarFlareHighScore') || 0;
+
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', (e) => { if (e.key in keys) keys[e.key] = false; });
+            window.addEventListener('resize', onWindowResize);
+            startButton.addEventListener('click', startGame);
+            restartButton.addEventListener('click', startGame);
+
+            // Spawn objects once but keep them ready
+            obstacles.forEach(o => respawnObject(o, true));
+            pickups.forEach(p => respawnObject(p, true));
+            
+            animate();
+        }
+
+        function initAudio() {
+            if (isAudioInitialized) return;
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            masterGain = audioCtx.createGain();
+            masterGain.gain.value = 0.5;
+            masterGain.connect(audioCtx.destination);
+            
+            hummerGain = audioCtx.createGain();
+            hummerGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            hummerGain.connect(masterGain);
+
+            hummer = audioCtx.createOscillator();
+            hummer.type = 'sine';
+            hummer.frequency.setValueAtTime(50, audioCtx.currentTime);
+            hummer.connect(hummerGain);
+            hummer.start();
+
+            isAudioInitialized = true;
+        }
+
+        function startGame() {
+            initAudio();
+            resetGame();
+        }
+
+        function resetGame() {
+            score = 0;
+            multiplier = 1;
+            energy = 100;
+            
+            playerShip.position.set(0, 0, 0);
+            playerTargetPosition.set(0, 0, 0);
+
+            obstacles.forEach(o => respawnObject(o, true));
+            pickups.forEach(p => respawnObject(p, true));
+
+            startScreenEl.style.display = 'none';
+            gameOverEl.style.display = 'none';
+            pauseScreenEl.style.display = 'none';
+            hudEl.style.opacity = 1;
+
+            updateUI();
+            gameState = 'PLAYING';
+        }
+
+        function handleKeyDown(e) {
+            if (e.key in keys) keys[e.key] = true;
+            if (e.key.toLowerCase() === 'p') {
+                togglePause();
+            }
+        }
+
+        function togglePause() {
+            if (gameState === 'PLAYING') {
+                gameState = 'PAUSED';
+                pauseScreenEl.style.display = 'flex';
+                hudEl.style.opacity = 0.5;
+                if(isAudioInitialized) hummerGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+            } else if (gameState === 'PAUSED') {
+                gameState = 'PLAYING';
+                pauseScreenEl.style.display = 'none';
+                hudEl.style.opacity = 1;
+            }
+        }
+
+        function setGameOver() {
+            gameState = 'GAME_OVER';
+            if (score > highScore) {
+                highScore = Math.floor(score);
+                localStorage.setItem('stellarFlareHighScore', highScore);
+            }
+            finalScoreEl.textContent = `Score: ${Math.floor(score)}`;
+            highScoreEl.textContent = `High Score: ${highScore}`;
+            gameOverEl.style.display = 'flex';
+            hudEl.style.opacity = 0;
+            playGameOverSound();
+        }
+
+        function respawnObject(obj, isInitialSpawn = false) {
+            const scale = THREE.MathUtils.randFloat(2, 15);
+            obj.scale.set(scale, scale, scale);
+            obj.position.x = THREE.MathUtils.randFloatSpread(playerMoveBounds.x * 10);
+            obj.position.y = THREE.MathUtils.randFloatSpread(playerMoveBounds.y * 10);
+            obj.position.z = isInitialSpawn ? THREE.MathUtils.randFloat(-farPlane, -100) : -farPlane;
+            obj.userData.boundingSphere.center.copy(obj.position);
+            obj.userData.boundingSphere.radius = scale;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function handleControls() {
+            const moveSpeed = 0.5;
+            if (keys.ArrowUp) playerTargetPosition.y += moveSpeed;
+            if (keys.ArrowDown) playerTargetPosition.y -= moveSpeed;
+            if (keys.ArrowLeft) playerTargetPosition.x -= moveSpeed;
+            if (keys.ArrowRight) playerTargetPosition.x += moveSpeed;
+
+            playerTargetPosition.x = THREE.MathUtils.clamp(playerTargetPosition.x, -playerMoveBounds.x, playerMoveBounds.x);
+            playerTargetPosition.y = THREE.MathUtils.clamp(playerTargetPosition.y, -playerMoveBounds.y, playerMoveBounds.y);
+
+            playerShip.position.lerp(playerTargetPosition, 0.1);
+            playerShip.rotation.z = (playerTargetPosition.x - playerShip.position.x) * -0.2;
+            playerShip.rotation.y = (playerTargetPosition.y - playerShip.position.y) * 0.1;
+        }
+
+        function updateGameWorld() {
+            const speed = worldSpeed + (score / 5000);
+            [...obstacles, ...pickups].forEach(obj => {
+                obj.position.z += speed;
+                if (obj.position.z > camera.position.z) respawnObject(obj);
+                obj.userData.boundingSphere.center.copy(obj.position);
+            });
+            playerShip.userData.boundingSphere.center.copy(playerShip.position);
+        }
+
+        function checkCollisions() {
+            for (const obstacle of obstacles) {
+                if (playerShip.userData.boundingSphere.intersectsSphere(obstacle.userData.boundingSphere)) {
+                    setGameOver();
+                    return;
+                }
+            }
+            for (const pickup of pickups) {
+                if (playerShip.userData.boundingSphere.intersectsSphere(pickup.userData.boundingSphere)) {
+                    multiplier++;
+                    playPickupSound();
+                    respawnObject(pickup);
+                }
+            }
+        }
+
+        function updateEnergy() {
+            raycaster.set(playerShip.position, sunDirection);
+            const intersects = raycaster.intersectObjects(obstacles);
+            const inShadow = intersects.length > 0;
+
+            if (inShadow) {
+                energy -= 0.25;
+                if(isAudioInitialized) hummerGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+            } else {
+                energy += 0.1;
+                if(isAudioInitialized) hummerGain.gain.setTargetAtTime(0.1, audioCtx.currentTime, 0.5);
+            }
+            energy = THREE.MathUtils.clamp(energy, 0, 100);
+
+            if (energy <= 0) setGameOver();
+        }
+
+        function updateUI() {
+            score += multiplier * 0.1;
+            scoreEl.textContent = `Score: ${Math.floor(score)}`;
+            multiplierEl.textContent = `x${multiplier}`;
+            energyBarEl.style.width = `${energy}%`;
+        }
+
+        function playPickupSound() {
+            if (!isAudioInitialized) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(masterGain);
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        function playGameOverSound() {
+            if (!isAudioInitialized) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(masterGain);
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(110, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 1);
+            gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1);
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 1);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (gameState === 'PLAYING') {
+                handleControls();
+                updateGameWorld();
+                checkCollisions();
+                // a second check because checkCollisions can change the state
+                if (gameState === 'PLAYING') {
+                    updateEnergy();
+                    updateUI();
+                }
+            }
+
+            const cameraTarget = new THREE.Vector3(
+                playerShip.position.x * 0.5,
+                playerShip.position.y * 0.5 + 5,
+                playerShip.position.z + 15
+            );
+            camera.position.lerp(cameraTarget, 0.05);
+            camera.lookAt(playerShip.position);
+
+            const time = Date.now() * 0.005;
+            pickups.forEach(p => {
+                p.rotation.x = time * 0.5;
+                p.rotation.y = time;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+</body>
+</html>

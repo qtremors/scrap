@@ -1,0 +1,152 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#game-canvas {
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+}
+
+#ui-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+}
+
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+#score,
+#multiplier,
+#speedometer {
+    font-size: 24px;
+    text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+}
+
+#speedometer {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#energy-container {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 20px;
+    border: 2px solid #0ff;
+    border-radius: 5px;
+    background-color: rgba(0, 255, 255, 0.1);
+}
+
+#energy-bar {
+    width: 100%;
+    height: 100%;
+    background-color: #0ff;
+    box-shadow: 0 0 10px #0ff, 0 0 15px #0ff;
+    transition: width 0.1s linear;
+}
+
+.title-text {
+    font-size: 64px;
+    margin: 0;
+    text-shadow: 0 0 10px #f0f, 0 0 20px #f0f;
+}
+
+.info-text {
+    font-size: 20px;
+    margin: 20px;
+    max-width: 500px;
+    line-height: 1.5;
+    text-shadow: 0 0 5px #fff;
+}
+
+.action-button {
+    font-size: 24px;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #0ff;
+    color: #0ff;
+    cursor: pointer;
+    text-shadow: 0 0 5px #0ff;
+    transition: background-color 0.3s, color 0.3s;
+    pointer-events: all;
+}
+
+.action-button:hover {
+    background-color: #0ff;
+    color: #000;
+}
+
+#game-over h1 {
+    text-shadow: 0 0 10px #f00, 0 0 20px #f00;
+}
+
+#high-score {
+    font-size: 24px;
+    margin-top: 10px;
+    color: #f0f;
+    text-shadow: 0 0 5px #f0f;
+}
+
+#pause-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 18px;
+    padding: 5px 15px;
+    z-index: 15;
+    display: none; /* Hidden by default */
+}
+
+/* Styling for dat.gui */
+.dg.main .close-button {
+    background-color: #333 !important;
+}
+
+.dg.main .close-button:hover {
+    background-color: #444 !important;
+}
+
+.dg li:not(.folder) {
+    background: #232323;
+    border-bottom: 1px solid #333;
+}
+
+.dg .cr.function:hover, .dg .cr.boolean:hover {
+    background: #383838;
+}
