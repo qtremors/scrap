@@ -42,7 +42,7 @@ function generateCardHTML(folderName) {
     const noteHTML = note ? `<p class="project-note">${note}</p>` : '';
 
     return `
-    <a href="${linkPath}" class="project-card">
+    <a href="${linkPath}" class="project-card" target="_blank" rel="noopener noreferrer">
         <h5>${title}</h5>
         <pre class="link-path">${linkPath}</pre>
         ${noteHTML}
