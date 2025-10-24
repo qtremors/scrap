@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrapped Websites</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0d0d0d;
+            background-image: radial-gradient(#222 1px, transparent 1px);
+            background-size: 20px 20px;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            perspective: 800px;
+            overflow-x: hidden;
+        }
+
+        .project-card {
+            display: block;
+            position: absolute;
+            width: clamp(240px, 70vw, 280px);
+            height: auto;
+            aspect-ratio: 280 / 180;
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+            color: #333;
+            padding: 1.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, top 0.3s ease-out;
+            will-change: transform, top;
+        }
+
+        .project-card:hover {
+            transform: scale(1.1) rotateZ(0deg) rotateX(0deg) rotateY(0deg) translateZ(100px) !important;
+            z-index: 100 !important;
+            box-shadow: 0px 0px 45px 5px rgba(255, 255, 255, 0.7);
+        }
+
+        .project-card h5 {
+            margin: 0.2rem 0;
+            font-size: 1.2rem;
+            text-transform: capitalize;
+            color: #d1002c;
+        }
+
+        .project-card .link-path {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.7rem;
+            color: #555;
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .project-card .link-path::before {
+            content: "PATH: ";
+            color: #00bb2d;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <a href="index1/index1.html" class="project-card"><h5>Portfolio</h5><pre class="link-path">./index1/index1.html</pre></a>
+    <a href="index2/index2.html" class="project-card"><h5>Portfolio</h5><pre class="link-path">./index2/index2.html</pre></a>
+    <a href="index3/index3.html" class="project-card"><h5>Portfolio</h5><pre class="link-path">./index3/index3.html</pre></a>
+    <a href="index4/index.html" class="project-card"><h5>Portfolio</h5><pre class="link-path">./index4/index.html
+        This reuires a running server for the json data</pre></a>
+    <a href="ascii.html" class="project-card"><h5>Ascii Art Collection</h5><pre class="link-path">./ascii.html</pre></a>
+    <a href="#" class="project-card"><h5>Broken Link</h5><pre class="link-path">./_scrapped/broken_02.html</pre></a>
+    <a href="#" class="project-card"><h5>Draft V3</h5><pre class="link-path">./_scrapped/draft_03.html</pre></a>
+    <a href="#" class="project-card"><h5>Failed Landing</h5><pre class="link-path">./_scrapped/failed_04.html</pre></a>
+    <a href="#" class="project-card"><h5>Concept UI 2.0</h5><pre class="link-path">./_scrapped/concept_05.html</pre></a>
+    <a href="#" class="project-card"><h5>Abandoned Blog</h5><pre class="link-path">./_scrapped/blog_06.html</pre></a>
+    <a href="#" class="project-card"><h5>Early Sketch</h5><pre class="link-path">./_scrapped/sketch_07.html</pre></a>
+    <a href="#" class="project-card"><h5>Dead End</h5><pre class="link-path">./_scrapped/deadend_08.html</pre></a>
+    <a href="#" class="project-card"><h5>Feature X idea</h5><pre class="link-path">./_scrapped/feature_09.html</pre></a>
+    <a href="#" class="project-card"><h5>Old Docs</h5><pre class="link-path">./_scrapped/docs_10.html</pre></a>
+    <a href="#" class="project-card"><h5>Rough Outline</h5><pre class="link-path">./_scrapped/outline_11.html</pre></a>
+    <a href="#" class="project-card"><h5>Unused Template</h5><pre class="link-path">./_scrapped/template_12.html</pre></a>
+    <a href="#" class="project-card"><h5>Forgotten Project</h5><pre class="link-path">./_scrapped/forgotten_13.html</pre></a>
+    <a href="#" class="project-card"><h5>Backup Copy</h5><pre class="link-path">./_scrapped/backup_14.html</pre></a>
+    <a href="#" class="project-card"><h5>Testing Page</h5><pre class="link-path">./_scrapped/test_15.html</pre></a>
+    <a href="#" class="project-card"><h5>Another Broken Link</h5><pre class="link-path">./_scrapped/broken_16.html</pre></a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const papers = document.querySelectorAll('.project-card');
+            let paperObjects = [];
+            
+            function setupLayout() {
+                paperObjects = [];
+
+                const isMobile = window.innerWidth < 768;
+
+                const numCols = isMobile ? 1 : 5;
+                const roadWidthPercent = isMobile ? 0.9 : 0.8;
+                const rowHeight = 200;
+                const topMargin = 350;
+
+                const scrollHeight = topMargin + (papers.length * rowHeight) + topMargin;
+                document.body.style.height = `${scrollHeight}px`;
+
+                const viewportWidth = window.innerWidth;
+                const roadWidthPx = viewportWidth * roadWidthPercent;
+                const horizontalMarginPx = (viewportWidth - roadWidthPx) / 2;
+                
+                const pseudoRandom = (seed) => {
+                    let x = Math.sin(seed) * 10000;
+                    return x - Math.floor(x);
+                };
+
+                papers.forEach((paper, index) => {
+                    const col = isMobile ? 0 : Math.floor(Math.random() * numCols);
+                    const xOffset = (roadWidthPx / numCols) * col;
+
+                    const initialY = topMargin + (index * rowHeight);
+                    const initialX = horizontalMarginPx + xOffset;
+
+                    const rotationZ = pseudoRandom(index + 100) * 20 - 10;
+                    const rotationY = pseudoRandom(index + 200) * 10 - 5;
+                    
+                    paperObjects.push({
+                        element: paper, initialX, initialY, rotationZ, rotationY, zIndex: 10 + index
+                    });
+                });
+                updatePositions();
+            }
+
+            function updatePositions() {
+                const scrollY = window.scrollY;
+                
+                paperObjects.forEach(p => {
+                    const newY = p.initialY - scrollY;
+                    
+                    p.element.style.top = `${newY}px`;
+                    p.element.style.left = `${p.initialX}px`;
+                    p.element.style.transform = `rotateZ(${p.rotationZ}deg) rotateY(${p.rotationY}deg)`;
+                    p.element.style.zIndex = p.zIndex;
+                });
+            }
+
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
+
+            setupLayout();
+            window.addEventListener('scroll', updatePositions, { passive: true });
+            window.addEventListener('resize', debounce(setupLayout, 250));
+        });
+    </script>
+
+</body>
+</html>
