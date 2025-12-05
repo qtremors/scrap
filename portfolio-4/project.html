@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+    <title>CØRE|Project</title>
+    <link rel="icon" type="image/svg+xml" href="assets/img/alien.svg">
+        
+    <link rel="stylesheet" href="assets/css/core.css">
+    <link rel="stylesheet" href="assets/css/ui.css">
+    <link rel="stylesheet" href="assets/css/project.css">
+</head>
+<body class="project-mode">
+
+    <div class="ambient-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="project-container">
+
+        <nav class="project-nav">
+            <a href="index.html" class="back-link">
+                <span class="icon">←</span> <span class="text">Back to Universe</span>
+            </a>
+        </nav>
+
+        <header class="project-header">
+            <div class="header-content">
+                <div class="project-subtitle" id="p-category">Category</div>
+                <h1 class="project-title" id="p-title">Loading...</h1>
+            </div>
+        </header>
+
+        <div class="project-grid">
+
+            <div class="content-col">
+                <div class="project-banner-wrapper">
+                    <img id="p-banner" src="" alt="Project Banner" class="project-banner">
+                    <div class="banner-glow"></div>
+                </div>
+
+                <div class="content-section">
+                    <h3 class="section-title">Overview</h3>
+                    <div class="text-body" id="p-description">Loading details...</div>
+                </div>
+
+                <div class="content-section" id="section-installation">
+                    <h3 class="section-title">Installation & Usage</h3>
+                    <div class="code-block" id="p-installation"></div>
+                </div>
+            </div>
+
+            
+            <div class="sidebar-col">
+                <div class="sidebar-card">
+
+                    <div class="sidebar-section">
+                        <h4 class="sidebar-label">Links</h4>
+                        <div id="p-links" class="links-list"></div>
+                    </div>
+
+                    <div class="sidebar-separator"></div>
+
+                    <div class="sidebar-section">
+                        <h4 class="sidebar-label">Technologies</h4>
+                        <div class="tech-tags" id="p-tags"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/project.js"></script>
+</body>
+</html>

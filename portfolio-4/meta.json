@@ -1,0 +1,5 @@
+{
+  "title": "CORE",
+  "mainFile": "index.html",
+  "note": "A highly interactive, physics-based portfolio website designed to showcase projects in a 'living universe'. Projects float as bubbles in a zero-gravity environment, reacting to mouse interactions, dragging, and collisions."
+}

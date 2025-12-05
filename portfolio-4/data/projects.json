@@ -1,0 +1,161 @@
+[
+  {
+    "id": "quizzer-ai",
+    "title": "Quizzer AI",
+    "category": "Website",
+    "image": "assets/img/quizzer-preview.png",
+    "bg_color": "#ffffff",
+    "description": "A dynamic quiz app using Gemini API for personalized questions and feedback.",
+    "full_details": "Quizzer AI leverages the Gemini API to generate unique quizzes on the fly. It features user authentication, progress tracking, and detailed explanations for every answer.",
+    "installation": "pip install -r requirements.txt\npython manage.py runserver",
+    "badges": ["tech-python", "tech-django", "tech-ts", "tech-html", "tech-css", "tech-js"],
+    "links": [
+      { "text": "Live Demo", "url": "https://quizzer-ai-dc4m.onrender.com/", "type": "primary" },
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/quizzer-ai", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "algo-viz",
+    "title": "Algorithm Visualizer",
+    "category": "Website",
+    "image": "assets/img/algorithm-preview.png",
+    "bg_color": "#ffffff",
+    "description": "Real-time visualization of sorting and pathfinding algorithms.",
+    "full_details": "This application helps students understand complex algorithms through interactive animations.",
+    "installation": "npm install\nnpm run dev",
+    "badges": ["tech-react", "tech-ts", "tech-python", "tech-fastapi"],
+    "links": [
+      { "text": "Live Demo", "url": "https://tremors-algoviz.netlify.app", "type": "primary" },
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/algorithm-visualizer", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "git-nexus",
+    "title": "GitNexus",
+    "category": "Self-Hosted",
+    "image": "assets/img/git-nexus-preview.png",
+    "bg_color": "#ffffff",
+    "description": "Self-hosted dashboard for monitoring local repositories.",
+    "full_details": "GitNexus serves as a central hub for your development workflow. It scans your local directories for git repositories.",
+    "installation": "python main.py",
+    "badges": ["tech-python", "tech-flask", "tech-js", "tech-sqlite"],
+    "links": [
+      { "text": "Live Demo", "url": "https://qtremors.github.io/repo-nav", "type": "primary" },
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/git-nexus", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "plant-disease",
+    "title": "Plant Disease Detector",
+    "category": "Website",
+    "image": "assets/img/plant-disease-detector-preview.jpg",
+    "bg_color": "#ffffff",
+    "description": "Classifies plant diseases from leaf images using TensorFlow.",
+    "full_details": "Using a Convolutional Neural Network (CNN), this app can identify various plant diseases from uploaded images with high accuracy.",
+    "installation": "pip install tensorflow django\npython manage.py runserver",
+    "badges": ["tech-django", "tech-tensorflow", "tech-numpy"],
+    "links": [
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/plant-disease-detector", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "music-player",
+    "title": "Tremors Music Player",
+    "category": "Desktop",
+    "image": "assets/img/music-preview.png",
+    "bg_color": "#ffffff",
+    "description": "High-performance local desktop music player.",
+    "full_details": "A desktop application that combines the speed of a Python backend with the aesthetics of a React frontend.",
+    "installation": "npm install\npython backend/main.py",
+    "badges": ["tech-python", "tech-fastapi", "tech-react", "tech-ts"],
+    "links": [
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/tremors-music", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "eshopper",
+    "title": "E-commerce Site",
+    "category": "Website",
+    "image": "assets/img/eshopper-preview.jpg",
+    "bg_color": "#ffffff",
+    "description": "Fully functional e-commerce platform built with Django.",
+    "full_details": "Features include a shopping cart, payment gateway integration, user profiles, and order history management.",
+    "installation": "pip install -r requirements.txt",
+    "badges": ["tech-django", "tech-html", "tech-css", "tech-js", "tech-sql"],
+    "links": [
+      { "text": "Live Demo", "url": "https://tremors.pythonanywhere.com/", "type": "primary" },
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/eshopper", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "rtree",
+    "title": "RepoTree Generator",
+    "category": "CLI",
+    "image": "assets/img/rtree-preview.png",
+    "bg_color": "#ffffff",
+    "description": "CLI tool to generate clean directory trees.",
+    "full_details": "Automatically respects .gitignore rules to generate ASCII tree structures of your project folders.",
+    "installation": "pip install repotree",
+    "badges": ["tech-python", "tech-cli", "tech-git"],
+    "links": [
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/rtree", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "locr",
+    "title": "Lines of Code in Repo",
+    "category": "CLI",
+    "image": "assets/img/locr-preview.png",
+    "bg_color": "#ffffff",
+    "description": "CLI tool to count lines of code in repo.",
+    "full_details": "Automatically respects .gitignore rules to count lines of code in your repo.",
+    "installation": "pip install locr",
+    "badges": ["tech-python", "tech-cli", "tech-git"],
+    "links": [
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/locr", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "pc-remote",
+    "title": "PC Remote API",
+    "category": "Self-Hosted",
+    "image": "assets/img/pcrc-preview.png",
+    "bg_color": "#ffffff",
+    "description": "Control your PC remotely via phone using FastAPI.",
+    "full_details": "Exposes endpoints to sleep, shutdown, mute volume, or launch applications on your host PC.",
+    "installation": "python server.py",
+    "badges": ["tech-python", "tech-fastapi", "tech-cli"],
+    "links": [
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/pc-rc", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "pygame-calc",
+    "title": "Pygame Calculator",
+    "category": "Desktop",
+    "image": "assets/img/calculator-preview.jpg",
+    "bg_color": "#ffffff",
+    "description": "A functional calculator built entirely in Pygame.",
+    "full_details": "Demonstrates GUI programming logic without standard widget libraries.",
+    "installation": "pip install pygame\npython calculator.py",
+    "badges": ["tech-python", "tech-pygame"],
+    "links": [
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/pygame-calculator-app", "type": "secondary" }
+    ]
+  },
+  {
+    "id": "nexus-landing",
+    "title": "Nexus",
+    "category": "Website",
+    "image": "assets/img/nexus11.png",
+    "bg_color": "#ffffff",
+    "description": "Creative landing page for digital universe navigation.",
+    "full_details": "The predecessor to the current portfolio. A visual experiment in React and Framer Motion.",
+    "installation": "npm install",
+    "badges": ["tech-nextjs", "tech-react", "tech-framermotion"],
+    "links": [
+      { "text": "Live Demo", "url": "https://tremors.vercel.app", "type": "primary" },
+      { "text": "GitHub Repo", "url": "https://github.com/qtremors/nexus", "type": "secondary" }
+    ]
+  }
+]

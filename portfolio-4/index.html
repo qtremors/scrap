@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+    <title>CØRE</title>
+    <link rel="icon" type="image/svg+xml" href="assets/img/alien.svg">
+    
+    <link rel="stylesheet" href="assets/css/core.css">
+    <link rel="stylesheet" href="assets/css/physics.css">
+    <link rel="stylesheet" href="assets/css/ui.css">
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="hero-static">
+        <h1>TREMORS</h1>
+        <p>Full Stack Python Developer</p>
+    </div>
+
+    <div id="playground"></div>
+
+    <div id="filter-dock" class="filter-dock"></div>
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-card">
+            <span class="btn-close" id="close-modal-btn">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-card settings-card">
+            <span class="btn-close" id="close-settings-btn">&times;</span>
+
+            <div class="modal-header">
+                <div class="modal-title">Settings</div>
+            </div>
+
+            <div class="settings-body">
+                <div class="setting-item">
+                    <span>Physics Enabled</span>
+                    <label class="switch">
+                        <input type="checkbox" checked id="toggle-physics">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
