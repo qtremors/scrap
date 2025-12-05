@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Status - TUI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-family: 'Fira Code', monospace;
+            --background: #282a36;
+            --panel-bg: #21222C;
+            --border: #6272a4;
+            --foreground: #f8f8f2;
+            --yellow: #f1fa8c;
+            --green: #50fa7b;
+            --primary: #ff79c6;
+        }
+
+        body {
+            background-color: var(--background);
+            font-family: var(--font-family);
+            color: var(--foreground);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1rem;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        .tui-panel {
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            width: auto;
+            max-width: 100%;
+        }
+
+        .tui-panel-header {
+            border-bottom: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            color: var(--yellow);
+        }
+
+        .tui-panel-body {
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+        
+        .tui-panel-body p {
+            margin: 1.5rem 0 0 0;
+            color: var(--green);
+        }
+        
+        .glitch-container {
+            position: relative;
+            border-bottom: 1px dashed var(--border);
+            padding-bottom: 1rem;
+        }
+        .glitch-art {
+             position: relative;
+             font-size: clamp(0.75rem, 2.5vw, 2.2rem);
+             line-height: 1;
+             cursor: pointer;
+        }
+        .glitch-art:hover {
+
+            animation: jitter 0.2s infinite;
+        }
+        
+        .glitch-art, .glitch-art::before, .glitch-art::after {
+            color: var(--green);
+        }
+        .glitch-art::before, .glitch-art::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            white-space: pre;
+        }
+        .glitch-art::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--yellow); 
+            animation: glitch-anim-before 3s infinite linear alternate-reverse;
+        }
+        .glitch-art::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--primary); 
+            animation: glitch-anim-after 2s infinite linear alternate-reverse;
+        }
+
+
+        .tui-button {
+            display: inline-block;
+            margin-top: 2.5rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary);
+            border-radius: 3px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+        }
+        .tui-button:hover,
+        .tui-button:focus {
+            background-color: var(--primary);
+            color: var(--panel-bg);
+            outline: none;
+        }
+        
+        @keyframes jitter {
+            0%   { transform: translate(0, 0) rotate(0deg); }
+            10%  { transform: translate(3px, -2px) rotate(-1deg); }
+            20%  { transform: translate(-3px, 3px) rotate(1deg); }
+            30%  { transform: translate(2px, 1px) rotate(0deg); }
+            40%  { transform: translate(-4px, -1px) rotate(2deg); }
+            50%  { transform: translate(1px, -3px) rotate(-1deg); }
+            60%  { transform: translate(4px, 2px) rotate(1deg); }
+            70%  { transform: translate(-2px, 4px) rotate(0deg); }
+            80%  { transform: translate(3px, -4px) rotate(-2deg); }
+            90%  { transform: translate(-1px, 2px) rotate(1deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        
+        @keyframes glitch-anim-before {
+            0%   { clip-path: inset(88% 0 1% 0); transform: translate(-3px, 1px); opacity: 0.8; }
+            5%   { clip-path: inset(45% 0 47% 0); transform: translate(2px, -3px) skew(-5deg); opacity: 0.6; }
+            10%  { clip-path: inset(1% 0 99% 0); transform: none; opacity: 1; }
+            20%  { clip-path: inset(92% 0 2% 0); transform: translate(1px, 2px); opacity: 0.7; }
+            30%  { clip-path: inset(23% 0 49% 0); transform: translate(-3px, 0px) skew(10deg); opacity: 0.5; }
+            40%  { clip-path: inset(45% 0 38% 0); transform: translate(3px, -1px); opacity: 0.9; }
+            50%  { clip-path: inset(48% 0 5% 0); transform: translate(-1px, 3px) skew(-2deg); opacity: 0.4; }
+            60%  { clip-path: inset(99% 0 1% 0); transform: none; opacity: 1; }
+            70%  { clip-path: inset(15% 0 81% 0); transform: translate(3px, 2px) skew(8deg); opacity: 0.3; }
+            80%  { clip-path: inset(40% 0 33% 0); transform: translate(-3px, -1px); opacity: 0.8; }
+            90%  { clip-path: inset(8% 0 71% 0); transform: translate(1px, 0px) skew(-12deg); opacity: 0.6; }
+            100% { clip-path: inset(62% 0 30% 0); transform: translate(2px, 3px); opacity: 1; }
+        }
+        
+        @keyframes glitch-anim-after {
+            0%   { clip-path: inset(99% 0 1% 0); transform: translate(3px, -2px) skew(15deg); opacity: 0.7; }
+            7%   { clip-path: inset(40% 0 45% 0); transform: translate(-1px, 1px); opacity: 0.9; }
+            14%  { clip-path: inset(10% 0 80% 0); transform: none; opacity: 0.5; }
+            21%  { clip-path: inset(79% 0 2% 0); transform: translate(0px, 2px) skew(-7deg); opacity: 1; }
+            28%  { clip-path: inset(30% 0 65% 0); transform: translate(3px, -1px); opacity: 0.6; }
+            35%  { clip-path: inset(5% 0 48% 0); transform: translate(-2px, 0px) skew(4deg); opacity: 0.8; }
+            42%  { clip-path: inset(55% 0 10% 0); transform: translate(1px, -3px); opacity: 0.4; }
+            49%  { clip-path: inset(1% 0 98% 0); transform: none; opacity: 1; }
+            56%  { clip-path: inset(22% 0 71% 0); transform: translate(-3px, 2px) skew(-10deg); opacity: 0.7; }
+            63%  { clip-path: inset(80% 0 5% 0); transform: translate(2px, 0px); opacity: 0.3; }
+            70%  { clip-path: inset(50% 0 40% 0); transform: translate(0px, -2px) skew(9deg); opacity: 0.8; }
+            77%  { clip-path: inset(90% 0 4% 0); transform: translate(-1px, 1px); opacity: 1; }
+            84%  { clip-path: inset(28% 0 65% 0); transform: translate(3px, 0px) skew(2deg); opacity: 0.5; }
+            91%  { clip-path: inset(10% 0 55% 0); transform: translate(1px, -3px); opacity: 0.9; }
+            100% { clip-path: inset(70% 0 15% 0); transform: translate(-3px, 1px) skew(-4deg); opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="tui-panel">
+        <div class="tui-panel-header">
+            error_log.txt
+        </div>
+        <div class="tui-panel-body">
+            <div class="glitch-container">
+                <pre class="glitch-art" data-text="
+██╗  ██╗ ██████╗ ██╗  ██╗
+██║  ██║██╔═████╗██║  ██║
+███████║██║██╔██║███████║
+╚════██║████╔╝██║╚════██║
+     ██║╚██████╔╝     ██║
+     ╚═╝ ╚═════╝      ╚═╝
+">
+██╗  ██╗ ██████╗ ██╗  ██╗
+██║  ██║██╔═████╗██║  ██║
+███████║██║██╔██║███████║
+╚════██║████╔╝██║╚════██║
+     ██║╚██████╔╝     ██║
+     ╚═╝ ╚═════╝      ╚═╝
+</pre>
+            </div>
+            <p>Error: Page not found.</p>
+            <p>The requested resource could not be located.</p>
+
+            <a href="indextui.html#portfolio" class="tui-button">$ cd ..</a>
+
+        </div>
+    </main>
+    
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working On It</title>
+    <link rel="icon" type="image/gif" href="assets/loading_cat.gif">
+    <style>
+        /* ==========================================================================
+           1. Global Styles & Variables
+           ========================================================================== */
+        :root {
+            --md-primary: #1a73e8;
+            --md-on-primary: #ffffff;
+            --md-background: #f8f9fa;
+            --md-surface-variant: #f1f3f4;
+            --md-on-surface: #202124;
+            --md-on-surface-variant: #5f6368;
+            --md-outline: #d1d5db;
+            --md-shadow-color: rgba(32, 33, 36, 0.1);
+        }
+
+        body[data-theme='dark'] {
+            --md-primary: #8ab4f8;
+            --md-on-primary: #202124;
+            --md-background: #131314;
+            --md-surface-variant: #282a2c;
+            --md-on-surface: #e8eaed;
+            --md-on-surface-variant: #9aa0a6;
+            --md-outline: #5f6368;
+            --md-shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--md-background);
+            color: var(--md-on-surface);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ==========================================================================
+           2. Layout and Card Styles
+           ========================================================================== */
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-color: var(--md-surface-variant);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--md-outline);
+            box-shadow: 0 10px 15px -3px var(--md-shadow-color);
+            width: 100%;
+            max-width: 32rem;
+        }
+
+        /* ==========================================================================
+           3. Content and Interactive Elements
+           ========================================================================== */
+        .construction-gif {
+            width: 12rem;
+            height: 12rem;
+            margin: 0 auto 1.5rem auto;
+            display: block;
+        }
+
+        /* GIF Toggling Logic */
+        .gif-toggle-checkbox {
+            display: none;
+        }
+
+        .gif-toggle-label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .gif-2 {
+            display: none;
+        }
+
+        /* Show gif-2 and hide gif-1 when checkbox is checked */
+        .gif-toggle-checkbox:checked + .gif-toggle-label .gif-1 {
+            display: none;
+        }
+
+        .gif-toggle-checkbox:checked + .gif-toggle-label .gif-2 {
+            display: block;
+        }
+
+        /* Typography */
+        .card-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--md-primary);
+            margin: 0 0 1rem 0;
+        }
+
+        .card-subtitle {
+            font-size: 1.25rem;
+            color: var(--md-on-surface);
+            margin: 0 0 0.5rem 0;
+        }
+
+        .card-description {
+            color: var(--md-on-surface-variant);
+            max-width: 28rem;
+            margin: 0 auto;
+        }
+
+        /* Button Styles */
+        .button-container {
+            margin-top: 2rem;
+        }
+
+        .home-button {
+            display: inline-block;
+            background-color: var(--md-primary);
+            color: var(--md-on-primary);
+            font-weight: bold;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px var(--md-shadow-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px var(--md-shadow-color);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <main class="container">
+        <div class="card">
+            <!-- Interactive GIF Container -->
+            <div class="gif-container">
+                <input type="checkbox" id="gif-toggle" class="gif-toggle-checkbox">
+                <label for="gif-toggle" class="gif-toggle-label" title="Click me!">
+                    <img src="assets/404.gif" alt="Work in progress animation" class="construction-gif gif-1">
+                    <img src="assets/coding.gif" alt="A different work in progress animation" class="construction-gif gif-2">
+                </label>
+            </div>
+
+            <!-- Card Content -->
+            <h1 class="card-title">Working On It</h1>
+            <p class="card-subtitle">This page is currently under development.</p>
+            <p class="card-description">
+                I'm busy working behind the scenes to get this polished up. Stay tuned for updates!
+            </p>
+
+            <!-- Action Button -->
+            <div class="button-container">
+                <a href="index.html#portfolio" class="home-button">Go Back</a>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

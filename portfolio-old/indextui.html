@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tremors.sh</title>
+    <link rel="icon" type="image" href="assets/alien.svg">
+
+    <link rel="stylesheet" href="indextui.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="splash-screen">
+        <div class="container">
+            <header>
+                <div>
+                    <span class="prompt">user@tui</span>:<span class="path">~/tremors</span>$ ls -a
+                </div>
+                <nav class="tui-nav">
+                    <a href="#home">./home</a>
+                    <a href="#about">./about</a>
+                    <a href="#skills">./skills</a>
+                    <a href="#portfolio">./portfolio</a>
+                    <a href="#contact">./contact</a>
+                </nav>
+            </header>
+            <main>
+                <section id="home" class="tui-panel">
+                    <div class="tui-panel-header">
+                        README.md
+                    </div>
+                    <div class="tui-panel-body hero-content">
+                        <div class="ascii-art">
+<pre>
+       ▓▓▓▓      ▓▓▓▓     
+       ▓▓▓▓▓▓  ▓▓▓▓▓▓     
+   ▓▓   ▓▓▓▓▓▓▓▓▓▓▓▓   ▓▓ 
+  ▓▓▓▓ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓▓▓▓
+  ▓▓▓▓ ▓▓    ▓▓    ▓▓ ▓▓▓▓
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   
+       ▓▓▓▓▓▓▓▓▓▓▓▓▓▓     
+        ▓▓▓▓▓▓▓▓▓▓▓▓      
+       ▓▓▓▓▓▓  ▓▓▓▓▓▓     
+       ▓▓▓▓      ▓▓▓▓       
+</pre>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <input type="radio" name="theme-switcher" id="theme-dracula" class="theme-radio" checked>
+    <input type="radio" name="theme-switcher" id="theme-catppuccin" class="theme-radio">
+    
+    <input type="radio" name="font-switcher" id="font-fira-code" class="font-radio" checked>
+    <input type="radio" name="font-switcher" id="font-roboto-mono" class="font-radio">
+
+    <div class="container">
+        <header>
+            <div>
+                <span class="prompt">user@tui</span>:<span class="path">~/tremors</span>$ ls -a
+            </div>
+            <nav class="tui-nav">
+                <a href="#home">./home</a>
+                <a href="#about">./about</a>
+                <a href="#skills">./skills</a>
+                <a href="#portfolio">./portfolio</a>
+                <a href="#contact">./contact</a>
+                
+                <details class="dropdown-container">
+                    <summary>./theme</summary>
+                    <div class="dropdown-options">
+                        <label for="theme-dracula">[ Dracula ]</label>
+                        <label for="theme-catppuccin">[ Catppuccin ]</label>
+                    </div>
+                </details>
+
+                <details class="dropdown-container">
+                    <summary>./font</summary>
+                    <div class="dropdown-options">
+                        <label for="font-fira-code">[ Fira Code ]</label>
+                        <label for="font-roboto-mono">[ Roboto Mono ]</label>
+                    </div>
+                </details>
+
+                <details class="dropdown-container">
+                    <summary>./resume</summary>
+                    <div class="dropdown-options">
+                        <a href="assets/Aman_Singh.pdf" download class="dropdown-link">[↓]</a>
+                    </div>
+                </details>
+
+            </nav>
+        </header>
+
+        <main>
+            <section id="home" class="tui-panel">
+                <div class="tui-panel-header">
+                    README.md
+                </div>
+                <div class="tui-panel-body hero-content">
+                    <div class="ascii-art">
+<pre>
+       ▓▓▓▓      ▓▓▓▓     
+       ▓▓▓▓▓▓  ▓▓▓▓▓▓     
+   ▓▓   ▓▓▓▓▓▓▓▓▓▓▓▓   ▓▓ 
+  ▓▓▓▓ ▓▓▓▓▓▓▓▓▓▓▓▓▓▓ ▓▓▓▓
+  ▓▓▓▓ ▓▓    ▓▓    ▓▓ ▓▓▓▓
+  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+     ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓   
+       ▓▓▓▓▓▓▓▓▓▓▓▓▓▓     
+        ▓▓▓▓▓▓▓▓▓▓▓▓      
+       ▓▓▓▓▓▓  ▓▓▓▓▓▓     
+       ▓▓▓▓      ▓▓▓▓       
+</pre>
+                    </div>
+                    <div class="hero-text">
+                        <h1>Hi, I'm Tremors</h1>
+                        <p>A junior Python Dev bringing ideas to life with Python and Django, with a focus on code quality and intuitive design.</p>
+                        <a href="#portfolio" class="cta-button">cat ./portfolio.log</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="about" class="tui-panel">
+                <div class="tui-panel-header">
+                    whoami
+                </div>
+                <div class="tui-panel-body about-text">
+                    <p>I am a Computer Science Engineering graduate specializing in Python and Django. My professional experience includes a 6-month internship as a Junior Developer, where I contributed to real-world web applications and strengthened my problem-solving skills.</p>
+                    <p>My approach to software development is built on a foundation of pragmatic problem-solving and a methodical debugging process. I am committed to writing clean, maintainable code and implementing best practices to ensure quality and security. While my expertise is in crafting backend logic, I have a strong appreciation for user experience and intuitive design, always keeping the end-user in mind.</p>
+                    <p>While my immediate goal is to excel as a Python dev, I am actively learning AI/ML in my personal time and plan to transition into that field after building a solid foundation in software engineering. I am eager to join a forward-thinking team where I can contribute to challenging projects and continue to grow as a developer.</p>
+                </div>
+            </section>
+
+            <section id="skills" class="tui-panel">
+                <div class="tui-panel-header">
+                    /usr/bin/skills
+                </div>
+                <div class="tui-panel-body skills-grid">
+                    <div class="skill-category">
+                        <h3>Frontend Development 💻</h3>
+                        <ul>
+                            <li>HTML</li>
+                            <li>CSS</li>
+                            <li>JavaScript</li>
+                            <li>TypeScript</li>
+                            <li>Nextjs.</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Backend & Databases ⚙️</h3>
+                        <ul>
+                            <li>Python</li>
+                            <li>Django</li>
+                            <li>FastAPI</li>
+                            <li>PostgreSQL</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Libraries & AI/ML 🧠</h3>
+                        <ul>
+                            <li>Numpy</li>
+                            <li>Pandas</li>
+                            <li>TensorFlow</li>
+                            <li>Scikit-learn</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>Platforms & Tools 🛠️</h3>
+                        <ul>
+                            <li>Git & Github</li>
+                            <li>VS Code</li>
+                            <li>Jupyter Notebook</li>
+                            <li>Docker</li>
+                            <li>Windows & Linux</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="portfolio" class="tui-panel">
+                <div class="tui-panel-header">
+                    /var/log/portfolio.log
+                </div>
+                <div class="tui-panel-body portfolio-grid">
+
+                    <fieldset class="portfolio-item">
+                        <legend>AI Quiz App</legend>
+                        <div class="portfolio-content">
+                            <p>An quiz app that dynamically generates quizzes using Gemini API with personalized questions, instant feedback & explanations for mistakes.</p>
+                            <div class="tech-badges">
+                                <span>Python</span>
+                                <span>Django</span>
+                                <span>Gemini API</span>
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="https://github.com/qtremors/ai-quiz-project" target="_blank" rel="noopener noreferrer" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">git show HEAD</span>
+                                </a>
+                            </div>
+
+                            <div class="run-live-container">
+                                <input type="checkbox" id="run-live-toggle-qtrmrs" class="hidden-toggle">
+                                <label for="run-live-toggle-qtrmrs" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">./run-live</span>
+                                </label>
+                                <div class="portfolio-output">
+                                    <div class="live-link-output">
+                                        server running on <a href="https://ai-quiz-project.onrender.com" target="_blank" rel="noopener noreferrer">https://ai-quiz-project.onrender.com</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset class="portfolio-item">
+                        <legend>Algorithm Visualizer</legend>
+                        <div class="portfolio-content">
+                            <p>A full-stack app for real-time, interactive algorithm visualizations using React (TypeScript) and FastAPI (Python). It helps users understand algorithms step by step in an engaging way.</p>
+                            <div class="tech-badges">
+                                <span>React (Typescript)</span>
+                                <span>Python (FastAPI)</span>
+                                <span>Uvicorn (ASGI)</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="https://github.com/qtremors/algorithm-visualizer" target="_blank" rel="noopener noreferrer" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">git show HEAD</span>
+                                </a>
+                            </div>
+
+                            <div class="run-live-container">
+                                <input type="checkbox" id="run-live-toggle-algoviz" class="hidden-toggle">
+                                <label for="run-live-toggle-algoviz" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">./run-live</span>
+                                </label>
+                                <div class="portfolio-output">
+                                    <div class="live-link-output">
+                                        server running on <a href="https://tremors-algoviz.netlify.app" target="_blank" rel="noopener noreferrer">https://tremors-algoviz.netlify.app</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </fieldset>
+
+                    
+                    <fieldset class="portfolio-item">
+                        <legend>Plant Disease Detector</legend>
+                        <div class="portfolio-content">
+                            <p>A Django and TensorFlow web app that classifies plant diseases from leaf images, allowing users to upload an image and get health predictions with confidence scores.</p>
+                            <div class="tech-badges">
+                                <span>Django</span>
+                                <span>TensorFlow</span>
+                                <span>Pillow</span>
+                                <span>NumPy</span>
+                                <span>Plotly</span>
+                            </div>
+                            
+                            <div class="portfolio-links">
+                                <a href="https://github.com/qtremors/plant-disease-detector" target="_blank" rel="noopener noreferrer" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">git show HEAD</span>
+                                </a>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="constructiontui.html" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">./run-live</span>
+                                </a>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset class="portfolio-item">
+                        <legend>E-commerce Website</legend>
+                        <div class="portfolio-content">
+                            <p>A fully functional e-commerce site built with Python and Django, using the "EShopper" template and offering a complete storefront, cart, orders, and account management.</p>
+                            <div class="tech-badges">
+                                <span>Django</span>
+                                <span>HTML</span>
+                                <span>CSS</span>
+                                <span>JavaScript</span>
+                                <span>SQL</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="https://github.com/qtremors/eshopper" target="_blank" rel="noopener noreferrer" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">git show HEAD</span>
+                                </a>
+                            </div>
+
+                            <div class="run-live-container">
+                                <input type="checkbox" id="run-live-toggle-ecommerce" class="hidden-toggle">
+                                <label for="run-live-toggle-ecommerce" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">./run-live</span>
+                                </label>
+                                <div class="portfolio-output">
+                                    <div class="live-link-output">
+                                        server running on <a href="https://tremors.pythonanywhere.com/" target="_blank" rel="noopener noreferrer">https://tremors.pythonanywhere.com/</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset class="portfolio-item">
+                        <legend>Calculator App (PYgame)</legend>
+                        <div class="portfolio-content">
+                            <p>A fully functional calculator implemented as a single Python script using Pygame. The project demonstrates a responsive GUI with persistent history and complete keyboard and mouse support.</p>
+                            <div class="tech-badges">
+                                <span>Python</span>
+                                <span>Pygame</span>
+                            </div>
+                             <div class="portfolio-links">
+                                <a href="https://github.com/qtremors/pygame-calculator-app" target="_blank" rel="noopener noreferrer" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">git show HEAD</span>
+                                </a>
+                            </div>
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset class="portfolio-item">
+                        <legend>Nexus</legend>
+                        <div class="portfolio-content">
+                            <p>A creative landing page designed to navigate through my digital universe by deploying a fleet of spaceships from the space station.</p>
+                            <div class="tech-badges">
+                                <span>NextJs</span>
+                                <span>React</span>
+                                <span>Framer-Motion</span>
+                                <span>tsParticles</span>
+                            </div>
+                            <div class="portfolio-links">
+                                <a href="https://github.com/qtremors/nexus" target="_blank" rel="noopener noreferrer" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">git show HEAD</span>
+                                </a>
+                            </div>
+
+                            <div class="run-live-container">
+                                <input type="checkbox" id="run-live-toggle-nexus" class="hidden-toggle">
+                                <label for="run-live-toggle-nexus" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">./run-live</span>
+                                </label>
+                                <div class="portfolio-output">
+                                    <div class="live-link-output">
+                                        server running on <a href="https://tremors.vercel.app" target="_blank" rel="noopener noreferrer">https://tremors.vercel.app</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                    
+                    <div class="portfolio-item">
+                        <div class="portfolio-content">
+                            <div class="portfolio-ascii-art">
+<pre>
+████████╗██████╗ ███████╗███╗   ███╗ ██████╗ ██████╗ ███████╗
+╚══██╔══╝██╔══██╗██╔════╝████╗ ████║██╔═══██╗██╔══██╗██╔════╝
+   ██║   ██████╔╝█████╗  ██╔████╔██║██║   ██║██████╔╝███████╗
+   ██║   ██╔══██╗██╔══╝  ██║╚██╔╝██║██║   ██║██╔══██╗╚════██║
+   ██║   ██║  ██║███████╗██║ ╚═╝ ██║╚██████╔╝██║  ██║███████║
+   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+</pre>
+                            </div>
+                            <h3>Explore More Projects</h3>
+                            <p class="description">See the rest of my experiments and contributions on my GitHub profile.</p>
+                             <div class="portfolio-links">
+                                <a href="https://github.com/qtremors" target="_blank" rel="noopener noreferrer" class="portfolio-command">
+                                    <span class="prompt">$</span>
+                                    <span class="command-text">cat /dev/github</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </section>
+
+
+            <section id="contact" class="tui-panel">
+                <div class="tui-panel-header">
+                    ./contact.sh
+                </div>
+                <div class="tui-panel-body">
+                    <p class="contact-intro">I'm currently looking for new opportunities. My inbox is always open.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/qtremors" target="_blank" rel="noopener noreferrer">[ GitHub ]</a>
+                        <a href="mailto:singhamankumar207@gmail.com">[ Email ]</a>
+                        <a href="https://www.linkedin.com/in/aman-singh-0a1938301" target="_blank" rel="noopener noreferrer">[ LinkedIn ]</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <span class="prompt">user@tui</span>:<span class="path">~/tremors</span>$ 
+            <a href="index.html">exit</a>
+            <span class="cursor"></span>
+        </footer>
+    </div>
+    
+</body>
+</html>
+
