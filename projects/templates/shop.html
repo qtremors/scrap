@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Project Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .product-card {
+            background-color: var(--md-sys-color-surface-container-low);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.2s, transform 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: var(--md-sys-color-surface-container);
+        }
+
+        .product-info {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-info h3 {
+            font-size: 18px;
+            margin: 0 0 4px 0;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .product-info p {
+            margin: 0 0 12px 0;
+            color: var(--md-sys-color-on-surface-variant);
+            flex-grow: 1;
+        }
+
+        .product-price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 16px;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-app-bar">
+        <div class="app-bar-left">
+            <span class="material-symbols-outlined logo-icon">flutter_dash</span>
+            <h1 class="app-bar-title">Shop All Products</h1>
+        </div>
+        <div class="app-bar-right">
+            <a href="cart.html" class="profile-button" style="text-decoration: none;">
+                <span class="material-symbols-outlined profile-icon" style="font-size: 28px;">shopping_cart</span>
+            </a>
+            <button class="profile-button">
+                <span class="material-symbols-outlined profile-icon">account_circle</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <h1>Latest Arrivals</h1>
+        
+        <div class="shop-grid">
+            
+            <a href="product_detail.html" class="product-card">
+                <img src="https://via.placeholder.com/400x200/4F378B/EADDFF?text=Product+A" alt="Product A">
+                <div class="product-info">
+                    <h3>Ergonomic Desk Mat</h3>
+                    <p>High-quality non-slip surface for professional use.</p>
+                    <div class="product-actions">
+                        <span class="product-price">$49.99</span>
+                        <button class="md3-button-elevated">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="product_detail.html" class="product-card">
+                <img src="https://via.placeholder.com/400x200/D0BCFF/381E72?text=Product+B" alt="Product B">
+                <div class="product-info">
+                    <h3>Wireless Mechanical Keyboard</h3>
+                    <p>Tactile switches and full MD3 color compatibility.</p>
+                    <div class="product-actions">
+                        <span class="product-price">$129.00</span>
+                        <button class="md3-button-elevated">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="product_detail.html" class="product-card">
+                <img src="https://via.placeholder.com/400x200/CCC2DC/332D41?text=Product+C" alt="Product C">
+                <div class="product-info">
+                    <h3>Minimalist Coffee Mug</h3>
+                    <p>Designed for the focused CSE graduate.</p>
+                    <div class="product-actions">
+                        <span class="product-price">$18.50</span>
+                        <button class="md3-button-elevated">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                </div>
+            </a>
+
+            <a href="product_detail.html" class="product-card">
+                <img src="https://via.placeholder.com/400x200/EADDFF/4F378B?text=Product+D" alt="Product D">
+                <div class="product-info">
+                    <h3>Noise-Cancelling Earbuds</h3>
+                    <p>Perfect for deep focus work or root cause analysis sessions.</p>
+                    <div class="product-actions">
+                        <span class="product-price">$89.99</span>
+                        <button class="md3-button-elevated">
+                            <span class="material-symbols-outlined">add_shopping_cart</span>
+                        </button>
+                    </div>
+                </div>
+            </a>
+            
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Project Title. Built with Material Design 3 principles.</p>
+    </footer>
+</body>
+</html>

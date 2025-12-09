@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Project Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+
+        .cart-layout {
+            display: flex;
+            gap: 32px;
+            margin-top: 24px;
+        }
+
+        .cart-items {
+            flex: 2;
+        }
+
+        .cart-summary {
+            flex: 1;
+            background-color: var(--md-sys-color-surface-container-high);
+            border-radius: 16px;
+            padding: 24px;
+            height: fit-content;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            background-color: var(--md-sys-color-surface-container-low);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 16px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-details h3 {
+            font-size: 16px;
+            margin: 0 0 4px 0;
+        }
+
+        .item-details p {
+            font-size: 14px;
+            margin: 0;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+        
+        .item-quantity, .item-price {
+            margin-left: 16px;
+            font-weight: 500;
+        }
+        
+        .item-quantity select {
+            padding: 8px;
+            border-radius: 8px;
+            background-color: var(--md-sys-color-surface);
+            border: 1px solid var(--md-sys-color-outline);
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .summary-total {
+            border-top: 2px dashed var(--md-sys-color-outline);
+            padding-top: 16px;
+            margin-top: 16px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+        }
+        
+        @media (max-width: 900px) {
+            .cart-layout {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-app-bar">
+        <div class="app-bar-left">
+            <span class="material-symbols-outlined logo-icon">flutter_dash</span>
+            <h1 class="app-bar-title">Your Shopping Cart</h1>
+        </div>
+        <div class="app-bar-right">
+            <button class="profile-button">
+                <span class="material-symbols-outlined profile-icon">account_circle</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <h1>Review Your Order</h1>
+        
+        <div class="cart-layout">
+            <div class="cart-items">
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/80/4F378B/EADDFF?text=A" alt="Desk Mat" class="item-image">
+                    <div class="item-details">
+                        <h3>Ergonomic Desk Mat</h3>
+                        <p>Color: Dark Grey</p>
+                    </div>
+                    <div class="item-quantity">
+                        <label for="qty1" class="sr-only">Quantity</label>
+                        <select id="qty1">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                    <div class="item-price">$49.99</div>
+                    <button class="md3-button-text" style="color: var(--md-sys-color-outline);">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </div>
+
+                <div class="cart-item">
+                    <img src="https://via.placeholder.com/80/D0BCFF/381E72?text=B" alt="Keyboard" class="item-image">
+                    <div class="item-details">
+                        <h3>Wireless Mechanical Keyboard</h3>
+                        <p>Switches: Tactile Brown</p>
+                    </div>
+                    <div class="item-quantity">
+                         <label for="qty2" class="sr-only">Quantity</label>
+                        <select id="qty2">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
+                    <div class="item-price">$129.00</div>
+                    <button class="md3-button-text" style="color: var(--md-sys-color-outline);">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h2>Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal (2 items)</span>
+                    <span>$178.99</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping Estimate</span>
+                    <span>$10.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax Estimate (7%)</span>
+                    <span>$12.53</span>
+                </div>
+                
+                <div class="summary-row summary-total">
+                    <span>Order Total</span>
+                    <span>$201.52</span>
+                </div>
+
+                <button class="md3-button-elevated" style="width: 100%; margin-top: 24px;">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Project Title. Built with Material Design 3 principles.</p>
+    </footer>
+</body>
+</html>
