@@ -61,7 +61,7 @@ try {
         .join('\n');
 
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
-    const finalHtml = templateContent.replace('', projectLinks);
+    const finalHtml = templateContent.replace('{{PROJECT_CARDS}}', projectLinks);
 
     fs.writeFileSync(outputPath, finalHtml);
     console.log(`Successfully built index.html with ${projectItems.length} projects.`);
