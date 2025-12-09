@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ergonomic Desk Mat - Project Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    <style>
+        .product-detail-layout {
+            display: flex;
+            gap: 40px;
+            margin-top: 24px;
+        }
+
+        .product-image-area {
+            flex: 1;
+            max-width: 50%;
+            background-color: var(--md-sys-color-surface-container-high);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image-area img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .product-details {
+            flex: 1;
+            max-width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-details h1 {
+            font-size: 36px;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        
+        .product-details .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--md-sys-color-primary);
+            margin-bottom: 24px;
+        }
+
+        .product-details h3 {
+            font-size: 20px;
+            margin: 24px 0 8px 0;
+            border-bottom: 1px solid var(--md-sys-color-outline);
+            padding-bottom: 4px;
+        }
+
+        .product-details ul {
+            list-style: none;
+            padding-left: 0;
+            margin-bottom: 24px;
+        }
+
+        .product-details ul li {
+            margin-bottom: 8px;
+            color: var(--md-sys-color-on-surface-variant);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        @media (max-width: 900px) {
+            .product-detail-layout {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .product-image-area, .product-details {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="top-app-bar">
+        <div class="app-bar-left">
+            <span class="material-symbols-outlined logo-icon">flutter_dash</span>
+            <h1 class="app-bar-title">Product Details</h1>
+        </div>
+        <div class="app-bar-right">
+            <a href="cart.html" class="profile-button" style="text-decoration: none;">
+                <span class="material-symbols-outlined profile-icon" style="font-size: 28px;">shopping_cart</span>
+            </a>
+            <button class="profile-button">
+                <span class="material-symbols-outlined profile-icon">account_circle</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <div class="product-detail-layout">
+            <div class="product-image-area">
+                <img src="https://via.placeholder.com/600x400/4F378B/EADDFF?text=Ergonomic+Desk+Mat" alt="Ergonomic Desk Mat">
+            </div>
+            
+            <div class="product-details">
+                <h1>Ergonomic Desk Mat</h1>
+                <p style="color: var(--md-sys-color-secondary);">In Stock</p>
+                
+                <div class="price">$49.99</div>
+
+                <p>
+                    Elevate your workspace with this high-density ergonomic mat. Designed for long programming sessions, 
+                    it provides superior comfort and precision for your mouse movements, aligning with a focused and productive setup.
+                </p>
+
+                <h3>Key Specifications</h3>
+                <ul>
+                    <li><span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">check_circle</span> Material: High-Density Polymer</li>
+                    <li><span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">straighten</span> Dimensions: 80cm x 30cm</li>
+                    <li><span class="material-symbols-outlined" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">colorize</span> Color: MD3 Surface Variant Grey</li>
+                </ul>
+
+                <div class="action-buttons">
+                    <button class="md3-button-elevated" style="flex-grow: 1;">
+                        <span class="material-symbols-outlined">add_shopping_cart</span> Add to Cart
+                    </button>
+                    <button class="md3-button-text" style="flex-grow: 1;">
+                        <span class="material-symbols-outlined">favorite</span> Add to Wishlist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Project Title. Built with Material Design 3 principles.</p>
+    </footer>
+</body>
+</html>

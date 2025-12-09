@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Showcase | Project Index</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="base.css">
+    
+    <style>
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .template-card {
+            background-color: var(--md-sys-color-surface-container-high);
+            border-radius: 16px; 
+            padding: 24px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .template-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .template-card h3 {
+            margin-top: 0;
+            color: var(--md-sys-color-primary);
+        }
+
+        .template-card a {
+            margin-top: auto;
+        }
+
+        .section-title-wrapper {
+            grid-column: 1 / -1;
+            margin-top: 16px;
+            margin-bottom: -8px;
+            border-bottom: 2px solid var(--md-sys-color-outline);
+            padding-bottom: 8px;
+        }
+        .section-title-wrapper h2 {
+            font-size: 24px;
+            color: var(--md-sys-color-on-surface);
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="top-app-bar">
+        <div class="app-bar-left">
+            <span class="material-symbols-outlined logo-icon">flutter_dash</span>
+            <h1 class="app-bar-title">Project Templates</h1>
+        </div>
+        <div class="app-bar-right">
+            <button class="profile-button">
+                <span class="material-symbols-outlined profile-icon">account_circle</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <h1>Material Design 3 Template Showcase</h1>
+        <p>A comprehensive set of core pages built with a system-default MD3 theme, prioritizing HTML and CSS for a clean, intuitive design, ready for deployment.</p>
+
+        <div class="template-grid">
+            
+            <div class="section-title-wrapper"><h2>Quiz Application Templates</h2></div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">code_blocks</span>
+                <h3>Quiz Landing Page</h3>
+                <p>The main page for selecting a quiz language/topic (e.g., `landing.html`).</p>
+                <a href="landing.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">tune</span>
+                <h3>Quiz Setup Page</h3>
+                <p>Form to select difficulty, topics, and number of questions (e.g., `setup.html`).</p>
+                <a href="setup.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">chat_sparkle</span>
+                <h3>Custom Quiz Chat</h3>
+                <p>AI-style chat interface for user-prompted quiz generation (e.g., `custom_quiz_chat.html`).</p>
+                <a href="custom_quiz_chat.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+            
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">quiz</span>
+                <h3>Quiz Player Page</h3>
+                <p>The core quiz interface with progress bar and question/option display (e.g., `quiz.html`).</p>
+                <a href="quiz.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">fact_check</span>
+                <h3>Quiz Results Page</h3>
+                <p>Score summary and detailed answer review (e.g., `results.html`).</p>
+                <a href="results.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="section-title-wrapper"><h2>E-Commerce Templates</h2></div>
+            
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">store</span>
+                <h3>Shop / Product Listing</h3>
+                <p>Responsive grid layout for displaying multiple products (e.g., `shop.html`).</p>
+                <a href="shop.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">inventory</span>
+                <h3>Product Detail</h3>
+                <p>Clean, two-column view for a single product with purchase actions (e.g., `product_detail.html`).</p>
+                <a href="product_detail.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+            
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">shopping_cart</span>
+                <h3>Shopping Cart</h3>
+                <p>Two-column layout for item review and order summary (e.g., `cart.html`).</p>
+                <a href="cart.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-primary);">receipt_long</span>
+                <h3>Order History</h3>
+                <p>List view of past and current orders using MD3 cards (e.g., `orders.html`).</p>
+                <a href="orders.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="section-title-wrapper"><h2>Authentication Templates</h2></div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">login</span>
+                <h3>Login Page</h3>
+                <p>Standard authentication page (e.g., `login.html`).</p>
+                <a href="login.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">person_add</span>
+                <h3>Sign Up Page</h3>
+                <p>User registration form (e.g., `signup.html`).</p>
+                <a href="signup.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">lock_open</span>
+                <h3>Forgot Password</h3>
+                <p>Email request for recovery link (e.g., `forgot_password.html`).</p>
+                <a href="forgot_password.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">key</span>
+                <h3>Reset Password</h3>
+                <p>New password submission form (e.g., `reset_password.html`).</p>
+                <a href="reset_password.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+            
+            <div class="section-title-wrapper"><h2>Core & Utility Templates</h2></div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">dashboard</span>
+                <h3>Dashboard Page</h3>
+                <p>User home screen with metrics and actions (e.g., `dashboard.html`).</p>
+                <a href="dashboard.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">settings</span>
+                <h3>Settings Page</h3>
+                <p>User preferences and account management (e.g., `settings.html`).</p>
+                <a href="settings.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">list_alt</span>
+                <h3>Data List Page</h3>
+                <p>List view for displaying collections of items (e.g., `data_list.html`).</p>
+                <a href="data_list.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">error</span>
+                <h3>404 Error Page</h3>
+                <p>A graceful page to inform users when a resource is not found (e.g., `404.html`).</p>
+                <a href="404.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">info</span>
+                <h3>About & Contact</h3>
+                <p>Informational page with team details and a contact form (e.g., `about_contact.html`).</p>
+                <a href="about_contact.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+
+            <div class="template-card">
+                <span class="material-symbols-outlined" style="font-size: 40px; color: var(--md-sys-color-secondary);">web_asset</span>
+                <h3>Base Structure</h3>
+                <p>The core HTML and CSS base with system-default theming (e.g., `base.html`).</p>
+                <a href="base.html" class="md3-button-elevated">
+                    View &rarr;
+                </a>
+            </div>
+            
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Project Title. Built with Material Design 3 principles.</p>
+    </footer>
+</body>
+</html>

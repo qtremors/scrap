@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 
 const rootDir = __dirname;
+const projectsDir = path.join(rootDir, 'projects');
 const templatePath = path.join(rootDir, '_template.html');
 const outputPath = path.join(rootDir, 'index.html');
 
 function getProjectItems() {
-    return fs.readdirSync(rootDir, { withFileTypes: true })
-        .filter(dirent => 
+    return fs.readdirSync(projectsDir, { withFileTypes: true })
+        .filter(dirent =>
             dirent.isDirectory() &&
             !dirent.name.startsWith('_') &&
             !dirent.name.startsWith('.')
@@ -19,22 +20,22 @@ function getProjectItems() {
 function generateCardHTML(folderName) {
     let title = folderName.replace(/[-_]/g, ' ');
     let note = '';
-    let linkPath = `./${folderName}/index.html`;
+    let linkPath = `./projects/${folderName}/index.html`;
 
 
-    const metaPath = path.join(rootDir, folderName, 'meta.json');
+    const metaPath = path.join(projectsDir, folderName, 'meta.json');
     if (fs.existsSync(metaPath)) {
         try {
             const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
             if (meta.title) title = meta.title;
             if (meta.note) note = meta.note;
-            if (meta.mainFile) linkPath = `./${folderName}/${meta.mainFile}`;
+            if (meta.mainFile) linkPath = `./projects/${folderName}/${meta.mainFile}`;
         } catch (e) {
             console.warn(`Could not parse meta.json for ${folderName}: ${e.message}`);
         }
     } else if (folderName === 'index4') {
         note = 'This requires a running server for the json data';
-    } else if (!fs.existsSync(path.join(rootDir, folderName, 'index.html'))) {
+    } else if (!fs.existsSync(path.join(projectsDir, folderName, 'index.html'))) {
         console.warn(`No index.html or meta.json found for ${folderName}. Skipping.`);
         return null;
     }
@@ -52,7 +53,7 @@ function generateCardHTML(folderName) {
 
 try {
     console.log('Starting build...');
-    
+
     const projectItems = getProjectItems();
 
     const projectLinks = projectItems

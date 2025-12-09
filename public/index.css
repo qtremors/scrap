@@ -1,0 +1,325 @@
+:root {
+    --bg-color: #050505;
+    --text-primary: #e0e0e0;
+    --text-secondary: #888;
+    --accent-color: #00f0ff;
+    --accent-glow: rgba(0, 240, 255, 0.4);
+    --card-bg: rgba(20, 20, 20, 0.8);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --font-heading: 'Space Mono', monospace;
+    --font-body: 'Inter', sans-serif;
+    --grid-color: rgba(255, 255, 255, 0.03);
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg-color);
+    background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+    background-size: 30px 30px;
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+#preview-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    /* Below noise (1000) and cards but above canvas */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    background: #000;
+}
+
+#preview-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    filter: blur(2px) grayscale(50%) brightness(0.7);
+    transform: scale(1.05);
+    /* Slight zoom for cinematic feel */
+}
+
+/* Noise Overlay */
+.noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Header */
+.site-header {
+    text-align: center;
+    padding: 4rem 1rem 2rem;
+    position: relative;
+    z-index: 20;
+}
+
+h1.glitch {
+    font-family: var(--font-heading);
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -2px;
+    margin: 0;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+}
+
+h1.glitch::before,
+h1.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+}
+
+h1.glitch::before {
+    left: 2px;
+    text-shadow: -1px 0 #ff00c1;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim 5s infinite linear alternate-reverse;
+}
+
+h1.glitch::after {
+    left: -2px;
+    text-shadow: -1px 0 #00fff9;
+    clip: rect(44px, 450px, 56px, 0);
+    animation: glitch-anim2 5s infinite linear alternate-reverse;
+}
+
+.subtitle {
+    font-family: var(--font-heading);
+    color: var(--accent-color);
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    opacity: 0.8;
+    letter-spacing: 2px;
+}
+
+.terminal-search {
+    margin-top: 2rem;
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--card-border);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    width: min(400px, 90vw);
+    position: relative;
+    backdrop-filter: blur(5px);
+}
+
+.terminal-search .prompt {
+    color: var(--accent-color);
+    margin-right: 0.5rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+.terminal-search input {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    text-transform: uppercase;
+}
+
+.terminal-search input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.terminal-search:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+
+/* Cards */
+#card-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* Will be set by JS */
+}
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    width: 280px;
+    padding: 1.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(5px);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+    will-change: transform, opacity, top, left;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent-color);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+}
+
+.project-card:hover {
+    transform: scale(1.05) translateZ(20px);
+    z-index: 100 !important;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.project-card:hover::before {
+    opacity: 1;
+}
+
+.project-card h5 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    color: #fff;
+    border-bottom: 1px solid var(--grid-color);
+    padding-bottom: 0.5rem;
+}
+
+.project-card .link-path {
+    font-family: var(--font-heading);
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    margin: 0.5rem 0;
+    display: block;
+    opacity: 0.7;
+}
+
+.project-card .link-path::before {
+    content: "> ";
+    color: var(--accent-color);
+}
+
+.project-card .project-note {
+    font-size: 0.85rem;
+    color: #ccc;
+    line-height: 1.5;
+    margin-top: auto;
+}
+
+/* Animations */
+@keyframes glitch-anim {
+    0% {
+        clip: rect(30px, 9999px, 10px, 0);
+    }
+
+    5% {
+        clip: rect(80px, 9999px, 90px, 0);
+    }
+
+    10% {
+        clip: rect(10px, 9999px, 40px, 0);
+    }
+
+    15% {
+        clip: rect(50px, 9999px, 20px, 0);
+    }
+
+    20% {
+        clip: rect(10px, 9999px, 80px, 0);
+    }
+
+    100% {
+        clip: rect(60px, 9999px, 70px, 0);
+    }
+}
+
+@keyframes glitch-anim2 {
+    0% {
+        clip: rect(60px, 9999px, 10px, 0);
+    }
+
+    5% {
+        clip: rect(20px, 9999px, 60px, 0);
+    }
+
+    10% {
+        clip: rect(80px, 9999px, 30px, 0);
+    }
+
+    15% {
+        clip: rect(10px, 9999px, 90px, 0);
+    }
+
+    20% {
+        clip: rect(50px, 9999px, 10px, 0);
+    }
+
+    100% {
+        clip: rect(30px, 9999px, 50px, 0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    h1.glitch {
+        font-size: 2.5rem;
+    }
+
+    .project-card {
+        width: 85%;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        position: relative !important;
+        margin-bottom: 1rem;
+        top: auto !important;
+    }
+
+    #card-container {
+        height: auto !important;
+        padding-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+    }
+}
