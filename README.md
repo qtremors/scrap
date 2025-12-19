@@ -56,6 +56,21 @@ All project folders follow the `category-name` format (e.g., `portfolio-terminal
     ```
 4.  Run `node build.js` locally to test, or just push to `main` to let GitHub Actions handle it.
 
+## Local Development
+
+```bash
+# Install dependencies (optional, for build script only)
+npm install
+
+# Build the site
+npm run build
+
+# Serve locally (using any static server)
+npx serve
+# or
+python -m http.server 8000
+```
+
 ## Technology Stack
 
 -   **HTML5 & CSS3**: Custom properties, glassmorphism, animations.

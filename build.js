@@ -48,8 +48,6 @@ function generateCardHTML(folderName) {
         } catch (e) {
             console.warn(`Could not parse meta.json for ${folderName}: ${e.message}`);
         }
-    } else if (folderName === 'index4') {
-        note = 'This requires a running server for the json data';
     } else if (!fs.existsSync(path.join(projectsDir, folderName, 'index.html'))) {
         console.warn(`No index.html or meta.json found for ${folderName}. Skipping.`);
         return null;
@@ -58,7 +56,7 @@ function generateCardHTML(folderName) {
     const noteHTML = note ? `<p class="project-note">${note}</p>` : '';
 
     return `
-    <a href="${linkPath}" class="project-card" data-category="${category.name}" target="_blank" rel="noopener noreferrer">
+    <a href="${linkPath}" class="project-card" data-category="${category.name}" aria-label="${title} - ${category.name} project" target="_blank" rel="noopener noreferrer">
         <h5><span class="category-icon">${category.emoji}</span> ${title}</h5>
         <pre class="link-path">${linkPath}</pre>
         ${noteHTML}

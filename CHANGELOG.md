@@ -2,26 +2,42 @@
 
 All notable changes to the "Scrapyard" project will be documented in this file.
 
-## [2.1.0] - 2025-12-19
+## [2.2.0] - 2025-12-19
 
 ### Added
 -   **Category Visual Indicators**: Emoji icons and color-coded borders for each category.
     -   🎨 Portfolio (cyan), 🎮 Game (red), 🧩 Component (purple), 📄 Template (green), 🖼️ Gallery (amber), ✨ Showcase (pink), 📦 Archive (gray)
+-   **Category Filter Buttons**: Quick filter by category with 8 clickable buttons.
+-   **Clear Search Button**: X button to quickly clear the search input.
+-   **Project Count Indicator**: Shows "SHOWING X OF Y PROJECTS" during search/filter.
+-   **Footer**: Added footer with version info, GitHub link, and copyright.
+-   **Skip-to-Content Link**: Accessibility improvement for keyboard users.
+-   **ARIA Labels**: All project cards now have proper aria-label attributes.
+-   **Reduced Motion Support**: Added `prefers-reduced-motion` media query.
+-   **Local Development Section**: Added to README with serve commands.
 
 ### Changed
 -   **Folder Naming Convention**: Reorganized all 24 project folders to follow `category-name` format.
-    -   Categories: `portfolio-`, `game-`, `component-`, `template-`, `gallery-`, `showcase-`, `archive-`
-    -   Example: `portfolio-1` → `portfolio-terminal`, `aestroid-runner` → `game-asteroid-runner`
 -   **Demos Reorganization**: Split `demos/` folder into 12 individual portfolio project folders.
 -   **Templates Rename**: `templates/` → `template-material-ecommerce`
--   **README Update**: Updated repository structure section to reflect new naming convention.
+-   **Contrast Fix**: Improved text contrast for WCAG AA compliance (`#a0a0a0`).
+
+### Performance
+-   **Canvas Throttled to 30fps**: Reduced from 60fps to save GPU.
+-   **Particle Count Reduced**: From 150 to 80 particles.
+-   **Removed `backdrop-filter: blur()`**: Major GPU savings.
+-   **Removed `will-change`**: Eliminated unnecessary GPU layers.
+-   **Tab Visibility API**: Canvas pauses when tab is hidden.
+
+### Fixed
+-   **Typo**: Fixed `aestroid-runner` → `game-asteroid-runner`.
+-   **iframe Race Condition**: Fixed preview flickering with `isPreviewActive` flag.
+-   **Dead Code**: Removed legacy `index4` check from build.js.
+-   **Browser Compatibility**: Added `@supports` fallback for `color-mix()`.
 
 ### Removed
 -   **Duplicate Projects**: Removed `solar-runner_1` and `stellar-flare` (kept better versions).
 
-### Fixed
--   **Typo**: Fixed `aestroid-runner` → `game-asteroid-runner`.
--   **Meta.json**: Updated all 24 `meta.json` files with accurate titles and descriptions.
 
 ## [2.0.0] - 2025-12-09
 

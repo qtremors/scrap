@@ -1,9 +1,15 @@
-// Layout configuration
+/**
+ * Layout Configuration
+ * These values control the card grid layout on the page
+ */
 const CONFIG = {
-    ROW_HEIGHT: 250, // Increased for better spacing
-    TOP_MARGIN: 100, // Reduced as header takes space
-    MOBILE_BREAKPOINT: 768,
-    DESKTOP: { COLUMNS: 4, ROAD_WIDTH: 0.9 }, // 4 columns for better readability
+    ROW_HEIGHT: 250,            // Height of each row in the card grid (px)
+    TOP_MARGIN: 100,            // Top margin before first row (px)
+    MOBILE_BREAKPOINT: 768,     // Below this width, switch to mobile layout
+    DESKTOP: {
+        COLUMNS: 4,             // Number of columns in desktop grid
+        ROAD_WIDTH: 0.9         // Percentage of viewport used for cards (90%)
+    },
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -120,33 +126,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Search Functionality ---
     const searchInput = document.getElementById('search-input');
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        const isSearching = query.length > 0;
+    const clearBtn = document.getElementById('clear-search');
+    const projectCount = document.getElementById('project-count');
+    const totalProjects = papers.length;
 
-        if (!isSearching) {
-            // Restore original scattered layout
-            papers.forEach((paper, index) => {
-                const pObj = paperObjects[index];
-                if (pObj) {
-                    paper.style.opacity = '1';
-                    paper.style.pointerEvents = 'auto';
-                    paper.style.top = `${pObj.initialY}px`;
-                    paper.style.left = `${pObj.initialX}px`;
-                    paper.style.transform = `rotateZ(${pObj.rotationZ}deg)`;
-                }
-            });
-            // Restore original container height
-            setupLayout();
-            return;
+    function updateProjectCount(showing, total) {
+        if (showing === total) {
+            projectCount.textContent = `${total} PROJECTS`;
+        } else {
+            projectCount.textContent = `SHOWING ${showing} OF ${total} PROJECTS`;
         }
+    }
 
-        // Filter and Re-layout for Grid
+    // Initial count
+    updateProjectCount(totalProjects, totalProjects);
+
+    // Clear search button
+    clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchInput.dispatchEvent(new Event('input'));
+        searchInput.focus();
+    });
+
+    // --- Category Filter ---
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    let activeFilter = 'all';
+
+    function applyFilters() {
+        const query = searchInput.value.toLowerCase();
         let matchCount = 0;
-        const gridCols = CONFIG.DESKTOP.COLUMNS; // Reuse desktop columns
+        const gridCols = CONFIG.DESKTOP.COLUMNS;
         const gridRowHeight = CONFIG.ROW_HEIGHT;
-
-        // For grid layout, we center it based on viewport
         const viewportWidth = window.innerWidth;
         const roadWidthPx = viewportWidth * CONFIG.DESKTOP.ROAD_WIDTH;
         const horizontalMarginPx = (viewportWidth - roadWidthPx) / 2;
@@ -154,23 +164,37 @@ document.addEventListener('DOMContentLoaded', () => {
         papers.forEach((paper, index) => {
             const text = paper.innerText.toLowerCase();
             const url = paper.getAttribute('href').toLowerCase();
-            const shouldShow = text.includes(query) || url.includes(query);
+            const category = paper.getAttribute('data-category');
+
+            const matchesSearch = query.length === 0 || text.includes(query) || url.includes(query);
+            const matchesFilter = activeFilter === 'all' || category === activeFilter;
+            const shouldShow = matchesSearch && matchesFilter;
 
             if (shouldShow) {
-                // Calculate grid position
-                const col = matchCount % gridCols;
-                const row = Math.floor(matchCount / gridCols);
+                if (query.length > 0 || activeFilter !== 'all') {
+                    // Grid layout for filtered results
+                    const col = matchCount % gridCols;
+                    const row = Math.floor(matchCount / gridCols);
+                    const xOffset = (roadWidthPx / gridCols) * col;
+                    const top = CONFIG.TOP_MARGIN + (row * gridRowHeight);
+                    const left = horizontalMarginPx + xOffset;
 
-                const xOffset = (roadWidthPx / gridCols) * col;
-                const top = CONFIG.TOP_MARGIN + (row * gridRowHeight);
-                const left = horizontalMarginPx + xOffset;
-
-                paper.style.opacity = '1';
-                paper.style.pointerEvents = 'auto';
-                paper.style.top = `${top}px`;
-                paper.style.left = `${left}px`;
-                paper.style.transform = `rotateZ(0deg) scale(1)`; // No rotation for search results for clarity
-
+                    paper.style.opacity = '1';
+                    paper.style.pointerEvents = 'auto';
+                    paper.style.top = `${top}px`;
+                    paper.style.left = `${left}px`;
+                    paper.style.transform = `rotateZ(0deg) scale(1)`;
+                } else {
+                    // Restore scattered layout
+                    const pObj = paperObjects[index];
+                    if (pObj) {
+                        paper.style.opacity = '1';
+                        paper.style.pointerEvents = 'auto';
+                        paper.style.top = `${pObj.initialY}px`;
+                        paper.style.left = `${pObj.initialX}px`;
+                        paper.style.transform = `rotateZ(${pObj.rotationZ}deg)`;
+                    }
+                }
                 matchCount++;
             } else {
                 paper.style.opacity = '0.05';
@@ -178,9 +202,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Adjust container height to fit the filtered grid
-        const newHeight = CONFIG.TOP_MARGIN + (Math.ceil(matchCount / gridCols) * gridRowHeight) + CONFIG.TOP_MARGIN;
-        container.style.height = `${newHeight}px`;
+        updateProjectCount(matchCount, totalProjects);
+
+        if (query.length > 0 || activeFilter !== 'all') {
+            const newHeight = CONFIG.TOP_MARGIN + (Math.ceil(matchCount / gridCols) * gridRowHeight) + CONFIG.TOP_MARGIN;
+            container.style.height = `${newHeight}px`;
+        } else {
+            setupLayout();
+        }
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeFilter = btn.getAttribute('data-filter');
+            applyFilters();
+        });
+    });
+
+    // Override search input to use combined filter
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        clearBtn.style.display = query.length > 0 ? 'block' : 'none';
+        applyFilters();
     });
 
     // Save original transform for restoring after search (if we decided to animate positions)
@@ -188,11 +233,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // --- Canvas Animation (Digital Grid Rain) ---
+    // GPU Optimized: 30fps, fewer particles
     const canvas = document.getElementById('bg-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
         let width, height;
         let particles = [];
+        let animationId = null;
+        let isTabVisible = true;
+        let lastFrameTime = 0;
+        const TARGET_FPS = 30;
+        const FRAME_INTERVAL = 1000 / TARGET_FPS;
 
         function resizeCanvas() {
             width = canvas.width = window.innerWidth;
@@ -204,46 +255,70 @@ document.addEventListener('DOMContentLoaded', () => {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.speed = Math.random() * 2 + 0.5;
-                this.size = Math.random() * 2;
-                this.color = `rgba(0, 240, 255, ${Math.random() * 0.5})`;
+                this.speed = Math.random() * 3 + 1; // Faster to compensate for lower FPS
+                this.size = Math.random() * 2 + 1;
             }
             update() {
                 this.y += this.speed;
                 if (this.y > height) this.y = 0;
             }
             draw() {
-                ctx.fillStyle = this.color;
-                ctx.fillRect(this.x, this.y, this.size, this.size * 5); // elongated "rain" look
+                ctx.fillRect(this.x, this.y, this.size, this.size * 4);
             }
         }
 
         function initParticles() {
             particles = [];
-            const count = Math.floor(width * 0.1); // Density
+            // Reduced to 80 particles max for better GPU performance
+            const count = Math.min(Math.floor(width * 0.05), 80);
             for (let i = 0; i < count; i++) {
                 particles.push(new Particle());
             }
         }
 
-        function animateCanvas() {
+        function animateCanvas(timestamp) {
+            if (!isTabVisible) return;
+
+            // Throttle to 30fps
+            const elapsed = timestamp - lastFrameTime;
+            if (elapsed < FRAME_INTERVAL) {
+                animationId = requestAnimationFrame(animateCanvas);
+                return;
+            }
+            lastFrameTime = timestamp - (elapsed % FRAME_INTERVAL);
+
             ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(0, 240, 255, 0.3)';
             particles.forEach(p => {
                 p.update();
                 p.draw();
             });
-            requestAnimationFrame(animateCanvas);
+            animationId = requestAnimationFrame(animateCanvas);
         }
+
+        // Pause animation when tab is hidden
+        document.addEventListener('visibilitychange', () => {
+            isTabVisible = !document.hidden;
+            if (isTabVisible && !animationId) {
+                lastFrameTime = performance.now();
+                animateCanvas(lastFrameTime);
+            } else if (!isTabVisible && animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        });
 
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
-        animateCanvas();
+        animateCanvas(0);
     }
 
     // --- Live Preview Logic ---
     const previewBackdrop = document.getElementById('preview-backdrop');
     const previewFrame = document.getElementById('preview-frame');
     let previewTimeout;
+    let clearFrameTimeout;
+    let isPreviewActive = false;
 
     if (previewBackdrop && previewFrame) {
         papers.forEach(paper => {
@@ -251,11 +326,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (window.innerWidth < CONFIG.MOBILE_BREAKPOINT) return;
                 const url = paper.getAttribute('href');
 
-                // Clear any existing timeout
+                // Cancel any pending clear
+                clearTimeout(clearFrameTimeout);
                 clearTimeout(previewTimeout);
 
                 // Set new timeout to load preview
                 previewTimeout = setTimeout(() => {
+                    isPreviewActive = true;
                     previewFrame.src = url;
                     previewBackdrop.style.opacity = '1';
                 }, 1000); // 1s delay to prevent distraction
@@ -264,10 +341,11 @@ document.addEventListener('DOMContentLoaded', () => {
             paper.addEventListener('mouseleave', () => {
                 clearTimeout(previewTimeout);
                 previewBackdrop.style.opacity = '0';
-                // Optional: clear src after animation to save memory, or keep it for cache?
-                // keeping it is better for flickering.
-                setTimeout(() => {
-                    if (previewBackdrop.style.opacity === '0') {
+                isPreviewActive = false;
+
+                // Clear src only if not re-entering another card
+                clearFrameTimeout = setTimeout(() => {
+                    if (!isPreviewActive) {
                         previewFrame.src = 'about:blank';
                     }
                 }, 500);
