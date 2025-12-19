@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Jenkins | Creative Developer</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #030305;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-shine: rgba(255, 255, 255, 0.1);
+            --accent-glow: radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.15), transparent 60%);
+            --font-sans: 'Inter', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            line-height: 1.6;
+            cursor: none;
+            /* Custom cursor */
+        }
+
+        /* Smooth Scrolling (Native) */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: white;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Ambient Background Glow */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.08), transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(45, 212, 191, 0.05), transparent 40%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .mouse-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: -1;
+            mix-blend-mode: screen;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            /* Animated in */
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--text-main);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero-label {
+            font-family: var(--font-sans);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: block;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 400;
+            line-height: 1.1;
+            background: linear-gradient(to right, #fff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .hero p {
+            max-width: 500px;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        /* Glass Cards for Projects */
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            font-weight: 400;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 8rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            /* Scroll triggered */
+            transform: translateY(40px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-shine), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-number {
+            font-family: var(--font-serif);
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tags {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .card:hover .tag {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 4rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .contact-link {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--text-main);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 0.5rem;
+            transition: border-color 0.3s, opacity 0.3s;
+        }
+
+        .contact-link:hover {
+            border-color: white;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Ambient / Interactive Elements -->
+    <div class="ambient-light"></div>
+    <div class="mouse-glow"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <div class="container">
+        <header>
+            <div class="logo">Tremors</div>
+            <nav>
+                <ul>
+                    <li><a href="#work" class="hover-trigger">Work</a></li>
+                    <li><a href="#about" class="hover-trigger">About</a></li>
+                    <li><a href="#contact" class="hover-trigger">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <span class="hero-label">Aman Singh</span>
+            <h1>Building AI-Powered<br>Platforms & Advanced<br>Developer Tooling.</h1>
+            <p>I'm a Full-Stack Python Developer focused on the Django and FastAPI ecosystems, creating scalable backend
+                systems and real-time applications.</p>
+        </section>
+
+        <section id="work">
+            <h2 class="section-title">Selected Works</h2>
+            <div class="projects-grid">
+                <!-- Card 1 -->
+                <article class="card hover-trigger">
+                    <span class="card-number">01</span>
+                    <h3>Quizzer AI</h3>
+                    <p>Adaptive learning platform generating infinite programming quizzes using Google Gemini AI with
+                        instant feedback.</p>
+                    <div class="tags">
+                        <span class="tag">Django</span>
+                        <span class="tag">Gemini AI</span>
+                        <span class="tag">HTMX</span>
+                    </div>
+                </article>
+
+                <!-- Card 2 -->
+                <article class="card hover-trigger">
+                    <span class="card-number">02</span>
+                    <h3>GitNexus</h3>
+                    <p>Self-hosted dashboard for tracking GitHub repo updates, bulk downloading assets, and exploring
+                        user profiles.</p>
+                    <div class="tags">
+                        <span class="tag">Flask</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">SQLite</span>
+                    </div>
+                </article>
+
+                <!-- Card 3 -->
+                <article class="card hover-trigger">
+                    <span class="card-number">03</span>
+                    <h3>Algorithm Visualizer</h3>
+                    <p>Educational platform visualizing sorting and pathfinding algorithms in real-time via WebSockets.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">FastAPI</span>
+                        <span class="tag">React</span>
+                        <span class="tag">WebSockets</span>
+                    </div>
+                </article>
+
+                <!-- Card 4 -->
+                <article class="card hover-trigger">
+                    <span class="card-number">04</span>
+                    <h3>Tremors Music</h3>
+                    <p>High-performance music player running as both a web app and a native desktop application (Tauri).
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Rust</span>
+                        <span class="tag">React</span>
+                        <span class="tag">Tauri</span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <footer id="contact">
+            <div class="footer-content">
+                <div>
+                    <h2 style="margin-bottom: 1rem; font-weight: 400;">Let's build something scalable.</h2>
+                    <a href="mailto:singhamankumar207@gmail.com"
+                        class="contact-link hover-trigger">singhamankumar207@gmail.com</a>
+                </div>
+                <div style="text-align: right; color: var(--text-muted); font-size: 0.9rem;">
+                    <p>Designed & Built by Aman Singh (Tremors)</p>
+                    <p style="margin-top: 0.5rem;">&copy; 2025</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        const mouseGlow = document.querySelector('.mouse-glow');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot follows instantly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline follows with slight delay (handled by CSS transition for simple smoothing, 
+            // or we could use GSAP for better physics, let's use GSAP for smoothness)
+        });
+
+        // GSAP for smooth cursor
+        window.addEventListener('mousemove', (e) => {
+            gsap.to(cursorOutline, {
+                x: e.clientX,
+                y: e.clientY,
+                duration: 0.15,
+                ease: "power2.out",
+                overwrite: "auto"
+            });
+
+            // Mouse glow follows slowly
+            gsap.to(mouseGlow, {
+                left: e.clientX,
+                top: e.clientY,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        });
+
+        // Cursor Effects on Hover
+        const hoverTriggers = document.querySelectorAll('.hover-trigger');
+
+        hoverTriggers.forEach(trigger => {
+            trigger.addEventListener('mouseenter', () => {
+                gsap.to(cursorOutline, {
+                    scale: 1.5,
+                    backgroundColor: "rgba(255, 255, 255, 0.1)",
+                    duration: 0.2
+                });
+            });
+            trigger.addEventListener('mouseleave', () => {
+                gsap.to(cursorOutline, {
+                    scale: 1,
+                    backgroundColor: "transparent",
+                    duration: 0.2
+                });
+            });
+        });
+
+        // Entry Animations
+        const tl = gsap.timeline();
+
+        tl.to('header', {
+            opacity: 1,
+            duration: 1,
+            ease: "power2.out"
+        })
+            .to('.hero-label', {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out"
+            }, "-=0.5")
+            .to('.hero h1', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            }, "-=0.6")
+            .to('.hero p', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            }, "-=0.8");
+
+        // Scroll Animations for Projects
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.utils.toArray('.card').forEach((card, i) => {
+            gsap.to(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: i * 0.1, // Stagger effect
+                ease: "power3.out"
+            });
+        });
+
+    </script>
+</body>
+
+</html>

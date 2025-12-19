@@ -23,14 +23,23 @@ The repository is organized to keep the root clean:
 
 ```
 /
-├── public/           # Core site assets (css, js, favicon)
-├── projects/         # Folder containing all scrapped projects
-│   ├── my-project/   # Example project folder
-│   └── templates/    # Reusable component templates
-├── build.js          # Node.js script to generate index.html
-├── _template.html    # HTML template for the main page
-└── index.html        # Generated entry point (DO NOT EDIT DIRECTLY)
+├── public/                      # Core site assets (css, js, favicon)
+├── projects/                    # Folder containing all scrapped projects
+│   ├── portfolio-*              # Portfolio website experiments
+│   ├── game-*                   # Game projects
+│   ├── component-*              # UI component demos
+│   ├── template-*               # Reusable templates
+│   ├── gallery-*                # Showcase galleries
+│   ├── showcase-*               # Design showcases
+│   └── archive-*                # Archived old projects
+├── build.js                     # Node.js script to generate index.html
+├── _template.html               # HTML template for the main page
+└── index.html                   # Generated entry point (DO NOT EDIT DIRECTLY)
 ```
+
+### Folder Naming Convention
+
+All project folders follow the `category-name` format (e.g., `portfolio-terminal`, `game-stellar-flare`).
 
 ## How to Add a New Project
 

@@ -2,6 +2,23 @@
 
 All notable changes to the "Scrapyard" project will be documented in this file.
 
+## [2.1.0] - 2025-12-19
+
+### Changed
+-   **Folder Naming Convention**: Reorganized all 24 project folders to follow `category-name` format.
+    -   Categories: `portfolio-`, `game-`, `component-`, `template-`, `gallery-`, `showcase-`, `archive-`
+    -   Example: `portfolio-1` → `portfolio-terminal`, `aestroid-runner` → `game-asteroid-runner`
+-   **Demos Reorganization**: Split `demos/` folder into 12 individual portfolio project folders.
+-   **Templates Rename**: `templates/` → `template-material-ecommerce`
+-   **README Update**: Updated repository structure section to reflect new naming convention.
+
+### Removed
+-   **Duplicate Projects**: Removed `solar-runner_1` and `stellar-flare` (kept better versions).
+
+### Fixed
+-   **Typo**: Fixed `aestroid-runner` → `game-asteroid-runner`.
+-   **Meta.json**: Updated all 24 `meta.json` files with accurate titles and descriptions.
+
 ## [2.0.0] - 2025-12-09
 
 ### Added

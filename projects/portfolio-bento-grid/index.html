@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option A: Bento Grid Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --surface: #141414;
+            --surface-hover: #1a1a1a;
+            --border: #262626;
+            --text: #fafafa;
+            --text-muted: #a1a1aa;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --green: #22c55e;
+            --purple: #a855f7;
+            --orange: #f97316;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, minmax(180px, auto));
+            gap: 16px;
+        }
+
+        .bento-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            background: var(--surface-hover);
+            border-color: #333;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Card - spans 2 columns */
+        .card-hero {
+            grid-column: span 2;
+            grid-row: span 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-hero .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .card-hero .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background: var(--accent-glow);
+            border-radius: 100px;
+            font-size: 0.875rem;
+            color: var(--accent);
+            width: fit-content;
+        }
+
+        .card-hero .status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* GitHub Stats Card */
+        .card-github {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card-github .header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+        }
+
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-item .label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Current Status Card */
+        .card-status {
+            background: linear-gradient(135deg, var(--surface) 0%, rgba(59, 130, 246, 0.1) 100%);
+        }
+
+        .card-status .emoji {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .card-status h3 {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .card-status p {
+            font-weight: 600;
+        }
+
+        /* Featured Project Card - Large */
+        .card-featured {
+            grid-column: span 2;
+            grid-row: span 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-featured .project-image {
+            flex: 1;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            min-height: 200px;
+        }
+
+        .card-featured h2 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .card-featured p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Skills Card */
+        .card-skills {
+            grid-column: span 2;
+        }
+
+        .skills-visual {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .skill-bubble {
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .skill-bubble.primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .skill-bubble.secondary {
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--purple);
+        }
+
+        .skill-bubble.tertiary {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--orange);
+        }
+
+        /* Small Project Cards */
+        .card-project-sm {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-project-sm .icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        .card-project-sm h3 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .card-project-sm p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Contact Card */
+        .card-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+        }
+
+        .contact-link:hover {
+            color: var(--accent);
+        }
+
+        /* Commit Card */
+        .card-commit .commit-hash {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .card-commit .commit-msg {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .card-commit .commit-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .card-hero, .card-featured, .card-skills {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-hero, .card-featured, .card-skills {
+                grid-column: span 1;
+            }
+            .card-featured {
+                grid-row: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-badge">Demo: Bento Grid</div>
+    
+    <div class="container">
+        <div class="bento-grid">
+            <!-- Hero Card -->
+            <div class="bento-card card-hero">
+                <h1>Hi, I'm Aman Singh</h1>
+                <p class="subtitle">Full-Stack Python Developer building AI-powered platforms and developer tools.</p>
+                <div class="status">Available for opportunities</div>
+            </div>
+
+            <!-- GitHub Stats -->
+            <div class="bento-card card-github">
+                <div class="header">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub Stats
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="number">42</div>
+                        <div class="label">Repos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">128</div>
+                        <div class="label">Stars</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">1.2k</div>
+                        <div class="label">Commits</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="number">15</div>
+                        <div class="label">PRs</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Status -->
+            <div class="bento-card card-status">
+                <div class="emoji">🚀</div>
+                <h3>Currently Building</h3>
+                <p>Arcade Nexus</p>
+            </div>
+
+            <!-- Featured Project -->
+            <div class="bento-card card-featured">
+                <div class="project-image">🧠</div>
+                <h2>Quizzer AI</h2>
+                <p>An adaptive learning platform that generates infinite programming quizzes using Google Gemini AI, providing personalized questions and context-aware explanations.</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Django</span>
+                    <span class="tech-tag">Gemini AI</span>
+                    <span class="tech-tag">HTMX</span>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="bento-card card-skills">
+                <h3 style="color: var(--text-muted); font-size: 0.875rem;">Tech Stack</h3>
+                <div class="skills-visual">
+                    <span class="skill-bubble primary">Python</span>
+                    <span class="skill-bubble primary">Django</span>
+                    <span class="skill-bubble primary">FastAPI</span>
+                    <span class="skill-bubble secondary">React</span>
+                    <span class="skill-bubble secondary">TypeScript</span>
+                    <span class="skill-bubble tertiary">TensorFlow</span>
+                    <span class="skill-bubble tertiary">PostgreSQL</span>
+                </div>
+            </div>
+
+            <!-- Small Project 1 -->
+            <div class="bento-card card-project-sm">
+                <div class="icon">📊</div>
+                <h3>GitNexus</h3>
+                <p>GitHub repo tracker & bulk downloader</p>
+            </div>
+
+            <!-- Small Project 2 -->
+            <div class="bento-card card-project-sm">
+                <div class="icon">🎵</div>
+                <h3>Tremors Music</h3>
+                <p>Local-first music player with Tauri</p>
+            </div>
+
+            <!-- Latest Commit -->
+            <div class="bento-card card-commit">
+                <div class="commit-hash">e7f3a2b</div>
+                <div class="commit-msg">feat: add cloud sync for save states</div>
+                <div class="commit-time">2 hours ago • arcade-nexus</div>
+            </div>
+
+            <!-- Contact -->
+            <div class="bento-card card-contact">
+                <h3 style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 8px;">Connect</h3>
+                <a href="#" class="contact-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    GitHub
+                </a>
+                <a href="#" class="contact-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    LinkedIn
+                </a>
+                <a href="#" class="contact-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/></svg>
+                    Email
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

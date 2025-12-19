@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TREMORS — Developer Chronicle</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:wght@400;600&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ============================================
+           DESIGN: NEWSPAPER / EDITORIAL
+           
+           Breaking ALL the patterns:
+           ❌ No cards → Text columns, lists, tables
+           ❌ No nav → Inline links, anchor jumps
+           ❌ No Material Design → Print-inspired, flat
+           ❌ No sections → Continuous editorial flow
+           ============================================ */
+
+        :root {
+            --bg: #0d0d0d;
+            --paper: #f5f0e8;
+            --ink: #1a1a1a;
+            --ink-light: #4a4a4a;
+            --accent: #c41e3a;
+            --rule: #333;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f0e8;
+            --paper: #0d0d0d;
+            --ink: #f5f0e8;
+            --ink-light: #c0c0c0;
+            --accent: #ff4d6a;
+            --rule: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--ink);
+            line-height: 1.7;
+            font-size: 18px;
+        }
+
+        /* Newspaper Container */
+        .newspaper {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--paper);
+            min-height: 100vh;
+            padding: 40px 60px;
+        }
+
+        @media (max-width: 768px) {
+            .newspaper {
+                padding: 24px;
+            }
+        }
+
+        /* Masthead */
+        .masthead {
+            text-align: center;
+            border-bottom: 3px double var(--ink);
+            padding-bottom: 24px;
+            margin-bottom: 32px;
+        }
+
+        .masthead-date {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 8px;
+        }
+
+        .masthead h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .masthead-tagline {
+            font-style: italic;
+            color: var(--ink-light);
+        }
+
+        .masthead-controls {
+            margin-top: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--ink);
+            padding: 6px 16px;
+            font-family: inherit;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: var(--ink);
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--ink);
+            color: var(--paper);
+        }
+
+        /* Headlines */
+        .headline {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin: 48px 0 24px;
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 12px;
+        }
+
+        .subheadline {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            font-style: italic;
+            margin-bottom: 32px;
+            color: var(--ink-light);
+        }
+
+        /* Byline */
+        .byline {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .byline-author {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Columns */
+        .columns {
+            column-count: 2;
+            column-gap: 40px;
+            column-rule: 1px solid var(--rule);
+        }
+
+        @media (max-width: 768px) {
+            .columns {
+                column-count: 1;
+            }
+        }
+
+        .columns p {
+            margin-bottom: 1.5em;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .columns p:first-of-type::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            float: left;
+            line-height: 0.8;
+            padding-right: 12px;
+            color: var(--accent);
+        }
+
+        /* Pull Quote */
+        .pull-quote {
+            break-inside: avoid;
+            border-left: 4px solid var(--accent);
+            padding: 16px 24px;
+            margin: 24px 0;
+            font-size: 1.3rem;
+            font-style: italic;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Data Tables instead of Cards */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 32px 0;
+            font-size: 0.95rem;
+        }
+
+        .data-table caption {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: left;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .data-table tr:hover td {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .data-table a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .data-table a:hover {
+            text-decoration: underline;
+        }
+
+        /* Index / TOC */
+        .index {
+            border: 1px solid var(--ink);
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .index h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 8px;
+        }
+
+        .index-list {
+            list-style: none;
+            column-count: 2;
+            column-gap: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .index-list {
+                column-count: 1;
+            }
+        }
+
+        .index-list li {
+            padding: 6px 0;
+            border-bottom: 1px dotted var(--rule);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .index-list a {
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .index-list a:hover {
+            color: var(--accent);
+        }
+
+        .index-list .dots {
+            flex: 1;
+            border-bottom: 1px dotted var(--ink-light);
+            margin: 0 8px 4px;
+        }
+
+        /* Statistics Block */
+        .stats-block {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin: 40px 0;
+            padding: 32px;
+            border-top: 2px solid var(--ink);
+            border-bottom: 2px solid var(--ink);
+        }
+
+        @media (max-width: 600px) {
+            .stats-block {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ink-light);
+        }
+
+        /* Contact Block */
+        .contact-block {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 3px double var(--ink);
+            text-align: center;
+        }
+
+        .contact-block h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .contact-links a {
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-bottom: 1px solid transparent;
+        }
+
+        .contact-links a:hover {
+            border-bottom-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid var(--rule);
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--ink-light);
+        }
+
+        .footer kbd {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        /* Recent Activity - Ticker Style */
+        .ticker {
+            background: var(--ink);
+            color: var(--paper);
+            padding: 12px 0;
+            margin: 32px -60px;
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .ticker {
+                margin: 32px -24px;
+            }
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: ticker 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-item {
+            padding: 0 48px;
+        }
+
+        .ticker-item .highlight {
+            color: var(--accent);
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Skill List - Not Cards! */
+        .skill-list {
+            column-count: 3;
+            column-gap: 32px;
+            list-style: none;
+            margin: 24px 0;
+        }
+
+        @media (max-width: 768px) {
+            .skill-list {
+                column-count: 2;
+            }
+        }
+
+        .skill-list li {
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--rule);
+            break-inside: avoid;
+        }
+
+        .skill-list .category {
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        /* Terminal Overlay */
+        .terminal {
+            position: fixed;
+            inset: 0;
+            background: #0d0d0d;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 40px;
+            overflow: auto;
+            color: #22c55e;
+        }
+
+        .terminal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .terminal pre {
+            margin-bottom: 16px;
+        }
+
+        .terminal .prompt {
+            color: #f472b6;
+        }
+
+        .terminal .output {
+            color: #888;
+        }
+
+        .terminal .close-hint {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="newspaper">
+        <!-- Masthead -->
+        <header class="masthead">
+            <p class="masthead-date">December 17, 2025 • Online Edition</p>
+            <h1>TREMORS</h1>
+            <p class="masthead-tagline">"All the Code That's Fit to Ship"</p>
+            <div class="masthead-controls">
+                <button class="theme-toggle" id="theme-toggle">☀ Light Edition</button>
+            </div>
+        </header>
+
+        <!-- Ticker -->
+        <div class="ticker">
+            <div class="ticker-content">
+                <span class="ticker-item">📝 <span class="highlight">arcade-nexus</span>: feat: add cloud sync for save
+                    states • 2h ago</span>
+                <span class="ticker-item">⭐ Starred <span class="highlight">vercel/next.js</span> • 5h ago</span>
+                <span class="ticker-item">🚀 Released <span class="highlight">tremors-music@v2.0.0</span> • 3d
+                    ago</span>
+                <span class="ticker-item">🔄 Merged PR in <span class="highlight">quizzer-ai</span> • 4d ago</span>
+                <span class="ticker-item">📝 <span class="highlight">arcade-nexus</span>: feat: add cloud sync for save
+                    states • 2h ago</span>
+                <span class="ticker-item">⭐ Starred <span class="highlight">vercel/next.js</span> • 5h ago</span>
+                <span class="ticker-item">🚀 Released <span class="highlight">tremors-music@v2.0.0</span> • 3d
+                    ago</span>
+                <span class="ticker-item">🔄 Merged PR in <span class="highlight">quizzer-ai</span> • 4d ago</span>
+            </div>
+        </div>
+
+        <!-- Main Headline -->
+        <h2 class="headline">Local Developer Builds AI-Powered Platforms, Refuses to Stop Pushing Commits</h2>
+        <p class="subheadline">Aman Singh, known online as "Tremors," continues his relentless pursuit of cleaner code
+            and smarter applications</p>
+
+        <div class="byline">
+            <span><span class="byline-author">AMAN SINGH</span> • Full-Stack Python Developer</span>
+            <span>📍 India</span>
+        </div>
+
+        <!-- Main Content -->
+        <div class="columns">
+            <p>In a world increasingly dominated by AI assistants and automated workflows, one developer has made it his
+                mission to bridge the gap between traditional web engineering and cutting-edge language models. Aman
+                Singh, a Computer Science graduate and self-proclaimed "Full-Stack Python Developer," has been quietly
+                building an impressive portfolio of projects that span from quiz platforms to music players.</p>
+
+            <p>"I fell in love with Python," Singh explains, "and I never looked back. There's an elegance to it that
+                just makes sense." His focus on the Django and FastAPI ecosystems has led to the creation of numerous
+                production-ready applications, each demonstrating a deep understanding of backend architecture and
+                real-time web features.</p>
+
+            <div class="pull-quote">
+                "I believe in writing code that's not just functional, but clean, efficient, and maintainable."
+            </div>
+
+            <p>Singh's most notable project, Quizzer AI, exemplifies his approach: an adaptive learning platform that
+                leverages Google's Gemini AI to generate infinite programming quizzes. The system provides personalized
+                questions and context-aware explanations, marking a significant step forward in educational technology.
+            </p>
+
+            <p>Beyond application development, Singh has demonstrated a penchant for developer tooling—creating CLIs for
+                Git visualization, remote control APIs for system management, and even a custom Terminal UI for his
+                portfolio. "I appreciate the details of how software interacts with the underlying system," he notes.
+            </p>
+
+            <p>Currently, Singh is exploring the intersection of traditional web engineering and LLM capabilities, with
+                the goal of creating "smarter applications" that adapt to user needs in real-time. His status: actively
+                seeking new opportunities.</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-block">
+            <div class="stat">
+                <div class="stat-number">42</div>
+                <div class="stat-label">Repositories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">128</div>
+                <div class="stat-label">GitHub Stars</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">1.2k+</div>
+                <div class="stat-label">Commits</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Projects</div>
+            </div>
+        </div>
+
+        <!-- Projects as Table -->
+        <table class="data-table">
+            <caption>Featured Projects</caption>
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Stack</th>
+                    <th>Stars</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><a href="#">Quizzer AI</a></td>
+                    <td>Python, Django, Gemini</td>
+                    <td>⭐ 45</td>
+                    <td>Live</td>
+                </tr>
+                <tr>
+                    <td><a href="#">GitNexus</a></td>
+                    <td>Python, Flask, GitHub API</td>
+                    <td>⭐ 28</td>
+                    <td>Live</td>
+                </tr>
+                <tr>
+                    <td><a href="#">Tremors Music</a></td>
+                    <td>React, Tauri, FastAPI</td>
+                    <td>⭐ 32</td>
+                    <td>v2.0</td>
+                </tr>
+                <tr>
+                    <td><a href="#">Algorithm Visualizer</a></td>
+                    <td>React, TypeScript, FastAPI</td>
+                    <td>⭐ 15</td>
+                    <td>Live</td>
+                </tr>
+                <tr>
+                    <td><a href="#">Arcade Nexus</a></td>
+                    <td>React, FastAPI, Game SDK</td>
+                    <td>⭐ 12</td>
+                    <td>Beta</td>
+                </tr>
+                <tr>
+                    <td><a href="#">LOCR</a></td>
+                    <td>Python, CLI</td>
+                    <td>⭐ 8</td>
+                    <td>Stable</td>
+                </tr>
+                <tr>
+                    <td><a href="#">PC Remote Control</a></td>
+                    <td>Python, FastAPI</td>
+                    <td>⭐ 5</td>
+                    <td>Stable</td>
+                </tr>
+                <tr>
+                    <td><a href="#">Plant Disease Detector</a></td>
+                    <td>Django, TensorFlow</td>
+                    <td>⭐ 4</td>
+                    <td>Demo</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Skills as List -->
+        <h3
+            style="font-family: 'Playfair Display', serif; font-size: 1.25rem; text-transform: uppercase; letter-spacing: 2px; margin-top: 48px; border-bottom: 1px solid var(--ink); padding-bottom: 8px;">
+            Technical Proficiencies</h3>
+        <ul class="skill-list">
+            <li><span class="category">Backend:</span> Python</li>
+            <li><span class="category">Backend:</span> Django</li>
+            <li><span class="category">Backend:</span> FastAPI</li>
+            <li><span class="category">Backend:</span> PostgreSQL</li>
+            <li><span class="category">Frontend:</span> React</li>
+            <li><span class="category">Frontend:</span> TypeScript</li>
+            <li><span class="category">Frontend:</span> Next.js</li>
+            <li><span class="category">Frontend:</span> HTML/CSS</li>
+            <li><span class="category">AI/ML:</span> TensorFlow</li>
+            <li><span class="category">AI/ML:</span> Gemini API</li>
+            <li><span class="category">AI/ML:</span> NumPy</li>
+            <li><span class="category">Tools:</span> Git & GitHub</li>
+            <li><span class="category">Tools:</span> Docker</li>
+            <li><span class="category">Tools:</span> VS Code</li>
+            <li><span class="category">Tools:</span> Linux</li>
+        </ul>
+
+        <!-- Contact -->
+        <div class="contact-block">
+            <h2>Correspondence</h2>
+            <p>For inquiries regarding positions, collaborations, or just to say hello:</p>
+            <div class="contact-links">
+                <a href="mailto:singhamankumar207@gmail.com">📧 singhamankumar207@gmail.com</a>
+                <a href="#">🐙 github.com/qtremors</a>
+                <a href="#">💼 linkedin.com/in/aman-singh</a>
+                <a href="#">📄 Download Resume (PDF)</a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>© 2025 The Tremors Chronicle. All Rights Reserved.</p>
+            <p style="margin-top: 8px;">Press <kbd>`</kbd> for terminal edition</p>
+        </footer>
+    </div>
+
+    <!-- Terminal Mode -->
+    <div class="terminal" id="terminal">
+        <pre style="color: #a78bfa;">
+ _____ ____  _____ __  __  ___  ____  ____  
+|_   _|  _ \| ____|  \/  |/ _ \|  _ \/ ___| 
+  | | | |_) |  _| | |\/| | | | | |_) \___ \ 
+  | | |  _ <| |___| |  | | |_| |  _ < ___) |
+  |_| |_| \_\_____|_|  |_|\___/|_| \_\____/ 
+        </pre>
+        <pre><span class="prompt">$</span> whoami</pre>
+        <pre class="output">Aman Singh — Full-Stack Python Developer</pre>
+        <pre><span class="prompt">$</span> cat about.txt</pre>
+        <pre class="output">Building AI-powered platforms, real-time systems, and developer tools.
+Django & FastAPI specialist. Open to opportunities.</pre>
+        <pre><span class="prompt">$</span> ls projects/</pre>
+        <pre class="output">quizzer-ai/  git-nexus/  tremors-music/  algorithm-viz/  arcade-nexus/</pre>
+        <pre><span class="prompt">$</span> cat contact.txt</pre>
+        <pre class="output">📧 singhamankumar207@gmail.com
+🐙 github.com/qtremors
+💼 linkedin.com/in/aman-singh</pre>
+        <pre><span class="prompt">$</span> <span style="animation: blink 1s step-end infinite;">_</span></pre>
+        <p class="close-hint">Press <kbd>`</kbd> to return to print edition</p>
+    </div>
+
+    <script>
+        // Theme toggle
+        const toggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        toggle.addEventListener('click', () => {
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            toggle.textContent = next === 'dark' ? '☀ Light Edition' : '☾ Dark Edition';
+        });
+
+        // Terminal toggle
+        const terminal = document.getElementById('terminal');
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '`') {
+                e.preventDefault();
+                terminal.classList.toggle('active');
+            }
+            if (e.key === 'Escape') {
+                terminal.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Modal Design Options</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #8ab4f8;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .demo-card {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 1.5rem;
+            border: 1px solid #333;
+        }
+
+        .demo-card h2 {
+            color: #8ab4f8;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .demo-card .desc {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-preview {
+            background: #121212;
+            border-radius: 24px;
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #333;
+            background: #1e1e1e;
+        }
+
+        .modal-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: #888;
+            font-size: 1.5rem;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .close-btn:hover {
+            background: #333;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        /* Shared Components */
+        .setting-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .setting-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .setting-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .theme-card {
+            background: transparent;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .theme-card:hover {
+            background: #252525;
+        }
+
+        .theme-card.active {
+            background: #252525;
+            border-color: #8ab4f8;
+        }
+
+        .theme-preview {
+            height: 50px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .md-preview {
+            background: linear-gradient(135deg, #8ab4f8, #1967d2);
+        }
+
+        .md3-preview {
+            background: linear-gradient(135deg, #e9b3ff, #4f2667);
+        }
+
+        .oled-preview {
+            background: linear-gradient(135deg, #666, #000);
+        }
+
+        .theme-card span {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
+        .segmented-control {
+            display: flex;
+            background: #1a1a1a;
+            padding: 4px;
+            border-radius: 12px;
+            gap: 4px;
+        }
+
+        .segment-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: #888;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .segment-btn:hover {
+            color: #fff;
+        }
+
+        .segment-btn.active {
+            background: #252525;
+            color: #8ab4f8;
+            font-weight: 600;
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .toggle-row:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-label {
+            font-size: 0.95rem;
+        }
+
+        .toggle-switch {
+            width: 48px;
+            height: 26px;
+            background: #333;
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle-switch.on {
+            background: #8ab4f8;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle-switch.on::after {
+            transform: translateX(22px);
+        }
+
+        /* OPTION A: Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #333;
+            background: #1a1a1a;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            font-size: 0.95rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: #fff;
+        }
+
+        .tab.active {
+            color: #8ab4f8;
+            border-bottom-color: #8ab4f8;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* OPTION B: Two Column */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .col-divider {
+            border-left: 1px solid #333;
+            padding-left: 1.5rem;
+        }
+
+        /* OPTION C: Accordion */
+        .accordion-item {
+            border-bottom: 1px solid #333;
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .accordion-header:hover {
+            color: #8ab4f8;
+        }
+
+        .accordion-icon {
+            transition: transform 0.2s;
+        }
+
+        .accordion-item.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s;
+        }
+
+        .accordion-item.open .accordion-content {
+            max-height: 200px;
+            padding-bottom: 1rem;
+        }
+
+        /* OPTION D: Drawer */
+        .drawer-demo {
+            display: flex;
+            height: 400px;
+            background: #0a0a0a;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .drawer-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+        }
+
+        .drawer-panel {
+            width: 300px;
+            background: #121212;
+            border-left: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-panel .modal-body {
+            flex: 1;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎨 Settings Modal Design Options</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 2rem;">Click/hover to see interactions. Choose your
+        favorite!</p>
+
+    <div class="demo-grid">
+        <!-- OPTION A: Tabbed -->
+        <div class="demo-card">
+            <h2>Option A: Tabbed Layout</h2>
+            <p class="desc">Two tabs separate Themes from Effects. Clean & focused.</p>
+            <div class="modal-preview">
+                <div class="modal-header">
+                    <h3>Appearance</h3>
+                    <button class="close-btn">×</button>
+                </div>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab(this, 'themes-a')">🎨 Themes</button>
+                    <button class="tab" onclick="switchTab(this, 'effects-a')">✨ Effects</button>
+                </div>
+                <div class="modal-body">
+                    <div id="themes-a" class="tab-panel active">
+                        <div class="setting-group">
+                            <div class="setting-label">Color Mode</div>
+                            <div class="segmented-control">
+                                <button class="segment-btn">System</button>
+                                <button class="segment-btn">Light</button>
+                                <button class="segment-btn active">Dark</button>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <div class="setting-label">Visual Theme</div>
+                            <div class="theme-grid">
+                                <div class="theme-card">
+                                    <div class="theme-preview md-preview"></div><span>MD</span>
+                                </div>
+                                <div class="theme-card">
+                                    <div class="theme-preview md3-preview"></div><span>MD3</span>
+                                </div>
+                                <div class="theme-card active">
+                                    <div class="theme-preview oled-preview"></div><span>OLED</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="effects-a" class="tab-panel">
+                        <div class="toggle-row"><span class="toggle-label">🌫️ Fog Effect</span>
+                            <div class="toggle-switch"></div>
+                        </div>
+                        <div class="toggle-row"><span class="toggle-label">🧊 Glass Effect</span>
+                            <div class="toggle-switch on"></div>
+                        </div>
+                        <div class="toggle-row"><span class="toggle-label">💡 Spotlight</span>
+                            <div class="toggle-switch"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION B: Two Column -->
+        <div class="demo-card">
+            <h2>Option B: Two-Column Grid</h2>
+            <p class="desc">Wider modal shows everything at once. Good for desktop.</p>
+            <div class="modal-preview" style="max-width: 550px;">
+                <div class="modal-header">
+                    <h3>Appearance</h3>
+                    <button class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="two-col">
+                        <div>
+                            <div class="setting-group">
+                                <div class="setting-label">Visual Theme</div>
+                                <div class="theme-grid">
+                                    <div class="theme-card">
+                                        <div class="theme-preview md-preview"></div><span>MD</span>
+                                    </div>
+                                    <div class="theme-card">
+                                        <div class="theme-preview md3-preview"></div><span>MD3</span>
+                                    </div>
+                                    <div class="theme-card active">
+                                        <div class="theme-preview oled-preview"></div><span>OLED</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <div class="setting-label">Color Mode</div>
+                                <div class="segmented-control">
+                                    <button class="segment-btn">System</button>
+                                    <button class="segment-btn active">Dark</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-divider">
+                            <div class="setting-label">Effects</div>
+                            <div class="toggle-row"><span class="toggle-label">🌫️ Fog</span>
+                                <div class="toggle-switch"></div>
+                            </div>
+                            <div class="toggle-row"><span class="toggle-label">🧊 Glass</span>
+                                <div class="toggle-switch on"></div>
+                            </div>
+                            <div class="toggle-row"><span class="toggle-label">💡 Spotlight</span>
+                                <div class="toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION C: Accordion -->
+        <div class="demo-card">
+            <h2>Option C: Accordion Sections</h2>
+            <p class="desc">Collapsible sections reduce visual clutter. Mobile-friendly.</p>
+            <div class="modal-preview">
+                <div class="modal-header">
+                    <h3>Appearance</h3>
+                    <button class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="accordion-item open" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            <span>🎨 Visual Theme</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="theme-grid">
+                                <div class="theme-card">
+                                    <div class="theme-preview md-preview"></div><span>MD</span>
+                                </div>
+                                <div class="theme-card">
+                                    <div class="theme-preview md3-preview"></div><span>MD3</span>
+                                </div>
+                                <div class="theme-card active">
+                                    <div class="theme-preview oled-preview"></div><span>OLED</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            <span>🌙 Color Mode</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="segmented-control">
+                                <button class="segment-btn">System</button>
+                                <button class="segment-btn active">Dark</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item" onclick="toggleAccordion(this)">
+                        <div class="accordion-header">
+                            <span>✨ Effects</span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="toggle-row"><span>Fog</span>
+                                <div class="toggle-switch"></div>
+                            </div>
+                            <div class="toggle-row"><span>Glass</span>
+                                <div class="toggle-switch on"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION D: Drawer -->
+        <div class="demo-card">
+            <h2>Option D: Sidebar Drawer</h2>
+            <p class="desc">Slides in from right. Modern feel, full height.</p>
+            <div class="drawer-demo">
+                <div class="drawer-content">← Your page content</div>
+                <div class="drawer-panel">
+                    <div class="modal-header">
+                        <h3>Appearance</h3>
+                        <button class="close-btn">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="setting-group">
+                            <div class="setting-label">Theme</div>
+                            <div class="theme-grid" style="grid-template-columns: 1fr 1fr;">
+                                <div class="theme-card">
+                                    <div class="theme-preview md-preview"></div><span>MD</span>
+                                </div>
+                                <div class="theme-card">
+                                    <div class="theme-preview md3-preview"></div><span>MD3</span>
+                                </div>
+                                <div class="theme-card active" style="grid-column: span 2;">
+                                    <div class="theme-preview oled-preview"></div><span>OLED</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <div class="setting-label">Effects</div>
+                            <div class="toggle-row"><span>🌫️ Fog</span>
+                                <div class="toggle-switch"></div>
+                            </div>
+                            <div class="toggle-row"><span>🧊 Glass</span>
+                                <div class="toggle-switch on"></div>
+                            </div>
+                            <div class="toggle-row"><span>💡 Spotlight</span>
+                                <div class="toggle-switch"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(btn, panelId) {
+            const container = btn.closest('.modal-preview');
+            container.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            container.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(panelId).classList.add('active');
+        }
+
+        function toggleAccordion(item) {
+            item.classList.toggle('open');
+        }
+
+        // Toggle switches
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggle.classList.toggle('on');
+            });
+        });
+
+        // Theme cards
+        document.querySelectorAll('.theme-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const grid = card.closest('.theme-grid');
+                grid.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

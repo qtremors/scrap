@@ -1,0 +1,5 @@
+{
+    "title": "Cinematic Depth Portfolio",
+    "mainFile": "index.html",
+    "note": "Parallax portfolio with scroll-snap sections, cinematic backgrounds, and GSAP animations."
+}
