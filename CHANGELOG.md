@@ -4,6 +4,10 @@ All notable changes to the "Scrapyard" project will be documented in this file.
 
 ## [2.1.0] - 2025-12-19
 
+### Added
+-   **Category Visual Indicators**: Emoji icons and color-coded borders for each category.
+    -   🎨 Portfolio (cyan), 🎮 Game (red), 🧩 Component (purple), 📄 Template (green), 🖼️ Gallery (amber), ✨ Showcase (pink), 📦 Archive (gray)
+
 ### Changed
 -   **Folder Naming Convention**: Reorganized all 24 project folders to follow `category-name` format.
     -   Categories: `portfolio-`, `game-`, `component-`, `template-`, `gallery-`, `showcase-`, `archive-`

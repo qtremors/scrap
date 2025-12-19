@@ -11,6 +11,7 @@ Every developer has a folder of unfinished projects and half-baked ideas. This "
 ## Features
 
 -   **Cyberpunk Aesthetics**: Dark theme, neon accents, glitch effects, and digital noise texture.
+-   **Category Visual Indicators**: Emoji icons and color-coded borders for each project type (🎨 Portfolio, 🎮 Game, 🧩 Component, 📄 Template, 🖼️ Gallery, ✨ Showcase, 📦 Archive).
 -   **Terminal Search**: Filter projects instantly using the command-line style input at the top.
 -   **Live Previews**: Hover over any card for 1 second to see a live running preview of the project in the background.
 -   **Interactive Background**: A dynamic HTML5 Canvas "Digital Matrix Rain" animation.

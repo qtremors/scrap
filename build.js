@@ -17,10 +17,25 @@ function getProjectItems() {
         .sort();
 }
 
+function getCategory(folderName) {
+    const prefix = folderName.split('-')[0];
+    const categories = {
+        'portfolio': { emoji: '🎨', name: 'portfolio' },
+        'game': { emoji: '🎮', name: 'game' },
+        'component': { emoji: '🧩', name: 'component' },
+        'template': { emoji: '📄', name: 'template' },
+        'gallery': { emoji: '🖼️', name: 'gallery' },
+        'showcase': { emoji: '✨', name: 'showcase' },
+        'archive': { emoji: '📦', name: 'archive' }
+    };
+    return categories[prefix] || { emoji: '📁', name: 'other' };
+}
+
 function generateCardHTML(folderName) {
     let title = folderName.replace(/[-_]/g, ' ');
     let note = '';
     let linkPath = `./projects/${folderName}/index.html`;
+    const category = getCategory(folderName);
 
 
     const metaPath = path.join(projectsDir, folderName, 'meta.json');
@@ -43,8 +58,8 @@ function generateCardHTML(folderName) {
     const noteHTML = note ? `<p class="project-note">${note}</p>` : '';
 
     return `
-    <a href="${linkPath}" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>${title}</h5>
+    <a href="${linkPath}" class="project-card" data-category="${category.name}" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">${category.emoji}</span> ${title}</h5>
         <pre class="link-path">${linkPath}</pre>
         ${noteHTML}
     </a>`;

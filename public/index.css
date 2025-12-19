@@ -246,6 +246,29 @@ h1.glitch::after {
     margin-top: auto;
 }
 
+/* Category Icons */
+.category-icon {
+    margin-right: 0.25rem;
+}
+
+/* Category Colors */
+.project-card[data-category="portfolio"] { --category-color: #00f0ff; }
+.project-card[data-category="game"] { --category-color: #ff6b6b; }
+.project-card[data-category="component"] { --category-color: #a855f7; }
+.project-card[data-category="template"] { --category-color: #22c55e; }
+.project-card[data-category="gallery"] { --category-color: #f59e0b; }
+.project-card[data-category="showcase"] { --category-color: #ec4899; }
+.project-card[data-category="archive"] { --category-color: #6b7280; }
+
+.project-card[data-category]::before {
+    background: var(--category-color, var(--accent-color));
+}
+
+.project-card[data-category]:hover {
+    border-color: var(--category-color, var(--accent-color));
+    box-shadow: 0 0 20px color-mix(in srgb, var(--category-color) 40%, transparent);
+}
+
 /* Animations */
 @keyframes glitch-anim {
     0% {
