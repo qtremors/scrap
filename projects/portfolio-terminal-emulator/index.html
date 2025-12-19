@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option C: Terminal Emulator</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Dracula Theme */
+            --bg: #282a36;
+            --current-line: #44475a;
+            --foreground: #f8f8f2;
+            --comment: #6272a4;
+            --cyan: #8be9fd;
+            --green: #50fa7b;
+            --orange: #ffb86c;
+            --pink: #ff79c6;
+            --purple: #bd93f9;
+            --red: #ff5555;
+            --yellow: #f1fa8c;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg);
+            color: var(--foreground);
+            min-height: 100vh;
+            padding: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--purple);
+            color: var(--bg);
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 100;
+        }
+
+        /* Terminal Window */
+        .terminal-window {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #1e1f29;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--current-line);
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red {
+            background: var(--red);
+        }
+
+        .terminal-dot.yellow {
+            background: var(--yellow);
+        }
+
+        .terminal-dot.green {
+            background: var(--green);
+        }
+
+        .terminal-title {
+            flex: 1;
+            text-align: center;
+            color: var(--comment);
+            font-size: 0.85rem;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            min-height: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* Terminal Lines */
+        .line {
+            margin-bottom: 8px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .prompt {
+            color: var(--green);
+        }
+
+        .prompt-user {
+            color: var(--pink);
+        }
+
+        .prompt-path {
+            color: var(--cyan);
+        }
+
+        .command {
+            color: var(--foreground);
+        }
+
+        .output {
+            color: var(--comment);
+            padding-left: 0;
+        }
+
+        .output-highlight {
+            color: var(--foreground);
+        }
+
+        .output-accent {
+            color: var(--purple);
+        }
+
+        .output-success {
+            color: var(--green);
+        }
+
+        .output-warning {
+            color: var(--yellow);
+        }
+
+        .output-link {
+            color: var(--cyan);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* ASCII Art */
+        .ascii-art {
+            color: var(--purple);
+            line-height: 1.2;
+            margin: 16px 0;
+        }
+
+        /* Project Table */
+        .project-table {
+            border: 1px solid var(--current-line);
+            margin: 12px 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 40px 1fr 200px;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--current-line);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-row.header {
+            background: var(--current-line);
+            color: var(--purple);
+            font-weight: 700;
+        }
+
+        .table-row:not(.header):hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .table-id {
+            color: var(--yellow);
+        }
+
+        .table-name {
+            color: var(--foreground);
+        }
+
+        .table-tech {
+            color: var(--comment);
+            text-align: right;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 12px 0;
+        }
+
+        .skill-box {
+            border: 1px solid var(--current-line);
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .skill-box h4 {
+            color: var(--pink);
+            margin-bottom: 8px;
+        }
+
+        .skill-box ul {
+            list-style: none;
+            color: var(--comment);
+        }
+
+        .skill-box li::before {
+            content: '› ';
+            color: var(--green);
+        }
+
+        /* Input Line */
+        .input-line {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .input-field {
+            background: transparent;
+            border: none;
+            color: var(--foreground);
+            font-family: inherit;
+            font-size: inherit;
+            flex: 1;
+            outline: none;
+            caret-color: var(--green);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--green);
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Help Menu */
+        .help-menu {
+            margin: 12px 0;
+        }
+
+        .help-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            padding: 4px 0;
+        }
+
+        .help-cmd {
+            color: var(--yellow);
+        }
+
+        .help-desc {
+            color: var(--comment);
+        }
+
+        /* Contact Box */
+        .contact-box {
+            border: 1px solid var(--current-line);
+            border-radius: 4px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .contact-item {
+            padding: 4px 0;
+        }
+
+        .contact-label {
+            color: var(--purple);
+        }
+
+        .contact-value {
+            color: var(--cyan);
+        }
+
+        /* Theme Selector */
+        .theme-info {
+            margin: 12px 0;
+            padding: 12px;
+            background: var(--current-line);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-badge">Demo: Terminal</div>
+
+    <div class="terminal-window">
+        <div class="terminal-header">
+            <div class="terminal-dot red"></div>
+            <div class="terminal-dot yellow"></div>
+            <div class="terminal-dot green"></div>
+            <div class="terminal-title">tremors@portfolio — zsh</div>
+        </div>
+
+        <div class="terminal-body" id="terminal">
+            <!-- Welcome -->
+            <div class="line">
+                <span class="output">Last login: Tue Dec 17 09:30:00 on ttys000</span>
+            </div>
+
+            <!-- ASCII Art -->
+            <pre class="ascii-art">
+████████╗██████╗ ███████╗███╗   ███╗ ██████╗ ██████╗ ███████╗
+╚══██╔══╝██╔══██╗██╔════╝████╗ ████║██╔═══██╗██╔══██╗██╔════╝
+   ██║   ██████╔╝█████╗  ██╔████╔██║██║   ██║██████╔╝███████╗
+   ██║   ██╔══██╗██╔══╝  ██║╚██╔╝██║██║   ██║██╔══██╗╚════██║
+   ██║   ██║  ██║███████╗██║ ╚═╝ ██║╚██████╔╝██║  ██║███████║
+   ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+            </pre>
+
+            <div class="line">
+                <span class="output">Welcome to </span>
+                <span class="output-accent">tremors.dev</span>
+                <span class="output"> — Interactive Portfolio v2.0.0</span>
+            </div>
+            <div class="line">
+                <span class="output">Type </span>
+                <span class="output-success">help</span>
+                <span class="output"> to see available commands.</span>
+            </div>
+
+            <!-- Help Command -->
+            <div class="line" style="margin-top: 20px;">
+                <span class="prompt-user">visitor</span><span class="prompt">@</span><span
+                    class="prompt-path">tremors.dev</span><span class="prompt">:</span><span
+                    class="prompt-path">~</span><span class="prompt">$ </span>
+                <span class="command">help</span>
+            </div>
+
+            <div class="help-menu">
+                <div class="help-item">
+                    <span class="help-cmd">about</span>
+                    <span class="help-desc">Who is Aman Singh?</span>
+                </div>
+                <div class="help-item">
+                    <span class="help-cmd">skills</span>
+                    <span class="help-desc">Tech stack and expertise</span>
+                </div>
+                <div class="help-item">
+                    <span class="help-cmd">projects</span>
+                    <span class="help-desc">View portfolio projects</span>
+                </div>
+                <div class="help-item">
+                    <span class="help-cmd">project &lt;id&gt;</span>
+                    <span class="help-desc">View specific project details</span>
+                </div>
+                <div class="help-item">
+                    <span class="help-cmd">contact</span>
+                    <span class="help-desc">Get in touch</span>
+                </div>
+                <div class="help-item">
+                    <span class="help-cmd">theme &lt;name&gt;</span>
+                    <span class="help-desc">Change theme (dracula|monokai|nord)</span>
+                </div>
+                <div class="help-item">
+                    <span class="help-cmd">clear</span>
+                    <span class="help-desc">Clear terminal</span>
+                </div>
+                <div class="help-item">
+                    <span class="help-cmd">easteregg</span>
+                    <span class="help-desc">???</span>
+                </div>
+            </div>
+
+            <!-- About Command -->
+            <div class="line" style="margin-top: 20px;">
+                <span class="prompt-user">visitor</span><span class="prompt">@</span><span
+                    class="prompt-path">tremors.dev</span><span class="prompt">:</span><span
+                    class="prompt-path">~</span><span class="prompt">$ </span>
+                <span class="command">about</span>
+            </div>
+
+            <div class="line">
+                <span class="output-highlight">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            </div>
+            <div class="line">
+                <span class="output-accent"> AMAN SINGH</span>
+                <span class="output"> │ Full-Stack Python Developer</span>
+            </div>
+            <div class="line">
+                <span class="output-highlight">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span>
+            </div>
+            <div class="line">
+                <span class="output">
+                    I'm a Computer Science graduate focused on the Django
+                    and FastAPI ecosystems. I build scalable backend systems
+                    and web applications, with experience in real-time
+                    WebSocket features and AI model integrations.
+
+                    Currently exploring: LLM-powered applications
+                    Location: India
+                    Status: </span><span class="output-success">Available for opportunities</span>
+            </div>
+
+            <!-- Projects Command -->
+            <div class="line" style="margin-top: 20px;">
+                <span class="prompt-user">visitor</span><span class="prompt">@</span><span
+                    class="prompt-path">tremors.dev</span><span class="prompt">:</span><span
+                    class="prompt-path">~</span><span class="prompt">$ </span>
+                <span class="command">projects</span>
+            </div>
+
+            <div class="line">
+                <span class="output">Fetching projects...</span>
+                <span class="output-success"> ✓</span>
+            </div>
+
+            <div class="project-table">
+                <div class="table-row header">
+                    <span>ID</span>
+                    <span>PROJECT</span>
+                    <span>TECH</span>
+                </div>
+                <div class="table-row">
+                    <span class="table-id">01</span>
+                    <span class="table-name">Quizzer AI</span>
+                    <span class="table-tech">Python, Django, Gemini</span>
+                </div>
+                <div class="table-row">
+                    <span class="table-id">02</span>
+                    <span class="table-name">GitNexus</span>
+                    <span class="table-tech">Python, Flask, GitHub API</span>
+                </div>
+                <div class="table-row">
+                    <span class="table-id">03</span>
+                    <span class="table-name">Algorithm Visualizer</span>
+                    <span class="table-tech">React, TypeScript, FastAPI</span>
+                </div>
+                <div class="table-row">
+                    <span class="table-id">04</span>
+                    <span class="table-name">Tremors Music</span>
+                    <span class="table-tech">React, Tauri, FastAPI</span>
+                </div>
+                <div class="table-row">
+                    <span class="table-id">05</span>
+                    <span class="table-name">Arcade Nexus</span>
+                    <span class="table-tech">React, FastAPI, Game SDK</span>
+                </div>
+            </div>
+
+            <div class="line">
+                <span class="output">Type </span>
+                <span class="output-success">project &lt;id&gt;</span>
+                <span class="output"> for details (e.g., </span>
+                <span class="output-success">project 01</span>
+                <span class="output">)</span>
+            </div>
+
+            <!-- Skills Command -->
+            <div class="line" style="margin-top: 20px;">
+                <span class="prompt-user">visitor</span><span class="prompt">@</span><span
+                    class="prompt-path">tremors.dev</span><span class="prompt">:</span><span
+                    class="prompt-path">~</span><span class="prompt">$ </span>
+                <span class="command">skills</span>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-box">
+                    <h4>Backend</h4>
+                    <ul>
+                        <li>Python</li>
+                        <li>Django</li>
+                        <li>FastAPI</li>
+                        <li>PostgreSQL</li>
+                    </ul>
+                </div>
+                <div class="skill-box">
+                    <h4>Frontend</h4>
+                    <ul>
+                        <li>React</li>
+                        <li>TypeScript</li>
+                        <li>Next.js</li>
+                        <li>HTML/CSS</li>
+                    </ul>
+                </div>
+                <div class="skill-box">
+                    <h4>AI/ML</h4>
+                    <ul>
+                        <li>TensorFlow</li>
+                        <li>Gemini API</li>
+                        <li>NumPy/Pandas</li>
+                        <li>scikit-learn</li>
+                    </ul>
+                </div>
+                <div class="skill-box">
+                    <h4>Tools</h4>
+                    <ul>
+                        <li>Git & GitHub</li>
+                        <li>Docker</li>
+                        <li>VS Code</li>
+                        <li>Linux/Windows</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Contact Command -->
+            <div class="line" style="margin-top: 20px;">
+                <span class="prompt-user">visitor</span><span class="prompt">@</span><span
+                    class="prompt-path">tremors.dev</span><span class="prompt">:</span><span
+                    class="prompt-path">~</span><span class="prompt">$ </span>
+                <span class="command">contact</span>
+            </div>
+
+            <div class="contact-box">
+                <div class="contact-item">
+                    <span class="contact-label">📧 Email: </span>
+                    <span class="contact-value">singhamankumar207@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">🐙 GitHub: </span>
+                    <span class="contact-value output-link">github.com/qtremors</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">💼 LinkedIn: </span>
+                    <span class="contact-value output-link">linkedin.com/in/aman-singh</span>
+                </div>
+            </div>
+
+            <!-- Input Line -->
+            <div class="input-line">
+                <span class="prompt-user">visitor</span><span class="prompt">@</span><span
+                    class="prompt-path">tremors.dev</span><span class="prompt">:</span><span
+                    class="prompt-path">~</span><span class="prompt">$ </span>
+                <input type="text" class="input-field" id="command-input" placeholder="" autofocus>
+                <span class="cursor"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple command handling demo
+        const input = document.getElementById('command-input');
+        input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value.trim().toLowerCase();
+                if (cmd === 'clear') {
+                    location.reload();
+                } else if (cmd === 'easteregg') {
+                    alert('🎮 Konami Code activated!\n\n↑ ↑ ↓ ↓ ← → ← → B A');
+                } else {
+                    alert(`Command "${cmd}" executed!\n\n(This is just a demo. The real version would process commands dynamically.)`);
+                }
+                input.value = '';
+            }
+        });
+    </script>
+</body>
+
+</html>

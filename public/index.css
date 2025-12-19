@@ -1,7 +1,8 @@
 :root {
     --bg-color: #050505;
     --text-primary: #e0e0e0;
-    --text-secondary: #888;
+    --text-secondary: #a0a0a0;
+    /* WCAG AA compliant on dark bg */
     --accent-color: #00f0ff;
     --accent-glow: rgba(0, 240, 255, 0.4);
     --card-bg: rgba(20, 20, 20, 0.8);
@@ -9,6 +10,26 @@
     --font-heading: 'Space Mono', monospace;
     --font-body: 'Inter', sans-serif;
     --grid-color: rgba(255, 255, 255, 0.03);
+}
+
+/* Skip Link for Accessibility */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-color);
+    color: var(--bg-color);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-family: var(--font-heading);
+    text-decoration: none;
+    z-index: 9999;
+    transition: top 0.3s;
+}
+
+.skip-link:focus {
+    top: 1rem;
 }
 
 body {
@@ -130,13 +151,13 @@ h1.glitch::after {
     margin-top: 2rem;
     display: inline-flex;
     align-items: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.85);
     border: 1px solid var(--card-border);
     padding: 0.5rem 1rem;
     border-radius: 4px;
     width: min(400px, 90vw);
     position: relative;
-    backdrop-filter: blur(5px);
+    /* Removed backdrop-filter for GPU performance */
 }
 
 .terminal-search .prompt {
@@ -167,6 +188,87 @@ h1.glitch::after {
     box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
 }
 
+.clear-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0.25rem;
+    opacity: 0.6;
+    transition: opacity 0.2s, color 0.2s;
+}
+
+.clear-btn:hover {
+    opacity: 1;
+    color: var(--accent-color);
+}
+
+.project-count {
+    font-family: var(--font-heading);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 1rem;
+    opacity: 0.7;
+}
+
+/* Category Filters */
+.category-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.filter-btn {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--text-primary);
+}
+
+.filter-btn.active {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    border-color: var(--accent-color);
+}
+
+/* Footer */
+.site-footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    position: relative;
+    z-index: 20;
+    margin-top: 2rem;
+}
+
+.site-footer p {
+    font-family: var(--font-heading);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+}
+
+.site-footer a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}
+
 /* Cards */
 #card-container {
     position: relative;
@@ -181,16 +283,16 @@ h1.glitch::after {
     position: absolute;
     width: 280px;
     padding: 1.5rem;
-    background: var(--card-bg);
+    background: rgba(20, 20, 20, 0.95);
     border: 1px solid var(--card-border);
-    backdrop-filter: blur(5px);
+    /* Removed backdrop-filter for GPU performance */
     text-decoration: none;
     color: var(--text-primary);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     border-radius: 4px;
     overflow: hidden;
-    will-change: transform, opacity, top, left;
+    /* Removed will-change for GPU performance */
 }
 
 .project-card::before {
@@ -244,6 +346,73 @@ h1.glitch::after {
     color: #ccc;
     line-height: 1.5;
     margin-top: auto;
+}
+
+/* Category Icons */
+.category-icon {
+    margin-right: 0.25rem;
+}
+
+/* Category Colors */
+.project-card[data-category="portfolio"] {
+    --category-color: #00f0ff;
+}
+
+.project-card[data-category="game"] {
+    --category-color: #ff6b6b;
+}
+
+.project-card[data-category="component"] {
+    --category-color: #a855f7;
+}
+
+.project-card[data-category="template"] {
+    --category-color: #22c55e;
+}
+
+.project-card[data-category="gallery"] {
+    --category-color: #f59e0b;
+}
+
+.project-card[data-category="showcase"] {
+    --category-color: #ec4899;
+}
+
+.project-card[data-category="archive"] {
+    --category-color: #6b7280;
+}
+
+.project-card[data-category]::before {
+    background: var(--category-color, var(--accent-color));
+}
+
+.project-card[data-category]:hover {
+    border-color: var(--category-color, var(--accent-color));
+    /* Fallback for browsers without color-mix support */
+    box-shadow: 0 0 20px var(--category-color, var(--accent-color));
+}
+
+@supports (box-shadow: 0 0 20px color-mix(in srgb, red 40%, transparent)) {
+    .project-card[data-category]:hover {
+        box-shadow: 0 0 20px color-mix(in srgb, var(--category-color) 40%, transparent);
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    h1.glitch::before,
+    h1.glitch::after {
+        animation: none;
+    }
+
+    .project-card {
+        transition: none;
+    }
+
+    #bg-canvas {
+        display: none;
+    }
 }
 
 /* Animations */

@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <a href="#card-container" class="skip-link">Skip to content</a>
     <div class="noise-overlay"></div>
     <canvas id="bg-canvas"></canvas>
     <div id="preview-backdrop">
@@ -36,88 +37,170 @@
         <div class="terminal-search">
             <span class="prompt">></span>
             <input type="text" id="search-input" placeholder="FILTER_PROJECTS..." spellcheck="false" autocomplete="off">
+            <button id="clear-search" class="clear-btn" aria-label="Clear search" style="display: none;">×</button>
+        </div>
+        <p id="project-count" class="project-count"></p>
+        <div id="category-filters" class="category-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="portfolio">🎨 Portfolio</button>
+            <button class="filter-btn" data-filter="game">🎮 Game</button>
+            <button class="filter-btn" data-filter="component">🧩 Component</button>
+            <button class="filter-btn" data-filter="template">📄 Template</button>
+            <button class="filter-btn" data-filter="gallery">🖼️ Gallery</button>
+            <button class="filter-btn" data-filter="showcase">✨ Showcase</button>
+            <button class="filter-btn" data-filter="archive">📦 Archive</button>
         </div>
     </header>
     <main id="card-container">
         
-    <a href="./projects/aestroid-runner/Aestroid Runner.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Aestroid Runner</h5>
-        <pre class="link-path">./projects/aestroid-runner/Aestroid Runner.html</pre>
-        <p class="project-note">Endless Runner Game</p>
+    <a href="./projects/archive-portfolio-old/index.html" class="project-card" data-category="archive" aria-label="Portfolio Archive (Old) - archive project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">📦</span> Portfolio Archive (Old)</h5>
+        <pre class="link-path">./projects/archive-portfolio-old/index.html</pre>
+        <p class="project-note">Archived previous monolith version of the main portfolio.</p>
     </a>
 
-    <a href="./projects/ascii-collection/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Ascii Gallery</h5>
-        <pre class="link-path">./projects/ascii-collection/index.html</pre>
-        <p class="project-note">A website to showcase the ASCII art collection.</p>
+    <a href="./projects/archive-scrap-old/index.html" class="project-card" data-category="archive" aria-label="Scrap Showcase (Old) - archive project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">📦</span> Scrap Showcase (Old)</h5>
+        <pre class="link-path">./projects/archive-scrap-old/index.html</pre>
+        <p class="project-note">Previous version of the scrap projects showcase website.</p>
     </a>
 
-    <a href="./projects/portfolio-1/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Portfolio (Terminal)</h5>
-        <pre class="link-path">./projects/portfolio-1/index.html</pre>
-        <p class="project-note">A portfolio built with Terminal inspired UI.</p>
+    <a href="./projects/component-modal-demos/index.html" class="project-card" data-category="component" aria-label="Modal Component Demos - component project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🧩</span> Modal Component Demos</h5>
+        <pre class="link-path">./projects/component-modal-demos/index.html</pre>
+        <p class="project-note">Collection of settings modal designs: Tabbed, Two-Column, Accordion, and Drawer layouts.</p>
     </a>
 
-    <a href="./projects/portfolio-2/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Portfolio-2</h5>
-        <pre class="link-path">./projects/portfolio-2/index.html</pre>
-        <p class="project-note">A portfolio built with modern UI.</p>
+    <a href="./projects/gallery-ascii-art/index.html" class="project-card" data-category="gallery" aria-label="ASCII Art Gallery - gallery project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🖼️</span> ASCII Art Gallery</h5>
+        <pre class="link-path">./projects/gallery-ascii-art/index.html</pre>
+        <p class="project-note">Website showcasing a collection of ASCII art pieces.</p>
     </a>
 
-    <a href="./projects/portfolio-3/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Portfolio-3</h5>
-        <pre class="link-path">./projects/portfolio-3/index.html</pre>
-        <p class="project-note">A scrolling based portfolio.</p>
+    <a href="./projects/game-asteroid-runner/Aestroid Runner.html" class="project-card" data-category="game" aria-label="Asteroid Runner - game project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎮</span> Asteroid Runner</h5>
+        <pre class="link-path">./projects/game-asteroid-runner/Aestroid Runner.html</pre>
+        <p class="project-note">3D endless runner game where you dodge asteroids in space.</p>
     </a>
 
-    <a href="./projects/portfolio-4/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>CORE</h5>
-        <pre class="link-path">./projects/portfolio-4/index.html</pre>
-        <p class="project-note">A highly interactive, physics-based portfolio website designed to showcase projects in a 'living universe'. Projects float as bubbles in a zero-gravity environment, reacting to mouse interactions, dragging, and collisions.</p>
+    <a href="./projects/game-stellar-flare/Stellar_Flare_1.html" class="project-card" data-category="game" aria-label="Stellar Flare - game project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎮</span> Stellar Flare</h5>
+        <pre class="link-path">./projects/game-stellar-flare/Stellar_Flare_1.html</pre>
+        <p class="project-note">3D space game with Three.js - stay in the sun's light, avoid shadows and asteroids, collect pickups.</p>
     </a>
 
-    <a href="./projects/portfolio-old/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Portfolio-old</h5>
-        <pre class="link-path">./projects/portfolio-old/index.html</pre>
-        <p class="project-note">An Archive of a previous monolith version of the main portfolio.</p>
+    <a href="./projects/game-stellar-flare-modular/index.html" class="project-card" data-category="game" aria-label="Stellar Flare (Modular) - game project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎮</span> Stellar Flare (Modular)</h5>
+        <pre class="link-path">./projects/game-stellar-flare-modular/index.html</pre>
+        <p class="project-note">Modular version of Stellar Flare game with Three.js, Tone.js audio, and separate JS/CSS files.</p>
     </a>
 
-    <a href="./projects/scrap-old/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>scrap old</h5>
-        <pre class="link-path">./projects/scrap-old/index.html</pre>
-        
+    <a href="./projects/portfolio-3d-spatial/index.html" class="project-card" data-category="portfolio" aria-label="3D Spatial Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> 3D Spatial Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-3d-spatial/index.html</pre>
+        <p class="project-note">Space-themed portfolio with starfield background, floating cards, and parallax effects.</p>
     </a>
 
-    <a href="./projects/solar-runner/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Solar Runner</h5>
-        <pre class="link-path">./projects/solar-runner/index.html</pre>
-        <p class="project-note">Endless Runner Game (Requires a server to run)</p>
+    <a href="./projects/portfolio-bento-grid/index.html" class="project-card" data-category="portfolio" aria-label="Bento Grid Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Bento Grid Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-bento-grid/index.html</pre>
+        <p class="project-note">Dashboard-style portfolio with Bento grid layout, GitHub stats, and project cards.</p>
     </a>
 
-    <a href="./projects/solar-runner_1/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Solar Runner-1</h5>
-        <pre class="link-path">./projects/solar-runner_1/index.html</pre>
-        <p class="project-note">Endless Runner Game (Requires a server to run)</p>
+    <a href="./projects/portfolio-brutalist/index.html" class="project-card" data-category="portfolio" aria-label="Brutalist Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Brutalist Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-brutalist/index.html</pre>
+        <p class="project-note">Minimalist brutalist design with monospace typography and ASCII dividers.</p>
     </a>
 
-    <a href="./projects/stellar-flare/Stellar_Flare.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Stellar Flare</h5>
-        <pre class="link-path">./projects/stellar-flare/Stellar_Flare.html</pre>
-        <p class="project-note">Endless Runner Game</p>
+    <a href="./projects/portfolio-cinematic-depth/index.html" class="project-card" data-category="portfolio" aria-label="Cinematic Depth Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Cinematic Depth Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-cinematic-depth/index.html</pre>
+        <p class="project-note">Parallax portfolio with scroll-snap sections, cinematic backgrounds, and GSAP animations.</p>
     </a>
 
-    <a href="./projects/stellar-flare-1/Stellar_Flare_1.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Stellar Flare-1</h5>
-        <pre class="link-path">./projects/stellar-flare-1/Stellar_Flare_1.html</pre>
-        <p class="project-note">Endless Runner Game</p>
+    <a href="./projects/portfolio-core-physics/index.html" class="project-card" data-category="portfolio" aria-label="CORE Physics Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> CORE Physics Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-core-physics/index.html</pre>
+        <p class="project-note">Interactive physics-based portfolio where projects float as draggable bubbles in zero-gravity.</p>
     </a>
 
-    <a href="./projects/templates/index.html" class="project-card" target="_blank" rel="noopener noreferrer">
-        <h5>Templates</h5>
-        <pre class="link-path">./projects/templates/index.html</pre>
-        <p class="project-note">A collection of reusable HTML/CSS templates and component scraps.</p>
+    <a href="./projects/portfolio-ethereal-glass/index.html" class="project-card" data-category="portfolio" aria-label="Ethereal Glass Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Ethereal Glass Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-ethereal-glass/index.html</pre>
+        <p class="project-note">Glassmorphism portfolio with custom cursor, ambient glow effects, and GSAP scroll animations.</p>
+    </a>
+
+    <a href="./projects/portfolio-final-concept/index.html" class="project-card" data-category="portfolio" aria-label="Final Concept Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Final Concept Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-final-concept/index.html</pre>
+        <p class="project-note">Comprehensive portfolio demo with dark/light themes, terminal overlay, and animated sections.</p>
+    </a>
+
+    <a href="./projects/portfolio-horizontal-scroll/index.html" class="project-card" data-category="portfolio" aria-label="Horizontal Scroll Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Horizontal Scroll Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-horizontal-scroll/index.html</pre>
+        <p class="project-note">Portfolio with horizontal scroll panels, dot navigation, and glitch text effects.</p>
+    </a>
+
+    <a href="./projects/portfolio-kinetic-type/index.html" class="project-card" data-category="portfolio" aria-label="Kinetic Typography Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Kinetic Typography Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-kinetic-type/index.html</pre>
+        <p class="project-note">Bold typographic portfolio with marquee animations, hover image reveal, and magnetic CTA button.</p>
+    </a>
+
+    <a href="./projects/portfolio-modern-bento/index.html" class="project-card" data-category="portfolio" aria-label="Modern Bento Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Modern Bento Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-modern-bento/index.html</pre>
+        <p class="project-note">Clean portfolio with Bento grid layout, Inter font, and reveal animations.</p>
+    </a>
+
+    <a href="./projects/portfolio-newspaper/index.html" class="project-card" data-category="portfolio" aria-label="Newspaper Editorial Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Newspaper Editorial Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-newspaper/index.html</pre>
+        <p class="project-note">Print-inspired editorial portfolio with newspaper layout, ticker, columns, and terminal mode.</p>
+    </a>
+
+    <a href="./projects/portfolio-quantum-hud/index.html" class="project-card" data-category="portfolio" aria-label="Quantum HUD Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Quantum HUD Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-quantum-hud/index.html</pre>
+        <p class="project-note">Cyberpunk portfolio with Three.js particles, glitch text effects, custom cursor, and HUD overlay.</p>
+    </a>
+
+    <a href="./projects/portfolio-terminal/index.html" class="project-card" data-category="portfolio" aria-label="Terminal Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Terminal Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-terminal/index.html</pre>
+        <p class="project-note">Portfolio with terminal UI aesthetic, Fira Code font, and command-line styling.</p>
+    </a>
+
+    <a href="./projects/portfolio-terminal-emulator/index.html" class="project-card" data-category="portfolio" aria-label="Terminal Emulator Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Terminal Emulator Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-terminal-emulator/index.html</pre>
+        <p class="project-note">Interactive terminal-style portfolio with command handling and Dracula theme.</p>
+    </a>
+
+    <a href="./projects/portfolio-timeline/index.html" class="project-card" data-category="portfolio" aria-label="Timeline Portfolio - portfolio project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">🎨</span> Timeline Portfolio</h5>
+        <pre class="link-path">./projects/portfolio-timeline/index.html</pre>
+        <p class="project-note">Scroll-snap timeline portfolio with chapter navigation and progress bar.</p>
+    </a>
+
+    <a href="./projects/showcase-transparent-design/index.html" class="project-card" data-category="showcase" aria-label="Transparent Design Showcase - showcase project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">✨</span> Transparent Design Showcase</h5>
+        <pre class="link-path">./projects/showcase-transparent-design/index.html</pre>
+        <p class="project-note">Nothing-inspired transparent design website with glassmorphism and animations.</p>
+    </a>
+
+    <a href="./projects/template-material-ecommerce/index.html" class="project-card" data-category="template" aria-label="Material E-commerce Templates - template project" target="_blank" rel="noopener noreferrer">
+        <h5><span class="category-icon">📄</span> Material E-commerce Templates</h5>
+        <pre class="link-path">./projects/template-material-ecommerce/index.html</pre>
+        <p class="project-note">Material Design templates and component scraps for e-commerce websites.</p>
     </a>
     </main>
+    <footer class="site-footer">
+        <p>SCRAP_YARD v2.2.0 // <a href="https://github.com/qtremors/scrap" target="_blank" rel="noopener">GitHub</a> //
+            © 2025</p>
+    </footer>
     <script src="public/index.js" defer></script>
 </body>
 

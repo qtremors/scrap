@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRANSPARENT / DESIGN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <!-- The Internal "Hardware" Layer -->
+    <div class="layer-internals" id="internals">
+        <div class="circuit-bg"></div>
+    </div>
+
+    <!-- The Glass Interface Layer -->
+    <div class="layer-glass">
+        <nav>
+            <div class="logo">NT/01</div>
+            <div class="nav-links">
+                <a href="#specs">SPECS</a>
+                <a href="#vision">VISION</a>
+                <a href="#blueprint">BLUEPRINT</a>
+            </div>
+            <div class="nav-status">
+                <span class="dot"></span> ONLINE
+            </div>
+        </nav>
+
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="glitch" data-text="TRANSPARENT">TRANSPARENT</h1>
+                    <div class="subtitle">SEE PAST THE SURFACE</div>
+                    <div class="tracker">
+                        <span id="coord-x">X: 000</span>
+                        <span id="coord-y">Y: 000</span>
+                    </div>
+                </div>
+                
+                <div class="card glass-panel">
+                    <div class="card-header">
+                        <span>COMPONENT_01</span>
+                        <span class="icon">➜</span>
+                    </div>
+                    <div class="card-body">
+                        The interface is the device. <br>
+                        No hidden layers. <br>
+                        Pure signal.
+                    </div>
+                    <div class="card-footer">
+                        SYS.RDY
+                    </div>
+                </div>
+            </section>
+
+            <section class="grid-display">
+                <div class="grid-item glass-panel">
+                    <h3>PROCESSOR</h3>
+                    <div class="bar-chart">
+                        <div class="bar" style="height: 80%"></div>
+                        <div class="bar" style="height: 40%"></div>
+                        <div class="bar" style="height: 90%"></div>
+                        <div class="bar" style="height: 60%"></div>
+                    </div>
+                </div>
+                <div class="grid-item glass-panel">
+                    <h3>MEMORY</h3>
+                    <div class="data-row"><span>ALLOC</span> <span>42%</span></div>
+                    <div class="data-row"><span>BUFFER</span> <span>128MB</span></div>
+                </div>
+                <div class="grid-item glass-panel alert">
+                    <h3>CORE TEMP</h3>
+                    <div class="big-stat">34°C</div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="marquee">
+                <span>DESIGNED IN LONDON // ASSEMBLED IN THE CLOUD // TRANSPARENCY IS THE NEW STANDARD // NOTHING TO HIDE // </span>
+                <span>DESIGNED IN LONDON // ASSEMBLED IN THE CLOUD // TRANSPARENCY IS THE NEW STANDARD // NOTHING TO HIDE // </span>
+            </div>
+        </footer>
+    </div>
+    
+    <div class="cursor-light"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

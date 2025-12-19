@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option B: Interactive Timeline</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0c0c0c;
+            --text: #f5f5f5;
+            --text-muted: #888;
+            --accent: #6366f1;
+            --accent-light: rgba(99, 102, 241, 0.2);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent);
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+
+        /* Section Base */
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        .section-content {
+            max-width: 900px;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        section.visible .section-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Chapter Number */
+        .chapter {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--accent);
+            margin-bottom: 24px;
+        }
+
+        /* Hero Section */
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 span {
+            display: block;
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            line-height: 1.8;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* About Section */
+        .about {
+            background: linear-gradient(180deg, var(--bg) 0%, #111 100%);
+        }
+
+        .about h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 32px;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 2;
+            margin-bottom: 24px;
+        }
+
+        .about .highlight {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Skills Section - Horizontal Scroll */
+        .skills {
+            flex-direction: column;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+
+        .skills .section-content {
+            width: 100%;
+            max-width: none;
+        }
+
+        .skills h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 48px;
+            padding-left: 40px;
+        }
+
+        .skills-track {
+            display: flex;
+            gap: 24px;
+            padding: 0 40px;
+            animation: scroll-left 20s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .skill-card {
+            flex-shrink: 0;
+            width: 280px;
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+
+        .skill-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+        }
+
+        .skill-card ul {
+            list-style: none;
+            color: var(--text-muted);
+            line-height: 2;
+        }
+
+        /* Projects Section */
+        .projects {
+            flex-direction: column;
+            gap: 100px;
+            padding: 100px 40px;
+            min-height: auto;
+        }
+
+        .project-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            max-width: 1100px;
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .project-item:nth-child(even) {
+            transform: translateX(60px);
+        }
+
+        .project-item:nth-child(even).visible {
+            transform: translateX(0);
+        }
+
+        .project-item:nth-child(even) {
+            direction: rtl;
+        }
+
+        .project-item:nth-child(even)>* {
+            direction: ltr;
+        }
+
+        .project-image {
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .project-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 16px;
+        }
+
+        .project-info p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: gap 0.3s;
+        }
+
+        .project-link:hover {
+            gap: 12px;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(180deg, #111 0%, var(--bg) 100%);
+            text-align: center;
+        }
+
+        .contact h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 24px;
+        }
+
+        .contact p {
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            padding: 16px 32px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .contact-btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .contact-btn.primary:hover {
+            background: #4f46e5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .project-item {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .project-item:nth-child(even) {
+                direction: ltr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-badge">Demo: Timeline</div>
+    <div class="progress-bar" id="progress"></div>
+
+    <!-- Hero -->
+    <section class="hero visible">
+        <div class="section-content">
+            <div class="chapter">Chapter 01</div>
+            <h1>I'm Aman Singh.<br><span>I build things.</span></h1>
+            <p>A Full-Stack Python Developer crafting AI-powered platforms, real-time systems, and tools that developers
+                actually want to use.</p>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll to explore</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about">
+        <div class="section-content">
+            <div class="chapter">Chapter 02</div>
+            <h2>The Story</h2>
+            <p>I'm a <span class="highlight">Computer Science graduate</span> who fell in love with the elegance of
+                Python and never looked back. My journey started with curiosity about how software works under the hood.
+            </p>
+            <p>Today, I specialize in the <span class="highlight">Django and FastAPI</span> ecosystems, building
+                everything from real-time WebSocket features to production-ready AI integrations. I believe in writing
+                code that's not just functional, but <span class="highlight">clean, efficient, and maintainable</span>.
+            </p>
+        </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="skills">
+        <div class="section-content">
+            <div class="chapter">Chapter 03</div>
+            <h2>The Arsenal</h2>
+            <div class="skills-track">
+                <div class="skill-card">
+                    <h3>🐍 Backend</h3>
+                    <ul>
+                        <li>Python</li>
+                        <li>Django</li>
+                        <li>FastAPI</li>
+                        <li>PostgreSQL</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>⚛️ Frontend</h3>
+                    <ul>
+                        <li>React</li>
+                        <li>TypeScript</li>
+                        <li>Next.js</li>
+                        <li>Tailwind CSS</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>🧠 AI/ML</h3>
+                    <ul>
+                        <li>TensorFlow</li>
+                        <li>Gemini API</li>
+                        <li>NumPy</li>
+                        <li>Pandas</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>🛠️ Tools</h3>
+                    <ul>
+                        <li>Git & GitHub</li>
+                        <li>Docker</li>
+                        <li>VS Code</li>
+                        <li>Linux</li>
+                    </ul>
+                </div>
+                <!-- Duplicate for infinite scroll -->
+                <div class="skill-card">
+                    <h3>🐍 Backend</h3>
+                    <ul>
+                        <li>Python</li>
+                        <li>Django</li>
+                        <li>FastAPI</li>
+                        <li>PostgreSQL</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>⚛️ Frontend</h3>
+                    <ul>
+                        <li>React</li>
+                        <li>TypeScript</li>
+                        <li>Next.js</li>
+                        <li>Tailwind CSS</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="projects">
+        <div class="chapter" style="padding-left: 0;">Chapter 04 — The Work</div>
+
+        <div class="project-item">
+            <div class="project-image">🧠</div>
+            <div class="project-info">
+                <h3>Quizzer AI</h3>
+                <p>An adaptive learning platform that generates infinite programming quizzes using Google Gemini AI. Get
+                    personalized questions and context-aware explanations for every mistake.</p>
+                <a href="#" class="project-link">View Project →</a>
+            </div>
+        </div>
+
+        <div class="project-item">
+            <div class="project-image">📊</div>
+            <div class="project-info">
+                <h3>GitNexus</h3>
+                <p>A self-hosted Flask dashboard for tracking GitHub repository updates, bulk-downloading assets, and
+                    exploring user profiles with contribution graphs.</p>
+                <a href="#" class="project-link">View Project →</a>
+            </div>
+        </div>
+
+        <div class="project-item">
+            <div class="project-image">🎵</div>
+            <div class="project-info">
+                <h3>Tremors Music</h3>
+                <p>A high-performance, local-first music player with both web and native desktop versions. Features
+                    glassmorphism design and Tauri for minimal resource usage.</p>
+                <a href="#" class="project-link">View Project →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="contact">
+        <div class="section-content">
+            <div class="chapter">Chapter 05</div>
+            <h2>Let's Connect</h2>
+            <p>I'm currently looking for new opportunities. My inbox is always open.</p>
+            <div class="contact-links">
+                <a href="#" class="contact-btn primary">Email Me</a>
+                <a href="#" class="contact-btn">GitHub</a>
+                <a href="#" class="contact-btn">LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress').style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('section, .project-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>

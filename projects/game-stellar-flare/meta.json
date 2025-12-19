@@ -1,0 +1,5 @@
+{
+  "title": "Stellar Flare",
+  "mainFile": "Stellar_Flare_1.html",
+  "note": "3D space game with Three.js - stay in the sun's light, avoid shadows and asteroids, collect pickups."
+}

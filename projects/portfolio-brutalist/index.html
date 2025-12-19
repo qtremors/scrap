@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option D: Minimal Brutalist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #fff;
+            --text: #000;
+            --accent: #0000ff;
+            --muted: #666;
+            --border: #000;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #000;
+                --text: #fff;
+                --accent: #00ff00;
+                --muted: #888;
+                --border: #fff;
+            }
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 100;
+            text-transform: uppercase;
+        }
+
+        /* Container */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 60px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--muted);
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            gap: 24px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        nav a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 1rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 24px;
+            color: var(--muted);
+        }
+
+        h2::before {
+            content: '// ';
+            color: var(--accent);
+        }
+
+        p {
+            margin-bottom: 16px;
+        }
+
+        /* About */
+        .about-text {
+            font-size: 1.1rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-top: 16px;
+        }
+
+        /* Skills */
+        .skills-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 8px 24px;
+        }
+
+        .skills-list li {
+            list-style: none;
+            padding: 4px 0;
+            border-bottom: 1px dotted var(--muted);
+        }
+
+        .skills-list li::before {
+            content: '→ ';
+            color: var(--accent);
+        }
+
+        /* Projects */
+        .project {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--muted);
+        }
+
+        .project:last-child {
+            border-bottom: none;
+        }
+
+        .project h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .project-meta {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 12px;
+        }
+
+        .project p {
+            margin-bottom: 12px;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .project-links a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .project-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Contact */
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .contact-list a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--muted);
+        }
+
+        .contact-list a:hover {
+            border-bottom-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .contact-label {
+            color: var(--muted);
+            min-width: 80px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 80px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        footer a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Marquee */
+        .marquee {
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 12px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin: 40px 0;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* ASCII Divider */
+        .ascii-divider {
+            text-align: center;
+            color: var(--muted);
+            margin: 40px 0;
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            gap: 40px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-badge">Demo: Brutalist</div>
+
+    <div class="container">
+        <header>
+            <h1>AMAN SINGH</h1>
+            <p>Full-Stack Python Developer</p>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#work">Work</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </header>
+
+        <section id="about">
+            <h2>About</h2>
+            <p class="about-text">
+                I'm a Computer Science graduate and Full-Stack Python Developer. I build scalable backend systems,
+                web applications, and developer tools. My focus is on the Django and FastAPI ecosystems, with
+                experience in real-time WebSocket features and AI model integrations.
+            </p>
+            <p>
+                Currently working on combining traditional web engineering with LLM capabilities to create
+                smarter applications.
+            </p>
+            <div class="status">AVAILABLE FOR WORK</div>
+        </section>
+
+        <div class="ascii-divider">
+            ════════════════════════════════════════
+        </div>
+
+        <section id="skills">
+            <h2>Skills</h2>
+            <ul class="skills-list">
+                <li>Python</li>
+                <li>Django</li>
+                <li>FastAPI</li>
+                <li>PostgreSQL</li>
+                <li>React</li>
+                <li>TypeScript</li>
+                <li>Next.js</li>
+                <li>TensorFlow</li>
+                <li>Git</li>
+                <li>Docker</li>
+                <li>Linux</li>
+                <li>WebSockets</li>
+            </ul>
+        </section>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Projects</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">3+</div>
+                <div class="stat-label">Years Coding</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">∞</div>
+                <div class="stat-label">Curiosity</div>
+            </div>
+        </div>
+
+        <div class="marquee">
+            <span class="marquee-content">
+                PYTHON • DJANGO • FASTAPI • REACT • TYPESCRIPT • TENSORFLOW • POSTGRESQL • GIT • DOCKER •
+                PYTHON • DJANGO • FASTAPI • REACT • TYPESCRIPT • TENSORFLOW • POSTGRESQL • GIT • DOCKER •
+            </span>
+        </div>
+
+        <section id="work">
+            <h2>Selected Work</h2>
+
+            <article class="project">
+                <h3>Quizzer AI</h3>
+                <div class="project-meta">Python, Django, Gemini API</div>
+                <p>
+                    An adaptive learning platform that generates infinite programming quizzes using Google
+                    Gemini AI. Provides personalized questions, instant feedback, and context-aware
+                    explanations for every mistake.
+                </p>
+                <div class="project-links">
+                    <a href="#">[WEBSITE]</a>
+                    <a href="#">[GITHUB]</a>
+                </div>
+            </article>
+
+            <article class="project">
+                <h3>GitNexus</h3>
+                <div class="project-meta">Python, Flask, GitHub API</div>
+                <p>
+                    A self-hosted dashboard for tracking GitHub repository updates, bulk-downloading
+                    assets to your local machine, and exploring user profiles with contribution graphs.
+                </p>
+                <div class="project-links">
+                    <a href="#">[DEMO]</a>
+                    <a href="#">[GITHUB]</a>
+                </div>
+            </article>
+
+            <article class="project">
+                <h3>Tremors Music</h3>
+                <div class="project-meta">React, Tauri, FastAPI, Rust</div>
+                <p>
+                    A high-performance, local-first music player with both web and native desktop
+                    versions. Features glassmorphism design and Tauri shell for minimal resource usage.
+                </p>
+                <div class="project-links">
+                    <a href="#">[DOWNLOAD]</a>
+                    <a href="#">[GITHUB]</a>
+                </div>
+            </article>
+
+            <article class="project">
+                <h3>Algorithm Visualizer</h3>
+                <div class="project-meta">React, TypeScript, FastAPI, WebSockets</div>
+                <p>
+                    An educational platform that visualizes sorting and pathfinding algorithms in
+                    real time, streaming execution states from a Python backend to React frontend.
+                </p>
+                <div class="project-links">
+                    <a href="#">[WEBSITE]</a>
+                    <a href="#">[GITHUB]</a>
+                </div>
+            </article>
+        </section>
+
+        <div class="ascii-divider">
+            ════════════════════════════════════════
+        </div>
+
+        <section id="contact">
+            <h2>Contact</h2>
+            <p>Interested in working together? Let's talk.</p>
+            <ul class="contact-list">
+                <li>
+                    <span class="contact-label">EMAIL</span>
+                    <a href="mailto:singhamankumar207@gmail.com">singhamankumar207@gmail.com</a>
+                </li>
+                <li>
+                    <span class="contact-label">GITHUB</span>
+                    <a href="https://github.com/qtremors">github.com/qtremors</a>
+                </li>
+                <li>
+                    <span class="contact-label">LINKEDIN</span>
+                    <a href="#">linkedin.com/in/aman-singh</a>
+                </li>
+            </ul>
+        </section>
+
+        <footer>
+            <span>© 2025 Aman Singh</span>
+            <span>No cookies. No tracking. Just code.</span>
+            <a href="#">↑ Back to top</a>
+        </footer>
+    </div>
+</body>
+
+</html>

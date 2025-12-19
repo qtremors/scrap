@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option E: 3D Spatial Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #050510;
+            --text: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --accent: #8b5cf6;
+            --accent-glow: rgba(139, 92, 246, 0.4);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Demo Badge */
+        .demo-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: var(--accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Grid Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background-image:
+                linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        header h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, #8b5cf6 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                filter: drop-shadow(0 0 20px var(--accent-glow));
+            }
+
+            100% {
+                filter: drop-shadow(0 0 40px var(--accent-glow));
+            }
+        }
+
+        header p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .orbit-indicator {
+            margin-top: 32px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .orbit-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+        }
+
+        /* 3D Card Container */
+        .space-container {
+            perspective: 2000px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .cards-orbit {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 32px;
+            transform-style: preserve-3d;
+        }
+
+        /* Floating Cards */
+        .space-card {
+            width: 320px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 32px;
+            transform-style: preserve-3d;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: float 6s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .space-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        }
+
+        .space-card:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .space-card:nth-child(2) {
+            animation-delay: 1s;
+        }
+
+        .space-card:nth-child(3) {
+            animation-delay: 2s;
+        }
+
+        .space-card:nth-child(4) {
+            animation-delay: 0.5s;
+        }
+
+        .space-card:nth-child(5) {
+            animation-delay: 1.5s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotateX(0) rotateY(0);
+            }
+
+            25% {
+                transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+            }
+
+            50% {
+                transform: translateY(-5px) rotateX(0) rotateY(0);
+            }
+
+            75% {
+                transform: translateY(-15px) rotateX(-2deg) rotateY(2deg);
+            }
+        }
+
+        .space-card:hover {
+            transform: translateY(-20px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow:
+                0 0 30px var(--accent-glow),
+                0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .space-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .space-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .card-tag {
+            padding: 4px 12px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--accent);
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s, gap 0.3s;
+        }
+
+        .card-link:hover {
+            color: var(--accent);
+            gap: 12px;
+        }
+
+        /* Center Card (About) */
+        .center-card {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 48px;
+            text-align: center;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .center-card .card-icon {
+            font-size: 4rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-size: 2rem;
+            margin-bottom: 24px;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            padding: 14px 28px;
+            background: transparent;
+            border: 1px solid var(--card-border);
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .contact-btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: drift 20s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.5;
+            }
+
+            90% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Planet decoration */
+        .planet {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #1a1a3e 0%, #0a0a1a 100%);
+            box-shadow:
+                inset -20px -20px 60px rgba(0, 0, 0, 0.8),
+                0 0 60px rgba(139, 92, 246, 0.1);
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .planet-1 {
+            bottom: -100px;
+            right: -100px;
+        }
+
+        .planet-2 {
+            top: 10%;
+            left: -150px;
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-badge">Demo: 3D Spatial</div>
+
+    <!-- Starfield -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Grid -->
+    <div class="grid-overlay"></div>
+
+    <!-- Planets -->
+    <div class="planet planet-1"></div>
+    <div class="planet planet-2"></div>
+
+    <!-- Floating Particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 5s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 10s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 3s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 7s;"></div>
+
+    <div class="main-content">
+        <header>
+            <h1>AMAN SINGH</h1>
+            <p>Full-Stack Python Developer exploring the universe of AI-powered platforms and developer tools.</p>
+            <div class="orbit-indicator">
+                <span class="orbit-dot"></span>
+                <span>Currently orbiting: Arcade Nexus</span>
+            </div>
+        </header>
+
+        <div class="space-container">
+            <!-- About Card -->
+            <div class="space-card center-card">
+                <span class="card-icon">👨‍🚀</span>
+                <h3>Mission Control</h3>
+                <p>
+                    Computer Science graduate navigating the Django and FastAPI galaxies.
+                    Building scalable backend systems, real-time WebSocket features, and
+                    AI-powered applications. Always seeking new frontiers.
+                </p>
+                <div class="card-tags">
+                    <span class="card-tag">Python</span>
+                    <span class="card-tag">Django</span>
+                    <span class="card-tag">FastAPI</span>
+                    <span class="card-tag">React</span>
+                    <span class="card-tag">AI/ML</span>
+                </div>
+            </div>
+
+            <!-- Project Cards -->
+            <div class="cards-orbit">
+                <div class="space-card">
+                    <span class="card-icon">🧠</span>
+                    <h3>Quizzer AI</h3>
+                    <p>Adaptive quiz platform powered by Google Gemini. Infinite questions, instant feedback.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Django</span>
+                        <span class="card-tag">Gemini</span>
+                    </div>
+                    <a href="#" class="card-link">Explore →</a>
+                </div>
+
+                <div class="space-card">
+                    <span class="card-icon">📊</span>
+                    <h3>GitNexus</h3>
+                    <p>Self-hosted GitHub dashboard for repo tracking and bulk asset downloads.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">Flask</span>
+                        <span class="card-tag">GitHub API</span>
+                    </div>
+                    <a href="#" class="card-link">Explore →</a>
+                </div>
+
+                <div class="space-card">
+                    <span class="card-icon">🎵</span>
+                    <h3>Tremors Music</h3>
+                    <p>High-performance music player with web & native desktop versions.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">React</span>
+                        <span class="card-tag">Tauri</span>
+                    </div>
+                    <a href="#" class="card-link">Explore →</a>
+                </div>
+
+                <div class="space-card">
+                    <span class="card-icon">⚡</span>
+                    <h3>Algorithm Visualizer</h3>
+                    <p>Real-time visualization of sorting and pathfinding algorithms.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">React</span>
+                        <span class="card-tag">WebSockets</span>
+                    </div>
+                    <a href="#" class="card-link">Explore →</a>
+                </div>
+
+                <div class="space-card">
+                    <span class="card-icon">🎮</span>
+                    <h3>Arcade Nexus</h3>
+                    <p>Browser gaming console with custom SDK and cloud-synced saves.</p>
+                    <div class="card-tags">
+                        <span class="card-tag">React</span>
+                        <span class="card-tag">FastAPI</span>
+                    </div>
+                    <a href="#" class="card-link">Explore →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2>Establish Connection</h2>
+            <div class="contact-links">
+                <a href="#" class="contact-btn primary">Send Transmission</a>
+                <a href="#" class="contact-btn">GitHub</a>
+                <a href="#" class="contact-btn">LinkedIn</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate random stars
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = star.style.height = Math.random() * 2 + 1 + 'px';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = Math.random() * 3 + 2 + 's';
+            starfield.appendChild(star);
+        }
+
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+
+            document.querySelectorAll('.space-card').forEach((card, i) => {
+                const depth = 1 + i * 0.2;
+                card.style.transform = `translateY(${-10 + y * depth}px) rotateX(${-y * 0.5}deg) rotateY(${x * 0.5}deg)`;
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -23,6 +23,7 @@
 </head>
 
 <body>
+    <a href="#card-container" class="skip-link">Skip to content</a>
     <div class="noise-overlay"></div>
     <canvas id="bg-canvas"></canvas>
     <div id="preview-backdrop">
@@ -36,11 +37,27 @@
         <div class="terminal-search">
             <span class="prompt">></span>
             <input type="text" id="search-input" placeholder="FILTER_PROJECTS..." spellcheck="false" autocomplete="off">
+            <button id="clear-search" class="clear-btn" aria-label="Clear search" style="display: none;">×</button>
+        </div>
+        <p id="project-count" class="project-count"></p>
+        <div id="category-filters" class="category-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="portfolio">🎨 Portfolio</button>
+            <button class="filter-btn" data-filter="game">🎮 Game</button>
+            <button class="filter-btn" data-filter="component">🧩 Component</button>
+            <button class="filter-btn" data-filter="template">📄 Template</button>
+            <button class="filter-btn" data-filter="gallery">🖼️ Gallery</button>
+            <button class="filter-btn" data-filter="showcase">✨ Showcase</button>
+            <button class="filter-btn" data-filter="archive">📦 Archive</button>
         </div>
     </header>
     <main id="card-container">
         {{PROJECT_CARDS}}
     </main>
+    <footer class="site-footer">
+        <p>SCRAP_YARD v2.2.0 // <a href="https://github.com/qtremors/scrap" target="_blank" rel="noopener">GitHub</a> //
+            © 2025</p>
+    </footer>
     <script src="public/index.js" defer></script>
 </body>
 

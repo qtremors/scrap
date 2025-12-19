@@ -1,0 +1,299 @@
+:root {
+    --bg-color: #0a0a0a;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #e5e5e5;
+    --text-dim: #666;
+    --accent-red: #d71921;
+    --font-mono: 'Space Mono', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    height: 100vh;
+    overflow: hidden; /* For the "app" feel */
+    position: relative;
+}
+
+/* --- Internal Hardware Layer --- */
+.layer-internals {
+    position: fixed;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.circuit-bg {
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/bg.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.6;
+    filter: grayscale(100%) contrast(1.2) brightness(0.6);
+}
+
+/* --- Glass Interface Layer --- */
+.layer-glass {
+    position: relative;
+    z-index: 10;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(circle at center, transparent 0%, #000 120%); /* Vignette */
+    overflow-y: auto;
+}
+
+/* Grid overlay for texture */
+.layer-glass::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.2;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* --- Nav --- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border-bottom: 1px solid var(--glass-border);
+    backdrop-filter: blur(5px);
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.05em;
+}
+
+.nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    margin: 0 1rem;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: var(--text-primary);
+    text-decoration: line-through; /* Strikethrough hover effect */
+}
+
+.nav-status {
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--accent-red);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-red);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+/* --- Main Layout --- */
+main {
+    flex: 1;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.hero-content h1 {
+    font-size: 5rem;
+    line-height: 1;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    letter-spacing: -2px;
+    position: relative;
+    /* Simulate transparency in text effectively punching through to bg */
+    mix-blend-mode: overlay; 
+    color: #fff;
+    opacity: 0.9;
+}
+
+.tracker {
+    font-size: 0.8rem;
+    color: var(--accent-red);
+    margin-top: 2rem;
+    font-family: monospace;
+}
+
+/* --- Glass Panels --- */
+.glass-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 2rem;
+    border-radius: 2px; /* Slight rounding or none for industrial */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.glass-panel:hover {
+    border-color: rgba(255,255,255,0.3);
+    /* transform: translateY(-2px); */
+}
+
+.card {
+    width: 300px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-dim);
+}
+
+.card-footer {
+    font-size: 0.7rem;
+    text-align: right;
+    color: var(--accent-red);
+}
+
+/* --- Grid Display --- */
+.grid-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.grid-item h3 {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    color: var(--text-dim);
+}
+
+/* Bar Chart */
+.bar-chart {
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 5px;
+}
+
+.bar {
+    flex: 1;
+    background: rgba(255,255,255,0.5);
+    transition: height 1s ease;
+}
+
+.bar:nth-child(even) {
+    background: var(--accent-red);
+}
+
+/* Data Rows */
+.data-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.big-stat {
+    font-size: 3rem;
+    color: #fff;
+}
+
+/* Alert style */
+.alert {
+    border-color: var(--accent-red);
+    position: relative;
+    overflow: hidden;
+}
+
+.alert::after {
+    content:"";
+    position: absolute;
+    top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(45deg, transparent 50%, rgba(215, 25, 33, 0.1) 100%);
+    pointer-events: none;
+}
+
+/* --- Footer --- */
+footer {
+    padding: 1rem 0;
+    border-top: 1px solid var(--glass-border);
+    background: rgba(0,0,0,0.5);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 20s linear infinite;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+
+@keyframes marquee {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}
+
+/* --- Cursor Light --- */
+.cursor-light {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* Let clicks pass through */
+    z-index: 5;
+    mix-blend-mode: screen;
+}

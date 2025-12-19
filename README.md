@@ -11,6 +11,7 @@ Every developer has a folder of unfinished projects and half-baked ideas. This "
 ## Features
 
 -   **Cyberpunk Aesthetics**: Dark theme, neon accents, glitch effects, and digital noise texture.
+-   **Category Visual Indicators**: Emoji icons and color-coded borders for each project type (🎨 Portfolio, 🎮 Game, 🧩 Component, 📄 Template, 🖼️ Gallery, ✨ Showcase, 📦 Archive).
 -   **Terminal Search**: Filter projects instantly using the command-line style input at the top.
 -   **Live Previews**: Hover over any card for 1 second to see a live running preview of the project in the background.
 -   **Interactive Background**: A dynamic HTML5 Canvas "Digital Matrix Rain" animation.
@@ -23,14 +24,23 @@ The repository is organized to keep the root clean:
 
 ```
 /
-├── public/           # Core site assets (css, js, favicon)
-├── projects/         # Folder containing all scrapped projects
-│   ├── my-project/   # Example project folder
-│   └── templates/    # Reusable component templates
-├── build.js          # Node.js script to generate index.html
-├── _template.html    # HTML template for the main page
-└── index.html        # Generated entry point (DO NOT EDIT DIRECTLY)
+├── public/                      # Core site assets (css, js, favicon)
+├── projects/                    # Folder containing all scrapped projects
+│   ├── portfolio-*              # Portfolio website experiments
+│   ├── game-*                   # Game projects
+│   ├── component-*              # UI component demos
+│   ├── template-*               # Reusable templates
+│   ├── gallery-*                # Showcase galleries
+│   ├── showcase-*               # Design showcases
+│   └── archive-*                # Archived old projects
+├── build.js                     # Node.js script to generate index.html
+├── _template.html               # HTML template for the main page
+└── index.html                   # Generated entry point (DO NOT EDIT DIRECTLY)
 ```
+
+### Folder Naming Convention
+
+All project folders follow the `category-name` format (e.g., `portfolio-terminal`, `game-stellar-flare`).
 
 ## How to Add a New Project
 
@@ -45,6 +55,21 @@ The repository is organized to keep the root clean:
     }
     ```
 4.  Run `node build.js` locally to test, or just push to `main` to let GitHub Actions handle it.
+
+## Local Development
+
+```bash
+# Install dependencies (optional, for build script only)
+npm install
+
+# Build the site
+npm run build
+
+# Serve locally (using any static server)
+npx serve
+# or
+python -m http.server 8000
+```
 
 ## Technology Stack
 
