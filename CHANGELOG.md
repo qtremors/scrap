@@ -2,6 +2,19 @@
 
 All notable changes to the "Scrapyard" project will be documented in this file.
 
+## [2.3.0] - 2025-12-22
+
+### Added
+-   **New Category: Demo** 🚀: Added "demo" category for live demo projects with blue (#3b82f6) color accent.
+-   **New Project: Git Nexus Demo**: GitHub repository navigator with profile viewing, README previews, and theme switching.
+-   **New Project: Paper Portfolio (Lite)**: Minimal reading-mode portfolio with TOC sidebar and clean typography.
+
+### Changed
+-   Updated category filter buttons to include 🚀 Demo filter.
+-   Updated documentation (README) with demo category in features and folder structure.
+
+---
+
 ## [2.2.0] - 2025-12-19
 
 ### Added

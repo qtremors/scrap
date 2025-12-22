@@ -26,7 +26,8 @@ function getCategory(folderName) {
         'template': { emoji: '📄', name: 'template' },
         'gallery': { emoji: '🖼️', name: 'gallery' },
         'showcase': { emoji: '✨', name: 'showcase' },
-        'archive': { emoji: '📦', name: 'archive' }
+        'archive': { emoji: '📦', name: 'archive' },
+        'demo': { emoji: '🚀', name: 'demo' }
     };
     return categories[prefix] || { emoji: '📁', name: 'other' };
 }

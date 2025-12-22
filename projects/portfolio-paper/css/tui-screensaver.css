@@ -1,0 +1,261 @@
+/* ==========================================================================
+   TUI SCREENSAVER - Pure CSS DVD-Style Bouncing ASCII Art
+   No JavaScript Required
+   Uses EXACT splash-screen structure for seamless positioning
+   Mirrors the splash screen's revealArt animation before bouncing
+   ========================================================================== */
+
+/* Hidden checkbox for toggle */
+#screensaver-toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   SCREENSAVER SCREEN
+   Matches splash-screen positioning exactly with black background
+   ========================================================================== */
+
+.screensaver-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    background-color: #000000;
+    z-index: 99999;
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    /* EXIT: Delayed fade-out - wait for alien to return to origin first */
+    transition: opacity 0.5s ease-out 0.6s, visibility 0.5s ease-out 0.6s;
+}
+
+/* Show screensaver when checkbox is checked */
+#screensaver-toggle:checked~.screensaver-exit~.screensaver-screen {
+    opacity: 1;
+    visibility: visible;
+    /* ENTER: Slow fade-in to hide the website */
+    transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+}
+
+/* Hide all containers/elements except the alien - make them invisible */
+.screensaver-screen .container,
+.screensaver-screen header,
+.screensaver-screen .tui-panel,
+.screensaver-screen .tui-panel-header,
+.screensaver-screen .tui-nav,
+.screensaver-screen .hero-content>*:not(.screensaver-alien) {
+    background-color: transparent !important;
+    color: transparent !important;
+    border-color: transparent !important;
+    pointer-events: none;
+    user-select: none;
+}
+
+.screensaver-screen header {
+    visibility: hidden;
+}
+
+.screensaver-screen .tui-panel {
+    border: none !important;
+    background: transparent !important;
+}
+
+.screensaver-screen .tui-panel-header {
+    visibility: hidden;
+}
+
+/* ==========================================================================
+   THE ALIEN - Always visible, no fade animation on the alien itself
+   Website fades around it, giving illusion of seamless transition
+   ========================================================================== */
+
+.screensaver-screen .screensaver-alien {
+    color: var(--muted, #6272a4) !important;
+    background-color: transparent !important;
+    border: none !important;
+    /* Always visible - no opacity animation */
+    opacity: 1;
+    /* EXIT STATE: Return to origin smoothly */
+    transform: translate(0, 0);
+    transition: transform 0.5s ease-out;
+}
+
+/* When active:
+   1. Website fades out (0.5s) - handled by .screensaver-screen
+   2. Then: alien starts bouncing (delayed by 0.5s to let website fade first)
+*/
+#screensaver-toggle:checked~.screensaver-exit~.screensaver-screen .screensaver-alien {
+    /* Start bouncing after website has faded out */
+    transition: none;
+    animation:
+        screensaver-bounce 30s linear 0.5s infinite,
+        screensaver-color-cycle 10s linear 0.5s infinite;
+}
+
+/* ==========================================================================
+   BOUNCING ANIMATION - Uses only transform to move from natural position
+   No position:fixed or top/left to avoid snapping
+   ========================================================================== */
+
+@keyframes screensaver-bounce {
+
+    0% {
+        transform: translate(0, 0);
+    }
+
+    10% {
+        transform: translate(calc(70vw - 100%), -5vh);
+    }
+
+    20% {
+        transform: translate(calc(80vw - 100%), 30vh);
+    }
+
+    30% {
+        transform: translate(calc(45vw - 50%), 55vh);
+    }
+
+    40% {
+        transform: translate(5vw, 50vh);
+    }
+
+    50% {
+        transform: translate(3vw, 15vh);
+    }
+
+    60% {
+        transform: translate(30vw, -10vh);
+    }
+
+    70% {
+        transform: translate(calc(70vw - 100%), 5vh);
+    }
+
+    80% {
+        transform: translate(calc(75vw - 100%), 35vh);
+    }
+
+    90% {
+        transform: translate(15vw, 20vh);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* ==========================================================================
+   COLOR CYCLING
+   ========================================================================== */
+
+@keyframes screensaver-color-cycle {
+
+    0%,
+    100% {
+        color: #6272a4;
+    }
+
+    12% {
+        color: #8ab4f8;
+    }
+
+    24% {
+        color: #50fa7b;
+    }
+
+    36% {
+        color: #ff79c6;
+    }
+
+    48% {
+        color: #f1fa8c;
+    }
+
+    60% {
+        color: #bd93f9;
+    }
+
+    72% {
+        color: #ffb86c;
+    }
+
+    84% {
+        color: #00d4ff;
+    }
+}
+
+/* ==========================================================================
+   EXIT OVERLAY - Click anywhere to close
+   ========================================================================== */
+
+.screensaver-exit {
+    display: none;
+}
+
+#screensaver-toggle:checked~.screensaver-exit {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100000;
+    cursor: pointer;
+}
+
+/* Exit hint text */
+.screensaver-screen::after {
+    content: 'click anywhere to exit';
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.25);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   MENU TRIGGER STYLING - Matches .tui-nav a styling
+   ========================================================================== */
+
+.screensaver-trigger {
+    cursor: pointer;
+    color: var(--foreground);
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.screensaver-trigger:hover {
+    background-color: var(--primary);
+    color: var(--background);
+    border-radius: 3px;
+}
+
+/* ==========================================================================
+   RESPONSIVE - Match splash screen sizing
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .screensaver-screen {
+        padding: 0.5rem;
+    }
+
+    .screensaver-screen::after {
+        font-size: 0.6rem;
+        bottom: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .screensaver-screen .screensaver-alien {
+        font-size: 6px !important;
+    }
+}

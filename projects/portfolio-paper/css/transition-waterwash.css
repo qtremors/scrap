@@ -1,0 +1,99 @@
+/* ==========================================================================
+   WATER-WASH PAGE TRANSITION
+   
+   EXPAND (index→lite): iframe clip grows from click - lite revealed inside
+   CONTRACT (lite→index): lite shrinks from click - index revealed outside
+   ========================================================================== */
+
+.waterwash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    pointer-events: none;
+    overflow: hidden;
+    --origin-x: 50%;
+    --origin-y: 50%;
+}
+
+.waterwash-overlay.active {
+    pointer-events: all;
+}
+
+/* Main iframe - loads destination page */
+.waterwash-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    visibility: hidden;
+}
+
+.waterwash-overlay.active .waterwash-iframe {
+    visibility: visible;
+}
+
+/* Second iframe for CONTRACT mode */
+.waterwash-current {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    visibility: hidden;
+    z-index: 2;
+}
+
+/* ============================================================================
+   EXPAND MODE: circle grows from click point
+   ============================================================================ */
+
+.waterwash-overlay.expand .waterwash-iframe {
+    clip-path: circle(0% at var(--origin-x) var(--origin-y));
+}
+
+.waterwash-overlay.active.expand .waterwash-iframe {
+    animation: expand-clip 1.5s ease-out forwards;
+}
+
+@keyframes expand-clip {
+    from {
+        clip-path: circle(0% at var(--origin-x) var(--origin-y));
+    }
+
+    to {
+        clip-path: circle(150% at var(--origin-x) var(--origin-y));
+    }
+}
+
+/* ============================================================================
+   CONTRACT MODE: circle shrinks to click point
+   ============================================================================ */
+
+.waterwash-overlay.contract .waterwash-iframe {
+    clip-path: none;
+}
+
+.waterwash-overlay.contract .waterwash-current {
+    clip-path: circle(150% at var(--origin-x) var(--origin-y));
+}
+
+.waterwash-overlay.active.contract .waterwash-current {
+    visibility: visible;
+    animation: contract-clip 1.5s ease-out forwards;
+}
+
+@keyframes contract-clip {
+    from {
+        clip-path: circle(150% at var(--origin-x) var(--origin-y));
+    }
+
+    to {
+        clip-path: circle(0% at var(--origin-x) var(--origin-y));
+    }
+}
