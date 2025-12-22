@@ -382,6 +382,10 @@ h1.glitch::after {
     --category-color: #6b7280;
 }
 
+.project-card[data-category="demo"] {
+    --category-color: #3b82f6;
+}
+
 .project-card[data-category]::before {
     background: var(--category-color, var(--accent-color));
 }
