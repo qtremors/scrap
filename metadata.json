@@ -1,0 +1,263 @@
+[
+  {
+    "id": "archive-portfolio-old",
+    "title": "Portfolio Archive (Old)",
+    "note": "Archived previous monolith version of the main portfolio.",
+    "category": "archive",
+    "categoryEmoji": "📦",
+    "linkPath": "./projects/archive/archive-portfolio-old/index.html",
+    "relativePath": "projects/archive/archive-portfolio-old"
+  },
+  {
+    "id": "archive-scrap-old",
+    "title": "Scrap Showcase (Old)",
+    "note": "Previous version of the scrap projects showcase website.",
+    "category": "archive",
+    "categoryEmoji": "📦",
+    "linkPath": "./projects/archive/archive-scrap-old/index.html",
+    "relativePath": "projects/archive/archive-scrap-old"
+  },
+  {
+    "id": "component-footer-collection",
+    "title": "Footer Layout Collection",
+    "note": "7 responsive footer layouts from minimal to complex multi-row designs.",
+    "category": "component",
+    "categoryEmoji": "🧩",
+    "linkPath": "./projects/component/component-footer-collection/index.html",
+    "relativePath": "projects/component/component-footer-collection"
+  },
+  {
+    "id": "component-hero-concepts",
+    "title": "Hero Section Concepts",
+    "note": "7 unique hero section designs including 3D cube, holographic terminal, and orbiting skills.",
+    "category": "component",
+    "categoryEmoji": "🧩",
+    "linkPath": "./projects/component/component-hero-concepts/index.html",
+    "relativePath": "projects/component/component-hero-concepts"
+  },
+  {
+    "id": "component-modal-demos",
+    "title": "Modal Component Demos",
+    "note": "Collection of settings modal designs: Tabbed, Two-Column, Accordion, and Drawer layouts.",
+    "category": "component",
+    "categoryEmoji": "🧩",
+    "linkPath": "./projects/component/component-modal-demos/index.html",
+    "relativePath": "projects/component/component-modal-demos"
+  },
+  {
+    "id": "component-newspaper-archive",
+    "title": "Newspaper Archive Designs",
+    "note": "Five scalable archive design options including calendar grid and timeline.",
+    "category": "component",
+    "categoryEmoji": "🧩",
+    "linkPath": "./projects/component/component-newspaper-archive/index.html",
+    "relativePath": "projects/component/component-newspaper-archive"
+  },
+  {
+    "id": "component-newspaper-skills",
+    "title": "Newspaper Skills Section",
+    "note": "Skills section layouts inspired by newspaper classifieds, masts, and directories.",
+    "category": "component",
+    "categoryEmoji": "🧩",
+    "linkPath": "./projects/component/component-newspaper-skills/index.html",
+    "relativePath": "projects/component/component-newspaper-skills"
+  },
+  {
+    "id": "demo-git-nexus",
+    "title": "Git Nexus Demo",
+    "note": "GitHub repository navigator with profile viewing, README previews, and theme switching.",
+    "category": "demo",
+    "categoryEmoji": "🚀",
+    "linkPath": "./projects/demo/demo-git-nexus/index.html",
+    "relativePath": "projects/demo/demo-git-nexus"
+  },
+  {
+    "id": "gallery-ascii-art",
+    "title": "ASCII Art Gallery",
+    "note": "Website showcasing a collection of ASCII art pieces.",
+    "category": "gallery",
+    "categoryEmoji": "🖼️",
+    "linkPath": "./projects/gallery/gallery-ascii-art/index.html",
+    "relativePath": "projects/gallery/gallery-ascii-art"
+  },
+  {
+    "id": "game-asteroid-runner",
+    "title": "Asteroid Runner",
+    "note": "3D endless runner game where you dodge asteroids in space.",
+    "category": "game",
+    "categoryEmoji": "🎮",
+    "linkPath": "./projects/game/game-asteroid-runner/Aestroid Runner.html",
+    "relativePath": "projects/game/game-asteroid-runner"
+  },
+  {
+    "id": "game-stellar-flare",
+    "title": "Stellar Flare Collection",
+    "note": "Includes both the Modular Redux (v2) and the original Legacy (v1) versions.",
+    "category": "game",
+    "categoryEmoji": "🎮",
+    "linkPath": "./projects/game/game-stellar-flare/index.html",
+    "relativePath": "projects/game/game-stellar-flare"
+  },
+  {
+    "id": "portfolio-3d-spatial",
+    "title": "3D Spatial Portfolio",
+    "note": "Space-themed portfolio with starfield background, floating cards, and parallax effects.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-3d-spatial/index.html",
+    "relativePath": "projects/portfolio/portfolio-3d-spatial"
+  },
+  {
+    "id": "portfolio-bento-grid",
+    "title": "Bento Grid Portfolio",
+    "note": "Dashboard-style portfolio with Bento grid layout, GitHub stats, and project cards.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-bento-grid/index.html",
+    "relativePath": "projects/portfolio/portfolio-bento-grid"
+  },
+  {
+    "id": "portfolio-brutalist",
+    "title": "Brutalist Portfolio",
+    "note": "Minimalist brutalist design with monospace typography and ASCII dividers.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-brutalist/index.html",
+    "relativePath": "projects/portfolio/portfolio-brutalist"
+  },
+  {
+    "id": "portfolio-cinematic-depth",
+    "title": "Cinematic Depth Portfolio",
+    "note": "Parallax portfolio with scroll-snap sections, cinematic backgrounds, and GSAP animations.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-cinematic-depth/index.html",
+    "relativePath": "projects/portfolio/portfolio-cinematic-depth"
+  },
+  {
+    "id": "portfolio-core-physics",
+    "title": "CORE Physics Portfolio",
+    "note": "Interactive physics-based portfolio where projects float as draggable bubbles in zero-gravity.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-core-physics/index.html",
+    "relativePath": "projects/portfolio/portfolio-core-physics"
+  },
+  {
+    "id": "portfolio-ethereal-glass",
+    "title": "Ethereal Glass Portfolio",
+    "note": "Glassmorphism portfolio with custom cursor, ambient glow effects, and GSAP scroll animations.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-ethereal-glass/index.html",
+    "relativePath": "projects/portfolio/portfolio-ethereal-glass"
+  },
+  {
+    "id": "portfolio-final-concept",
+    "title": "Final Concept Portfolio",
+    "note": "Comprehensive portfolio demo with dark/light themes, terminal overlay, and animated sections.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-final-concept/index.html",
+    "relativePath": "projects/portfolio/portfolio-final-concept"
+  },
+  {
+    "id": "portfolio-horizontal-scroll",
+    "title": "Horizontal Scroll Portfolio",
+    "note": "Portfolio with horizontal scroll panels, dot navigation, and glitch text effects.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-horizontal-scroll/index.html",
+    "relativePath": "projects/portfolio/portfolio-horizontal-scroll"
+  },
+  {
+    "id": "portfolio-kinetic-type",
+    "title": "Kinetic Typography Portfolio",
+    "note": "Bold typographic portfolio with marquee animations, hover image reveal, and magnetic CTA button.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-kinetic-type/index.html",
+    "relativePath": "projects/portfolio/portfolio-kinetic-type"
+  },
+  {
+    "id": "portfolio-modern-bento",
+    "title": "Modern Bento Portfolio",
+    "note": "Clean portfolio with Bento grid layout, Inter font, and reveal animations.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-modern-bento/index.html",
+    "relativePath": "projects/portfolio/portfolio-modern-bento"
+  },
+  {
+    "id": "portfolio-newspaper",
+    "title": "Newspaper Editorial Portfolio",
+    "note": "Print-inspired editorial portfolio with newspaper layout, ticker, columns, and terminal mode.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-newspaper/index.html",
+    "relativePath": "projects/portfolio/portfolio-newspaper"
+  },
+  {
+    "id": "portfolio-paper",
+    "title": "Paper Portfolio (Lite)",
+    "note": "Minimal reading-mode portfolio with TOC sidebar and clean typography.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-paper/indexlite.html",
+    "relativePath": "projects/portfolio/portfolio-paper"
+  },
+  {
+    "id": "portfolio-quantum-hud",
+    "title": "Quantum HUD Portfolio",
+    "note": "Cyberpunk portfolio with Three.js particles, glitch text effects, custom cursor, and HUD overlay.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-quantum-hud/index.html",
+    "relativePath": "projects/portfolio/portfolio-quantum-hud"
+  },
+  {
+    "id": "portfolio-terminal",
+    "title": "Terminal Portfolio",
+    "note": "Portfolio with terminal UI aesthetic, Fira Code font, and command-line styling.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-terminal/index.html",
+    "relativePath": "projects/portfolio/portfolio-terminal"
+  },
+  {
+    "id": "portfolio-terminal-emulator",
+    "title": "Terminal Emulator Portfolio",
+    "note": "Interactive terminal-style portfolio with command handling and Dracula theme.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-terminal-emulator/index.html",
+    "relativePath": "projects/portfolio/portfolio-terminal-emulator"
+  },
+  {
+    "id": "portfolio-timeline",
+    "title": "Timeline Portfolio",
+    "note": "Scroll-snap timeline portfolio with chapter navigation and progress bar.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-timeline/index.html",
+    "relativePath": "projects/portfolio/portfolio-timeline"
+  },
+  {
+    "id": "showcase-transparent-design",
+    "title": "Transparent Design Showcase",
+    "note": "Nothing-inspired transparent design website with glassmorphism and animations.",
+    "category": "showcase",
+    "categoryEmoji": "✨",
+    "linkPath": "./projects/showcase/showcase-transparent-design/index.html",
+    "relativePath": "projects/showcase/showcase-transparent-design"
+  },
+  {
+    "id": "template-material-ecommerce",
+    "title": "Material E-commerce Templates",
+    "note": "Material Design templates and component scraps for e-commerce websites.",
+    "category": "template",
+    "categoryEmoji": "📄",
+    "linkPath": "./projects/template/template-material-ecommerce/index.html",
+    "relativePath": "projects/template/template-material-ecommerce"
+  }
+]

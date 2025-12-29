@@ -25,15 +25,16 @@ The repository is organized to keep the root clean:
 ```
 /
 ├── public/                      # Core site assets (css, js, favicon)
-├── projects/                    # Folder containing all scrapped projects
-│   ├── portfolio-*              # Portfolio website experiments
-│   ├── game-*                   # Game projects
-│   ├── component-*              # UI component demos
-│   ├── template-*               # Reusable templates
-│   ├── gallery-*                # Showcase galleries
-│   ├── showcase-*               # Design showcases
-│   ├── archive-*                # Archived old projects
-│   └── demo-*                   # Live demos of projects
+├── projects/                    # Root folder for all projects
+│   ├── archive/                 # Old/Archived projects
+│   ├── component/               # UI component demos 
+│   ├── demo/                    # Live demos
+│   ├── gallery/                 # Design galleries
+│   ├── game/                    # Game projects (e.g. game-stellar-flare)
+│   ├── portfolio/               # Portfolio experiments
+│   ├── showcase/                # Design showcases
+│   └── template/                # Reusable templates
+├── metadata.json                # Auto-generated catalog of all projects
 ├── build.js                     # Node.js script to generate index.html
 ├── _template.html               # HTML template for the main page
 └── index.html                   # Generated entry point (DO NOT EDIT DIRECTLY)

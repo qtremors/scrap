@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Archive Design Options - Newspaper Style</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Serif 4', Georgia, serif;
+            background: #f5f0e8;
+            color: #1a1a1a;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            border-top: 2px solid #1a1a1a;
+            border-bottom: 1px solid #1a1a1a;
+            padding: 10px 0;
+            margin: 40px 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1rem;
+        }
+
+        .section-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ========================================
+           OPTION 1: CALENDAR GRID
+           ======================================== */
+        .calendar-archive {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-month {
+            border: 1px solid #333;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+
+        .calendar-month:hover {
+            background: #c41e3a;
+            color: #fff;
+            border-color: #c41e3a;
+        }
+
+        .calendar-month.active {
+            background: rgba(196, 30, 58, 0.1);
+            border-color: #c41e3a;
+        }
+
+        .calendar-month-name {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+
+        .calendar-month-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 8px 0;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .calendar-month-year {
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .calendar-editions {
+            display: none;
+            grid-column: 1 / -1;
+            border: 1px dashed #999;
+            padding: 16px;
+            margin-top: -12px;
+        }
+
+        .calendar-editions.visible {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .edition-chip {
+            background: #1a1a1a;
+            color: #f5f0e8;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .edition-chip:hover {
+            background: #c41e3a;
+        }
+
+        .edition-chip.active {
+            background: #c41e3a;
+        }
+
+        /* ========================================
+           OPTION 2: HORIZONTAL TIMELINE
+           ======================================== */
+        .timeline-container {
+            position: relative;
+            overflow-x: auto;
+            padding: 40px 20px 20px;
+            background: #fff;
+            border: 1px solid #333;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: flex-start;
+            min-width: max-content;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #333;
+        }
+
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 40px;
+            cursor: pointer;
+        }
+
+        .timeline-item:last-child {
+            margin-right: 0;
+        }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #1a1a1a;
+            border: 3px solid #f5f0e8;
+            z-index: 1;
+            transition: all 0.2s;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            background: #c41e3a;
+            transform: scale(1.3);
+        }
+
+        .timeline-item.active .timeline-dot {
+            background: #c41e3a;
+        }
+
+        .timeline-date {
+            margin-top: 12px;
+            font-size: 0.75rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .timeline-headline {
+            max-width: 120px;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #666;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        /* ========================================
+           OPTION 3: FULLSCREEN MODAL
+           ======================================== */
+        .modal-trigger {
+            background: #1a1a1a;
+            color: #f5f0e8;
+            border: none;
+            padding: 12px 24px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-trigger:hover {
+            background: #c41e3a;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #f5f0e8;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #1a1a1a;
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-search {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            font-family: inherit;
+            margin-bottom: 20px;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .modal-item {
+            border: 1px solid #ddd;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-item:hover {
+            border-color: #c41e3a;
+            background: rgba(196, 30, 58, 0.05);
+        }
+
+        .modal-item-date {
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .modal-item-headline {
+            font-weight: bold;
+            margin-top: 4px;
+        }
+
+        /* ========================================
+           OPTION 4: YEAR/MONTH HIERARCHY
+           ======================================== */
+        .hierarchy-archive {
+            border: 1px solid #333;
+            background: #fff;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .hierarchy-year {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .hierarchy-year:last-child {
+            border-bottom: none;
+        }
+
+        .hierarchy-year-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f5f0e8;
+            border: none;
+            text-align: left;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            transition: background 0.2s;
+        }
+
+        .hierarchy-year-btn:hover {
+            background: #ebe7df;
+        }
+
+        .hierarchy-year-btn.open {
+            background: #ebe7df;
+        }
+
+        .hierarchy-months {
+            display: none;
+            padding-left: 20px;
+            background: #fff;
+        }
+
+        .hierarchy-months.open {
+            display: block;
+        }
+
+        .hierarchy-month-btn {
+            width: 100%;
+            padding: 10px 16px;
+            background: none;
+            border: none;
+            border-bottom: 1px dotted #ddd;
+            text-align: left;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+
+        .hierarchy-month-btn:hover {
+            background: #f9f7f3;
+        }
+
+        .hierarchy-editions {
+            display: none;
+            padding: 8px 16px 16px 32px;
+            background: #faf8f4;
+        }
+
+        .hierarchy-editions.open {
+            display: block;
+        }
+
+        .hierarchy-edition {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px dotted #eee;
+            font-size: 0.85rem;
+        }
+
+        .hierarchy-edition:last-child {
+            border-bottom: none;
+        }
+
+        .hierarchy-use-btn {
+            background: #c41e3a;
+            color: #fff;
+            border: none;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        /* ========================================
+           OPTION 5: SEARCH + LAZY LOAD
+           ======================================== */
+        .lazy-archive {
+            border: 1px solid #333;
+            background: #fff;
+            max-width: 320px;
+        }
+
+        .lazy-search {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-bottom: 1px solid #333;
+            font-family: inherit;
+        }
+
+        .lazy-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .lazy-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lazy-item:hover {
+            background: rgba(196, 30, 58, 0.1);
+        }
+
+        .lazy-item-date {
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .lazy-item-headline {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .lazy-load-more {
+            width: 100%;
+            padding: 12px;
+            background: #f5f0e8;
+            border: none;
+            border-top: 1px solid #ddd;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+        }
+
+        .lazy-load-more:hover {
+            background: #ebe7df;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="demo-container">
+        <h1>THE ARCHIVE GAZETTE</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 40px;">Five Scalable Archive Designs for the News Page
+        </p>
+
+        <!-- OPTION 1 -->
+        <h2>Option 1: Calendar Grid</h2>
+        <p class="section-desc">Compact monthly overview. Click a month to see editions inside. Good for long history.
+        </p>
+        <div class="calendar-archive">
+            <div class="calendar-month active" onclick="this.nextElementSibling?.classList.toggle('visible')">
+                <div class="calendar-month-name">Dec</div>
+                <div class="calendar-month-count">8</div>
+                <div class="calendar-month-year">2025</div>
+            </div>
+            <div class="calendar-editions visible">
+                <span class="edition-chip active">Dec 29 v3</span>
+                <span class="edition-chip">Dec 29 v2</span>
+                <span class="edition-chip">Dec 29 v1</span>
+                <span class="edition-chip">Dec 28 v1</span>
+                <span class="edition-chip">Dec 27 v1</span>
+            </div>
+            <div class="calendar-month">
+                <div class="calendar-month-name">Nov</div>
+                <div class="calendar-month-count">4</div>
+                <div class="calendar-month-year">2025</div>
+            </div>
+            <div class="calendar-month">
+                <div class="calendar-month-name">Oct</div>
+                <div class="calendar-month-count">2</div>
+                <div class="calendar-month-year">2025</div>
+            </div>
+            <div class="calendar-month">
+                <div class="calendar-month-name">Sep</div>
+                <div class="calendar-month-count">6</div>
+                <div class="calendar-month-year">2025</div>
+            </div>
+        </div>
+
+        <!-- OPTION 2 -->
+        <h2>Option 2: Horizontal Timeline</h2>
+        <p class="section-desc">Scrollable timeline with dots. Visual way to see history progression.</p>
+        <div class="timeline-container">
+            <div class="timeline">
+                <div class="timeline-item active">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Dec 29</div>
+                    <div class="timeline-headline">Developer Pushes 100th Commit...</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Dec 28</div>
+                    <div class="timeline-headline">New Features Land in Production</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Dec 27</div>
+                    <div class="timeline-headline">Bug Squashed After Long Battle</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Dec 26</div>
+                    <div class="timeline-headline">AI Integration Complete</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Dec 25</div>
+                    <div class="timeline-headline">Holiday Code Marathon</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">Dec 24</div>
+                    <div class="timeline-headline">Weekend Refactor Success</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION 3 -->
+        <h2>Option 3: Fullscreen Modal</h2>
+        <p class="section-desc">Click button to open full archive browser with search and grid layout.</p>
+        <button class="modal-trigger" onclick="document.getElementById('archiveModal').classList.add('visible')">📰 Open
+            Archive</button>
+        <div id="archiveModal" class="modal-overlay"
+            onclick="if(event.target === this) this.classList.remove('visible')">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>📰 The Archive</h3>
+                    <button class="modal-close"
+                        onclick="document.getElementById('archiveModal').classList.remove('visible')">&times;</button>
+                </div>
+                <input type="text" class="modal-search" placeholder="Search editions...">
+                <div class="modal-grid">
+                    <div class="modal-item">
+                        <div class="modal-item-date">December 29, 2025</div>
+                        <div class="modal-item-headline">Developer Pushes 100th Commit...</div>
+                    </div>
+                    <div class="modal-item">
+                        <div class="modal-item-date">December 28, 2025</div>
+                        <div class="modal-item-headline">New Features Land in Production</div>
+                    </div>
+                    <div class="modal-item">
+                        <div class="modal-item-date">December 27, 2025</div>
+                        <div class="modal-item-headline">Bug Squashed After Long Battle</div>
+                    </div>
+                    <div class="modal-item">
+                        <div class="modal-item-date">December 26, 2025</div>
+                        <div class="modal-item-headline">AI Integration Complete</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION 4 -->
+        <h2>Option 4: Year → Month → Edition Hierarchy</h2>
+        <p class="section-desc">Nested accordion. Most organized for large archives with years of history.</p>
+        <div class="hierarchy-archive">
+            <div class="hierarchy-year">
+                <button class="hierarchy-year-btn open"
+                    onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+                    <span>2025</span>
+                    <span>▼</span>
+                </button>
+                <div class="hierarchy-months open">
+                    <button class="hierarchy-month-btn" onclick="this.nextElementSibling.classList.toggle('open')">
+                        <span>December</span>
+                        <span>8 editions</span>
+                    </button>
+                    <div class="hierarchy-editions open">
+                        <div class="hierarchy-edition">
+                            <span><strong>Dec 29:</strong> Developer Pushes 100th...</span>
+                            <button class="hierarchy-use-btn">Use</button>
+                        </div>
+                        <div class="hierarchy-edition">
+                            <span><strong>Dec 28:</strong> New Features Land...</span>
+                            <button class="hierarchy-use-btn">Use</button>
+                        </div>
+                        <div class="hierarchy-edition">
+                            <span><strong>Dec 27:</strong> Bug Squashed After...</span>
+                            <button class="hierarchy-use-btn">Use</button>
+                        </div>
+                    </div>
+                    <button class="hierarchy-month-btn" onclick="this.nextElementSibling.classList.toggle('open')">
+                        <span>November</span>
+                        <span>4 editions</span>
+                    </button>
+                    <div class="hierarchy-editions"></div>
+                    <button class="hierarchy-month-btn" onclick="this.nextElementSibling.classList.toggle('open')">
+                        <span>October</span>
+                        <span>2 editions</span>
+                    </button>
+                    <div class="hierarchy-editions"></div>
+                </div>
+            </div>
+            <div class="hierarchy-year">
+                <button class="hierarchy-year-btn"
+                    onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+                    <span>2024</span>
+                    <span>▶</span>
+                </button>
+                <div class="hierarchy-months">
+                    <button class="hierarchy-month-btn">
+                        <span>December</span>
+                        <span>12 editions</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPTION 5 -->
+        <h2>Option 5: Search + Lazy Load</h2>
+        <p class="section-desc">Compact dropdown with search and infinite scroll. Best for quick access.</p>
+        <div class="lazy-archive">
+            <input type="text" class="lazy-search" placeholder="🔍 Search archives...">
+            <div class="lazy-list">
+                <div class="lazy-item">
+                    <div class="lazy-item-date">Dec 29, 2025</div>
+                    <div class="lazy-item-headline">Developer Pushes 100th Commit, Shows No Signs of Stopping</div>
+                </div>
+                <div class="lazy-item">
+                    <div class="lazy-item-date">Dec 28, 2025</div>
+                    <div class="lazy-item-headline">New Features Land in Production Environment</div>
+                </div>
+                <div class="lazy-item">
+                    <div class="lazy-item-date">Dec 27, 2025</div>
+                    <div class="lazy-item-headline">Bug Squashed After Long and Grueling Battle</div>
+                </div>
+                <div class="lazy-item">
+                    <div class="lazy-item-date">Dec 26, 2025</div>
+                    <div class="lazy-item-headline">AI Integration Complete After Weeks of Work</div>
+                </div>
+            </div>
+            <button class="lazy-load-more">Load 10 more...</button>
+        </div>
+
+        <hr style="margin: 60px 0; border: none; border-top: 3px double #1a1a1a;">
+        <p style="text-align: center; color: #999; font-size: 0.8rem;">
+            Recommendation: <strong>Option 4</strong> (Hierarchy) or <strong>Option 5</strong> (Search + Lazy) for best
+            scalability
+        </p>
+    </div>
+</body>
+
+</html>

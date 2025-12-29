@@ -1,5 +1,0 @@
-{
-  "title": "Stellar Flare (Modular)",
-  "mainFile": "index.html",
-  "note": "Modular version of Stellar Flare game with Three.js, Tone.js audio, and separate JS/CSS files."
-}
