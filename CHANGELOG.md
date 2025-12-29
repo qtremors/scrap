@@ -2,6 +2,13 @@
 
 All notable changes to the "Scrapyard" project will be documented in this file.
 
+## [2.5.1] - 2025-12-29
+
+### Fixed
+-   **Build Script**: Fixed `build.js` to properly inject the version number into the footer.
+-   **Cross-Platform Paths**: Ensured web links in `metadata.json` always use forward slashes regardless of the OS.
+-   **Metadata Validation**: Added checks to ensure project `mainFile` exists before linking to it.
+
 ## [2.5.0] - 2025-12-29
 
 ### Added

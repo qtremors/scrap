@@ -1,10 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const packageJson = require('./package.json');
 
 const rootDir = __dirname;
 const projectsDir = path.join(rootDir, 'projects');
 const templatePath = path.join(rootDir, '_template.html');
 const outputPath = path.join(rootDir, 'index.html');
+
 
 // Categories to look for
 const categories = ['archive', 'component', 'demo', 'gallery', 'game', 'portfolio', 'showcase', 'template', 'other'];
@@ -18,7 +20,7 @@ function getProjectItems() {
         if (fs.existsSync(categoryPath) && fs.statSync(categoryPath).isDirectory()) {
             const projects = fs.readdirSync(categoryPath, { withFileTypes: true })
                 .filter(dirent => dirent.isDirectory() && !dirent.name.startsWith('_') && !dirent.name.startsWith('.'))
-                .map(dirent => path.join(category, dirent.name)); // Store as 'category/project'
+                .map(dirent => `${category}/${dirent.name}`); // Store with forward slashes
             items.push(...projects);
         }
     });
@@ -38,14 +40,14 @@ function getProjectItems() {
 }
 
 function getCategory(projectPath) {
-    // projectPath is likely 'category/project-name' or just 'project-name'
-    const parts = projectPath.split(path.sep).join('/').split('/'); // Normalize separators
+    // projectPath is likely 'category/project-name' (forward slashes)
+    const parts = projectPath.split('/');
     let categoryName = 'other';
 
     if (parts.length > 1 && categories.includes(parts[0])) {
         categoryName = parts[0];
     } else {
-        // Fallback to prefix check if in root
+        // Fallback
         const prefix = parts[parts.length - 1].split('-')[0];
         const prefixMap = {
             'portfolio': 'portfolio',
@@ -76,15 +78,17 @@ function getCategory(projectPath) {
 }
 
 function getProjectMetadata(projectPath) {
-    // projectPath can be 'category/project' or 'project'
+    // projectPath is 'category/project' or 'project' (with forward slashes)
     // Extract actual folder name for title generation
     const folderName = path.basename(projectPath);
 
     let title = folderName.replace(/[-_]/g, ' ');
     let note = '';
-    // Fix link path to use the relative structure found
-    // Using forward slashes for web links
-    const webPath = projectPath.split(path.sep).join('/');
+
+    // Normalize path separators for OS compatibility when checking filesystem
+    const fsPath = projectPath.split('/').join(path.sep);
+    const webPath = projectPath; // Already forward slashes
+
     let linkPath = `./projects/${webPath}/index.html`;
 
     const category = getCategory(projectPath);
@@ -99,19 +103,26 @@ function getProjectMetadata(projectPath) {
         relativePath: `projects/${webPath}`
     };
 
-    const metaPath = path.join(projectsDir, projectPath, 'meta.json');
+    const metaPath = path.join(projectsDir, fsPath, 'meta.json');
     if (fs.existsSync(metaPath)) {
         try {
             const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
             if (meta.title) metadata.title = meta.title;
             if (meta.note) metadata.note = meta.note;
-            if (meta.mainFile) metadata.linkPath = `./projects/${webPath}/${meta.mainFile}`;
+
+            if (meta.mainFile) {
+                // Validate if mainFile exists
+                const mainFilePath = path.join(projectsDir, fsPath, meta.mainFile);
+                if (fs.existsSync(mainFilePath)) {
+                    metadata.linkPath = `./projects/${webPath}/${meta.mainFile}`;
+                } else {
+                    console.warn(`[WARN] Main file '${meta.mainFile}' specified in meta.json for '${folderName}' does not exist. Using default index.html.`);
+                }
+            }
         } catch (e) {
             console.warn(`Could not parse meta.json for ${folderName}: ${e.message}`);
         }
-    } else if (!fs.existsSync(path.join(projectsDir, projectPath, 'index.html'))) {
-        // Check deeply if it might be a nested project root or we should skip
-        // For now, if no index.html at root of project folder, we warn
+    } else if (!fs.existsSync(path.join(projectsDir, fsPath, 'index.html'))) {
         console.warn(`No index.html or meta.json found for ${folderName} at ${projectPath}. Skipping.`);
         return null;
     }
@@ -130,7 +141,7 @@ function generateCardHTML(project) {
 }
 
 try {
-    console.log('Starting build...');
+    console.log(`Starting build v${packageJson.version}...`);
 
     const projectItems = getProjectItems();
 
@@ -144,7 +155,11 @@ try {
         .map(generateCardHTML)
         .join('\n');
 
-    const templateContent = fs.readFileSync(templatePath, 'utf-8');
+    let templateContent = fs.readFileSync(templatePath, 'utf-8');
+
+    // Inject version
+    templateContent = templateContent.replace('{{VERSION}}', packageJson.version);
+
     const finalHtml = templateContent.replace('{{PROJECT_CARDS}}', projectLinks);
 
     fs.writeFileSync(outputPath, finalHtml);
