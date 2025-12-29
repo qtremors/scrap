@@ -2,6 +2,26 @@
 
 All notable changes to the "Scrapyard" project will be documented in this file.
 
+## [2.5.0] - 2025-12-29
+
+### Added
+-   **Universal Metadata**: `metadata.json` is now generated in the root, cataloging all projects with title, category, and paths.
+-   **Nested Category Structure**: Projects are now organized into subdirectories (e.g., `projects/game/stellar-flare`).
+-   **Stellar Flare Redux**: Merged legacy and modular versions of Stellar Flare into a single collection with a new launcher.
+
+### Changed
+-   **Project Reorganization**: Moved all 29 projects into category-specific subfolders (`projects/portfolio/`, `projects/game/`, etc.) to declutter the workspace.
+-   **Build System**: Updated `build.js` to support recursive project scanning and metadata generation.
+
+
+### Added
+-   **New Component: Newspaper Archive**: Five scalable archive designs including calendar grid and timeline.
+-   **New Component: Hero Concepts**: 7 unique hero section concepts (3D Cube, Hologram, etc.).
+-   **New Component: Footer Collection**: 7 responsive footer layouts collection.
+-   **New Component: Newspaper Skills**: Skills section layouts inspired by newspaper classifieds.
+
+---
+
 ## [2.3.0] - 2025-12-22
 
 ### Added
