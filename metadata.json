@@ -99,6 +99,15 @@
     "relativePath": "projects/game/game-stellar-flare"
   },
   {
+    "id": "model-alien-x",
+    "title": "Alien X Model Showcase",
+    "note": "A high-fidelity 3D model showcase of Alien X.",
+    "category": "models",
+    "categoryEmoji": "👾",
+    "linkPath": "./projects/models/model-alien-x/alien-x.html",
+    "relativePath": "projects/models/model-alien-x"
+  },
+  {
     "id": "portfolio-3d-spatial",
     "title": "3D Spatial Portfolio",
     "note": "Space-themed portfolio with starfield background, floating cards, and parallax effects.",
@@ -250,6 +259,15 @@
     "categoryEmoji": "✨",
     "linkPath": "./projects/showcase/showcase-transparent-design/index.html",
     "relativePath": "projects/showcase/showcase-transparent-design"
+  },
+  {
+    "id": "template-error",
+    "title": "Universal Error Page",
+    "note": "A playful, multi-state error page collection (404, 500, 403, 503) with interactive previews.",
+    "category": "template",
+    "categoryEmoji": "📄",
+    "linkPath": "./projects/template/template-error/error.html",
+    "relativePath": "projects/template/template-error"
   },
   {
     "id": "template-material-ecommerce",
