@@ -1,0 +1,5 @@
+{
+    "title": "Universal Error Page",
+    "mainFile": "error.html",
+    "note": "A playful, multi-state error page collection (404, 500, 403, 503) with interactive previews."
+}

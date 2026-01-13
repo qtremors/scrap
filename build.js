@@ -9,7 +9,7 @@ const outputPath = path.join(rootDir, 'index.html');
 
 
 // Categories to look for
-const categories = ['archive', 'component', 'demo', 'gallery', 'game', 'portfolio', 'showcase', 'template', 'other'];
+const categories = ['archive', 'component', 'demo', 'gallery', 'game', 'models', 'portfolio', 'showcase', 'template', 'other'];
 
 function getProjectItems() {
     const items = [];
@@ -65,6 +65,7 @@ function getCategory(projectPath) {
     const emojiMap = {
         'portfolio': '🎨',
         'game': '🎮',
+        'models': '👾',
         'component': '🧩',
         'template': '📄',
         'gallery': '🖼️',
