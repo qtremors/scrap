@@ -2,7 +2,7 @@
 
 > Comprehensive documentation for developers working on the Scrapyard Digital Graveyard.
 
-**Version:** 2.5.1 | **Last Updated:** 2026-01-13
+**Version:** 2.5.2 | **Last Updated:** 2026-03-03
 
 ---
 
@@ -10,9 +10,13 @@
 
 - [Architecture Overview](#architecture-overview)
 - [Project Structure](#project-structure)
+- [Naming Conventions](#naming-conventions)
 - [Build System](#build-system)
 - [Search Implementation](#search-implementation)
 - [Deployment](#deployment)
+- [Intended Changes](#intended-changes)
+- [Project Auditing](#project-auditing--quality-standards)
+- [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 
 ---
@@ -72,6 +76,18 @@ scrap/
 
 ---
 
+## Naming Conventions
+
+> Names should be self-documenting. A reader should understand what a file, function, or component does without opening it.
+
+### Files & Directories
+
+| Type | Convention | Good Example |
+|------|-----------|--------------|
+| **Project Folders** | `category-project-name` | `portfolio-terminal` |
+
+---
+
 ## Build System
 
 The build script (`build.js`) performs the following steps:
@@ -105,6 +121,70 @@ The project is automatically deployed via GitHub Actions when changes are pushed
 1. **Checkout**: Pulls the latest code.
 2. **Build**: Runs `npm run build` to generate the latest `index.html`.
 3. **Deploy**: Uploads the root directory to GitHub Pages.
+
+---
+
+## Intended Changes
+
+> A log of deliberate but unconventional code, design decisions, or structure choices that might look like bugs or bad practices to an outside observer. If a change is weird, it's documented here so it isn't accidentally "fixed".
+
+| Component / Feature | Deliberate Weirdness | Rationalization |
+|---------------------|-----------------------|-----------------|
+| **Canvas Loop**     | Throttling `requestAnimationFrame` to 30 FPS instead of the monitor's natural refresh rate. | Prevents high GPU loads and laptop battery drain for an aesthetic background where 60+ FPS isn't strictly necessary. |
+| **Vanilla JS**      | Avoiding modern bundlers and frontend frameworks (React/Vue/Svelte). | Prioritizing decades-long archivel stability without framework rot or dependency deprecation. |
+
+### Technical Debt
+
+- [ ] Optimize loading state/spinner for iframe previews.
+- [ ] Accessibility: Improve keyboard navigation for project cards.
+
+---
+
+## Project Auditing & Quality Standards
+
+> A structured approach to ensuring the project is correct, secure, and maintainable.
+
+### System Understanding
+
+Before making significant changes, ensure a deep understanding of:
+- **Core Architecture**: Workflows, data flow, and overall purpose.
+- **Implicit Design**: Assumptions and hidden coupling between components.
+- **Edge Cases**: UNintended behaviors and alternative use cases.
+
+### Audit Categories
+
+Evaluate changes and existing code against these dimensions:
+
+| Category | Focus Areas |
+|----------|-------------|
+| **Correctness** | Logical errors, edge-case failures, silent failures, data integrity |
+| **Performance** | Algorithm efficiency, query optimization, resource overuse (CPU/RAM) |
+| **Maintainability** | Readability, naming consistency, technical debt, dead code |
+| **Documentation** | Accuracy, completeness, implementation-spec matching |
+
+### General Anomalies
+
+Identify and resolve anything that is:
+- **Confusing**: Inconsistent or unjustified logic.
+- **Out of place**: Contextually surprising behavior.
+- **Undocumented**: Implicit assumptions that aren't spelled out.
+
+### Reporting Process
+
+- All audit findings must be added to [TASKS.md](TASKS.md).
+- Ensure entries are **Clear**, **Actionable**, and **Concisely described**.
+- Avoid vague statements; provide concrete context and impact.
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| **Live Previews Flicker** | Ensure your cursor remains inside the bounds of the card for the 1-second debounce delay. |
+| **Projects not showing** | Verify that `npm run build` completed without errors and the project folder starts with an approved category prefix. |
 
 ---
 

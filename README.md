@@ -90,11 +90,13 @@ scrap/
 
 ---
 
-## 📊 System Resource usage and impact
+## 📊 System Resources
 
-cpu: < 5% (Throttled to 30fps)
-ram: Low (Static HTML/JS)
-disk: ~20MB (Including project assets)
+| Metric | Value |
+|--------|-------|
+| **CPU** | < 5% (Throttled to 30fps) |
+| **RAM** | Low (Static HTML/JS) |
+| **Disk** | ~20MB (including project assets) |
 
 ---
 
