@@ -1,12 +1,12 @@
 # Scrapyard - Tasks
 
 > **Project:** Scrapyard  
-> **Version:** 2.5.1  
-> **Last Updated:** 2026-01-13
+> **Version:** 2.5.2  
+> **Last Updated:** 2026-03-03
 
 ---
 
-## ✅ Completed (v2.5.1)
+## ✅ Completed (v2.5.2)
 
 ### Infrastructure
 - [x] Implement nested category structure in `projects/`.
@@ -29,6 +29,7 @@
 ### Content
 - [/] Archiving remaining legacy experiments.
 - [/] Updating individual project `meta.json` files for better descriptions.
+- [x] Added and categorized 5 new Generative Canvas templates and 2 Portfolio directories.
 
 ---
 

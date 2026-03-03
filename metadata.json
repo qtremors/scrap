@@ -153,6 +153,15 @@
     "relativePath": "projects/portfolio/portfolio-core-physics"
   },
   {
+    "id": "portfolio-directory",
+    "title": "App Directory",
+    "note": "A central directory of live deployments and repositories.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-directory/index.html",
+    "relativePath": "projects/portfolio/portfolio-directory"
+  },
+  {
     "id": "portfolio-ethereal-glass",
     "title": "Ethereal Glass Portfolio",
     "note": "Glassmorphism portfolio with custom cursor, ambient glow effects, and GSAP scroll animations.",
@@ -225,6 +234,15 @@
     "relativePath": "projects/portfolio/portfolio-quantum-hud"
   },
   {
+    "id": "portfolio-selected-works",
+    "title": "Selected Works",
+    "note": "A curated collection of software systems and applications.",
+    "category": "portfolio",
+    "categoryEmoji": "🎨",
+    "linkPath": "./projects/portfolio/portfolio-selected-works/index.html",
+    "relativePath": "projects/portfolio/portfolio-selected-works"
+  },
+  {
     "id": "portfolio-terminal",
     "title": "Terminal Portfolio",
     "note": "Portfolio with terminal UI aesthetic, Fira Code font, and command-line styling.",
@@ -261,6 +279,33 @@
     "relativePath": "projects/showcase/showcase-transparent-design"
   },
   {
+    "id": "template-constellation-network",
+    "title": "Constellation Nexus",
+    "note": "Interactive constellation particle ecosystem.",
+    "category": "template",
+    "categoryEmoji": "📄",
+    "linkPath": "./projects/template/template-constellation-network/index.html",
+    "relativePath": "projects/template/template-constellation-network"
+  },
+  {
+    "id": "template-cosmic-node-network",
+    "title": "Cosmic Node Network",
+    "note": "Cosmic nodes generative network with repel forces.",
+    "category": "template",
+    "categoryEmoji": "📄",
+    "linkPath": "./projects/template/template-cosmic-node-network/index.html",
+    "relativePath": "projects/template/template-cosmic-node-network"
+  },
+  {
+    "id": "template-deep-sea-luminesence",
+    "title": "Deep Sea Luminescence",
+    "note": "Deep sea bioluminescent particle interactions.",
+    "category": "template",
+    "categoryEmoji": "📄",
+    "linkPath": "./projects/template/template-deep-sea-luminesence/index.html",
+    "relativePath": "projects/template/template-deep-sea-luminesence"
+  },
+  {
     "id": "template-error",
     "title": "Universal Error Page",
     "note": "A playful, multi-state error page collection (404, 500, 403, 503) with interactive previews.",
@@ -277,5 +322,23 @@
     "categoryEmoji": "📄",
     "linkPath": "./projects/template/template-material-ecommerce/index.html",
     "relativePath": "projects/template/template-material-ecommerce"
+  },
+  {
+    "id": "template-particle-constellation",
+    "title": "Particle Constellation",
+    "note": "Interactive multi-theme particle constellation simulation.",
+    "category": "template",
+    "categoryEmoji": "📄",
+    "linkPath": "./projects/template/template-particle-constellation/index.html",
+    "relativePath": "projects/template/template-particle-constellation"
+  },
+  {
+    "id": "template-stellar-kinetic",
+    "title": "Stellar Kinetic",
+    "note": "Interactive stellar kinetic garden fragment.",
+    "category": "template",
+    "categoryEmoji": "📄",
+    "linkPath": "./projects/template/template-stellar-kinetic/index.html",
+    "relativePath": "projects/template/template-stellar-kinetic"
   }
 ]

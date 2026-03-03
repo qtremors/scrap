@@ -1,8 +1,20 @@
 # Scrapyard Changelog
 
 > **Project:** Scrapyard  
-> **Version:** 2.5.1  
-> **Last Updated:** 2026-01-13
+> **Version:** 2.5.2  
+> **Last Updated:** 2026-03-03
+
+---
+
+## [2.5.2] - 2026-03-03
+
+### Added
+- **New Template: Constellation Nexus**: Interactive constellation particle ecosystem.
+- **New Template: Cosmic Node Network**: Generative network with repel forces.
+- **New Template: Deep Sea Luminescence**: Bioluminescent particle interactions.
+- **New Template: Particle Constellation**: Multi-theme particle constellation simulation.
+- **New Template: Stellar Kinetic**: Interactive stellar kinetic garden fragment.
+- **New Portfolio: Selected Works & App Directory**: Integrated portfolio directories.
 
 ---
 
