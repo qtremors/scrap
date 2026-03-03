@@ -1,8 +1,24 @@
 # Scrapyard Changelog
 
 > **Project:** Scrapyard  
-> **Version:** 2.5.2  
+> **Version:** 2.5.3  
 > **Last Updated:** 2026-03-03
+
+---
+
+## [2.5.3] - 2026-03-03
+
+### Removed
+- **Live Preview Feature**: Removed iframe-based live preview on card hover (HTML, CSS, JS).
+
+### Changed
+- **Documentation Overhaul**: Aligned all docs (README, DEVELOPMENT, LICENSE) with latest templates.
+- **README**: Fixed version badge, completed project structure diagram, added TASKS.md to docs table, added license web link.
+- **DEVELOPMENT.md**: Added build artifact warning for `index.html`, expanded audit categories (Security, Architecture, Infrastructure), added TASKS.md to project structure, removed stale iframe references.
+- **LICENSE.md**: Added email contact for commercial licensing.
+
+### Added
+- **Comprehensive Audit**: Full codebase audit with 40+ findings across correctness, security, performance, architecture, maintainability, documentation, and infrastructure recorded in TASKS.md.
 
 ---
 

@@ -81,6 +81,7 @@ If you wish to use this Software for commercial purposes (e.g., in a product, re
 
 **Contact for Permissions:**
 -   **GitHub**: Open a discussion or issue in the repository.
+-   **Email**: `rwprdlm8@anonaddy.me`
 
 *Permissions granted are permanent unless revoked for violation of terms.*
 

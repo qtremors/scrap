@@ -2,7 +2,7 @@
 
 > Comprehensive documentation for developers working on the Scrapyard Digital Graveyard.
 
-**Version:** 2.5.2 | **Last Updated:** 2026-03-03
+**Version:** 2.5.3 | **Last Updated:** 2026-03-03
 
 ---
 
@@ -64,13 +64,14 @@ scrap/
 │   ├── index.js          # Layout logic & Canvas animation
 │   └── favicon.svg       # Project logo
 ├── projects/             # Organized project storage
-│   ├── [category]/       # archive, component, demo, game, models, portfolio, etc.
+│   ├── [category]/       # archive, component, demo, gallery, game, models, portfolio, showcase, template
 │   │   └── [project]/    # Individual project files (index.html, meta.json)
 ├── build.js              # SSG logic
 ├── _template.html        # Base HTML skeleton
 ├── README.md             # User-facing documentation
 ├── DEVELOPMENT.md        # This file
 ├── CHANGELOG.md          # Version history
+├── TASKS.md              # Planned features and known issues
 └── LICENSE.md            # License terms
 ```
 
@@ -95,6 +96,9 @@ The build script (`build.js`) performs the following steps:
 2. **Metadata**: Parses `meta.json` if available; otherwise, infers metadata from filenames.
 3. **Template**: Reads `_template.html` and replaces placeholders (`{{PROJECT_CARDS}}`, `{{VERSION}}`).
 4. **Output**: Writes the final `index.html` and updates `metadata.json`.
+
+> [!CAUTION]
+> **`index.html` is a generated build artifact.** Never edit it directly — your changes will be overwritten on the next build. All markup changes should be made in `_template.html`, then regenerated with `npm run build`.
 
 ```bash
 # Run the build
@@ -135,7 +139,6 @@ The project is automatically deployed via GitHub Actions when changes are pushed
 
 ### Technical Debt
 
-- [ ] Optimize loading state/spinner for iframe previews.
 - [ ] Accessibility: Improve keyboard navigation for project cards.
 
 ---
@@ -158,9 +161,12 @@ Evaluate changes and existing code against these dimensions:
 | Category | Focus Areas |
 |----------|-------------|
 | **Correctness** | Logical errors, edge-case failures, silent failures, data integrity |
+| **Security** | Vulnerabilities, auth flaws, input weaknesses, sensitive data exposure |
 | **Performance** | Algorithm efficiency, query optimization, resource overuse (CPU/RAM) |
+| **Architecture** | Bottlenecks, tight coupling, structural mismatches, scalability |
 | **Maintainability** | Readability, naming consistency, technical debt, dead code |
 | **Documentation** | Accuracy, completeness, implementation-spec matching |
+| **Infrastructure** | Environment config, deployment risks, secret management |
 
 ### General Anomalies
 
@@ -183,7 +189,6 @@ Identify and resolve anything that is:
 
 | Issue | Solution |
 |-------|----------|
-| **Live Previews Flicker** | Ensure your cursor remains inside the bounds of the card for the 1-second debounce delay. |
 | **Projects not showing** | Verify that `npm run build` completed without errors and the project folder starts with an approved category prefix. |
 
 ---

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Version-2.5.1-00f0ff?logo=node.js" alt="Version">
+  <img src="https://img.shields.io/badge/Version-2.5.3-00f0ff?logo=node.js" alt="Version">
   <img src="https://img.shields.io/badge/Build-SSG-ebdbb2?logo=javascript" alt="Build">
   <img src="https://img.shields.io/badge/License-TSL-red" alt="License">
 </p>
@@ -76,11 +76,14 @@ scrap/
 ├── public/                      # Core site assets (css, js, favicon)
 ├── projects/                    # Root folder for all projects
 │   ├── archive/                 # Old/Archived projects
-│   ├── component/               # UI component demos 
+│   ├── component/               # UI component demos
 │   ├── demo/                    # Live demos
+│   ├── gallery/                 # Gallery showcases
 │   ├── game/                    # Game projects
 │   ├── models/                  # 3D model showcases
-│   └── portfolio/               # Portfolio experiments
+│   ├── portfolio/               # Portfolio experiments
+│   ├── showcase/                # Design showcases
+│   └── template/                # Template experiments
 ├── metadata.json                # Auto-generated catalog of all projects
 ├── build.js                     # Node.js script to generate index.html
 ├── _template.html               # HTML template for the main page
@@ -114,15 +117,18 @@ npm run build
 
 | Document | Description |
 |----------|-------------|
-| [DEVELOPMENT.md](DEVELOPMENT.md) | SSG Logic, search implementation, and folder conventions. |
-| [CHANGELOG.md](CHANGELOG.md) | Version history and category additions. |
-| [LICENSE.md](LICENSE.md) | Tremors Source License (TSL) terms. |
+| [DEVELOPMENT.md](DEVELOPMENT.md) | Architecture, build system, and folder conventions. |
+| [CHANGELOG.md](CHANGELOG.md) | Version history and release notes. |
+| [TASKS.md](TASKS.md) | Planned features and known issues. |
+| [LICENSE.md](LICENSE.md) | License terms and attribution. |
 
 ---
 
 ## 📄 License
 
 **Tremors Source License (TSL)** - Source-available license allowing viewing, forking, and derivative works with **mandatory attribution**. Commercial use requires written permission.
+
+Web Version: [github.com/qtremors/license](https://github.com/qtremors/license)
 
 See [LICENSE.md](LICENSE.md) for full terms.
 
