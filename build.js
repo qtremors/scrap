@@ -3,13 +3,13 @@ const path = require('path');
 const packageJson = require('./package.json');
 
 const rootDir = __dirname;
-const projectsDir = path.join(rootDir, 'projects');
+const projectsDir = rootDir; // Categories are now in the root
 const templatePath = path.join(rootDir, '_template.html');
 const outputPath = path.join(rootDir, 'index.html');
 
 
 // Categories to look for
-const categories = ['archive', 'component', 'demo', 'gallery', 'game', 'models', 'portfolio', 'showcase', 'template', 'other'];
+const categories = ['archive', 'component', 'demo', 'gallery', 'game', 'models', 'portfolio', 'showcase', 'template', 'utilities', 'other'];
 
 function getProjectItems() {
     const items = [];
@@ -25,11 +25,13 @@ function getProjectItems() {
         }
     });
 
-    // Also check root projects dir for any loose projects (backwards compatibility/misc)
-    const rootProjects = fs.readdirSync(projectsDir, { withFileTypes: true })
+    // Root-level projects (folders that are NOT categories and NOT internal)
+    const ignoreFolders = ['.git', '.github', 'public', 'node_modules', 'projects', 'scripts'];
+    const rootProjects = fs.readdirSync(rootDir, { withFileTypes: true })
         .filter(dirent =>
             dirent.isDirectory() &&
-            !categories.includes(dirent.name) && // Don't re-scan category folders as projects
+            !categories.includes(dirent.name) &&
+            !ignoreFolders.includes(dirent.name) &&
             !dirent.name.startsWith('_') &&
             !dirent.name.startsWith('.')
         )
@@ -72,6 +74,7 @@ function getCategory(projectPath) {
         'showcase': '✨',
         'archive': '📦',
         'demo': '🚀',
+        'utilities': '🛠️',
         'other': '📁'
     };
 
@@ -90,7 +93,7 @@ function getProjectMetadata(projectPath) {
     const fsPath = projectPath.split('/').join(path.sep);
     const webPath = projectPath; // Already forward slashes
 
-    let linkPath = `./projects/${webPath}/index.html`;
+    let linkPath = `./${webPath}/index.html`;
 
     const category = getCategory(projectPath);
 
@@ -101,7 +104,7 @@ function getProjectMetadata(projectPath) {
         category: category.name,
         categoryEmoji: category.emoji,
         linkPath: linkPath,
-        relativePath: `projects/${webPath}`
+        relativePath: `${webPath}`
     };
 
     const metaPath = path.join(projectsDir, fsPath, 'meta.json');
@@ -115,7 +118,7 @@ function getProjectMetadata(projectPath) {
                 // Validate if mainFile exists
                 const mainFilePath = path.join(projectsDir, fsPath, meta.mainFile);
                 if (fs.existsSync(mainFilePath)) {
-                    metadata.linkPath = `./projects/${webPath}/${meta.mainFile}`;
+                    metadata.linkPath = `./${webPath}/${meta.mainFile}`;
                 } else {
                     console.warn(`[WARN] Main file '${meta.mainFile}' specified in meta.json for '${folderName}' does not exist. Using default index.html.`);
                 }

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constellation Nexus</title>
+    <!-- Tailwind CSS for sleek UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #050505;
+            font-family: 'Space Grotesk', sans-serif;
+            touch-action: none; /* Prevent scrolling on touch devices */
+        }
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        #ui-layer {
+            position: relative;
+            z-index: 10;
+            pointer-events: none; /* Let clicks pass through to canvas by default */
+        }
+        /* Re-enable pointer events for interactive UI elements */
+        .interactive-ui {
+            pointer-events: auto;
+        }
+        
+        /* Custom range slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #4ade80;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="text-white selection:bg-green-500 selection:text-black">
+
+    <!-- The Canvas for Generative Art -->
+    <canvas id="nexusCanvas"></canvas>
+
+    <!-- UI Overlay -->
+    <div id="ui-layer" class="w-full h-full p-4 sm:p-8 flex flex-col justify-between absolute inset-0">
+        
+        <!-- Header / Glassmorphism Card -->
+        <div class="interactive-ui max-w-sm bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-2xl transition-all hover:bg-white/10">
+            <h1 class="text-3xl font-semibold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+                Constellation Nexus
+            </h1>
+            <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                An interactive particle ecosystem. Move your cursor or touch the screen to disrupt the network. Adjust parameters below to shape the cosmos.
+            </p>
+
+            <!-- Controls -->
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Connection Range</span>
+                        <span id="rangeValue">150</span>
+                    </div>
+                    <input type="range" id="connectionRange" min="50" max="300" value="150" class="w-full">
+                </div>
+                
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Particle Speed</span>
+                        <span id="speedValue">1.0</span>
+                    </div>
+                    <input type="range" id="particleSpeed" min="0.1" max="3" step="0.1" value="1.0" class="w-full">
+                </div>
+
+                <div>
+                    <div class="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Repulsion Force</span>
+                        <span id="forceValue">100</span>
+                    </div>
+                    <input type="range" id="repulsionForce" min="0" max="250" value="100" class="w-full">
+                </div>
+            </div>
+
+            <button id="resetBtn" class="mt-6 w-full py-2 px-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-green-400/50">
+                Randomize Colors
+            </button>
+        </div>
+
+        <!-- Footer watermark -->
+        <div class="text-right text-xs text-gray-500 tracking-widest mt-auto">
+            GENERATIVE · HTML5 · CANVAS
+        </div>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        const canvas = document.getElementById('nexusCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // UI Elements
+        const rangeSlider = document.getElementById('connectionRange');
+        const speedSlider = document.getElementById('particleSpeed');
+        const forceSlider = document.getElementById('repulsionForce');
+        const rangeValue = document.getElementById('rangeValue');
+        const speedValue = document.getElementById('speedValue');
+        const forceValue = document.getElementById('forceValue');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // State
+        let particles = [];
+        let particleCount = 100;
+        let connectionDistance = parseInt(rangeSlider.value);
+        let globalSpeedMult = parseFloat(speedSlider.value);
+        let mouseRepelRadius = parseInt(forceSlider.value);
+        let colorPalette = generatePalette();
+
+        let mouse = {
+            x: null,
+            y: null,
+            isActive: false
+        };
+
+        // Resize Canvas to fit window
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Adjust particle count based on screen size (density control)
+            const area = canvas.width * canvas.height;
+            particleCount = Math.min(Math.floor(area / 9000), 200); 
+            initParticles();
+        }
+
+        // Generate a random vibrant color palette
+        function generatePalette() {
+            const hues = [
+                Math.floor(Math.random() * 360), // Base hue
+                (Math.floor(Math.random() * 360) + 120) % 360, // Triadic 1
+                (Math.floor(Math.random() * 360) + 240) % 360  // Triadic 2
+            ];
+            return hues.map(h => `hsl(${h}, 80%, 60%)`);
+        }
+
+        // Particle Class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                
+                // Random velocity
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 1 + 0.5;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                
+                this.color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+
+            update() {
+                // Apply global speed multiplier
+                let currentVx = this.vx * globalSpeedMult;
+                let currentVy = this.vy * globalSpeedMult;
+
+                // Mouse interaction (Repulsion)
+                if (mouse.isActive && mouse.x !== null && mouse.y !== null && mouseRepelRadius > 0) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < mouseRepelRadius) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        
+                        // Inverse square-like falloff for smooth repulsion
+                        const force = (mouseRepelRadius - distance) / mouseRepelRadius;
+                        
+                        const pushX = forceDirectionX * force * 5;
+                        const pushY = forceDirectionY * force * 5;
+
+                        this.x -= pushX;
+                        this.y -= pushY;
+                    }
+                }
+
+                // Normal movement
+                this.x += currentVx;
+                this.y += currentVy;
+
+                // Bounce off edges smoothly
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+                
+                // Failsafe bounds clamp
+                this.x = Math.max(0, Math.min(this.x, canvas.width));
+                this.y = Math.max(0, Math.min(this.y, canvas.height));
+
+                this.draw();
+            }
+        }
+
+        // Initialize particles array
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Draw connecting lines between close particles
+        function connectParticles() {
+            let opacityValue = 1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    let dx = particles[a].x - particles[b].x;
+                    let dy = particles[a].y - particles[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        // Opacity fades as distance increases
+                        opacityValue = 1 - (distance / connectionDistance);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacityValue * 0.2})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Main Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            // Clear screen with a slight trail effect (alpha < 1)
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.3)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+            }
+            connectParticles();
+        }
+
+        // Event Listeners for UI
+        rangeSlider.addEventListener('input', (e) => {
+            connectionDistance = parseInt(e.target.value);
+            rangeValue.innerText = connectionDistance;
+        });
+
+        speedSlider.addEventListener('input', (e) => {
+            globalSpeedMult = parseFloat(e.target.value);
+            speedValue.innerText = globalSpeedMult.toFixed(1);
+        });
+
+        forceSlider.addEventListener('input', (e) => {
+            mouseRepelRadius = parseInt(e.target.value);
+            forceValue.innerText = mouseRepelRadius;
+        });
+
+        resetBtn.addEventListener('click', () => {
+            colorPalette = generatePalette();
+            // Assign new colors to existing particles
+            particles.forEach(p => {
+                p.color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+            });
+            
+            // Add a little splash effect to the button
+            resetBtn.classList.add('bg-green-500/20');
+            setTimeout(() => resetBtn.classList.remove('bg-green-500/20'), 200);
+        });
+
+        // Event Listeners for Mouse/Touch Interaction
+        window.addEventListener('resize', resizeCanvas);
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+            mouse.isActive = true;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.isActive = false;
+        });
+
+        // Touch support for mobile
+        window.addEventListener('touchstart', (e) => {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+            mouse.isActive = true;
+        }, {passive: false});
+
+        window.addEventListener('touchmove', (e) => {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+            mouse.isActive = true;
+        }, {passive: false});
+
+        window.addEventListener('touchend', () => {
+            mouse.isActive = false;
+            // Throw particles out of frame gracefully
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Start
+        resizeCanvas();
+        animate();
+
+    </script>
+</body>
+</html>

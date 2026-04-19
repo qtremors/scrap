@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Directory | Selected Works</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        background: '#050505',
+                        surface: '#121212',
+                        border: '#262626',
+                        textPrimary: '#ffffff',
+                        textSecondary: '#a1a1aa',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Subtle noise texture for a premium matte finish */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 50;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Image fallback pattern (Used if actual assets are missing) */
+        .img-fallback {
+            background-image: radial-gradient(#262626 1px, transparent 1px);
+            background-size: 8px 8px;
+            background-color: #121212;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        /* Pure CSS Animation to avoid CDN config issues */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-12 px-4 sm:px-6 relative bg-background text-textPrimary selection:bg-white selection:text-black antialiased">
+    <div class="noise-overlay"></div>
+
+    <main class="max-w-2xl mx-auto relative z-10">
+        
+        <!-- Header Profile -->
+        <header class="text-center mb-10 animate-fade-in">
+            <div class="w-20 h-20 mx-auto rounded-full bg-surface border border-border flex items-center justify-center mb-4 shadow-xl">
+                <i data-lucide="command" class="w-8 h-8 text-textSecondary"></i>
+            </div>
+            <h1 class="text-2xl font-semibold tracking-tight text-textPrimary mb-2">Systems & Applications</h1>
+            <p class="text-sm text-textSecondary">A central directory of live deployments and repositories.</p>
+        </header>
+
+        <!-- Links Container -->
+        <div id="links-container" class="flex flex-col gap-3">
+            <!-- Links will be injected here -->
+        </div>
+
+        <footer class="mt-16 text-center text-xs text-textSecondary/50 pb-8 animate-fade-in" style="animation-delay: 800ms;">
+            Directory updated automatically.
+        </footer>
+    </main>
+
+    <script>
+        const projectData = [
+  {
+    "id": "quizzer-ai",
+    "title": "Quizzer AI",
+    "image": "assets/qtrmrs-preview.png",
+    "description": "An AI-powered adaptive learning platform that generates unlimited, tailored programming quizzes.",
+    "links": [
+      {"text": "Website", "url": "https://qtrmrs.onrender.com", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/quizzer-ai", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "algorithm-visualizer",
+    "title": "Algorithm Visualizer",
+    "image": "assets/algorithm-preview.png",
+    "description": "Interactive platform executing sorting/pathfinding algorithms streamed via WebSockets.",
+    "links": [
+      {"text": "Website", "url": "https://tremors-algoviz.netlify.app", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/algorithm-visualizer", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "git-nexus",
+    "title": "GitNexus",
+    "image": "assets/git-nexus-preview.png",
+    "description": "Self-hosted GitHub companion dashboard for isolated dev servers and commit history.",
+    "links": [
+      {"text": "Live Demo", "url": "https://qtremors.github.io/scrap/projects/demo/demo-git-nexus", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/git-nexus", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "arcade-nexus",
+    "status": "beta",
+    "title": "Arcade Nexus",
+    "image": "assets/arcade-nexus-preview.png",
+    "description": "Browser-based gaming console with an offline-first SQLite backend and typed Game SDK.",
+    "links": [
+      {"text": "GitHub", "url": "https://github.com/qtremors/arcade-nexus", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "tremors-music",
+    "title": "Tremors Music",
+    "image": "assets/tremors-music-app-preview.png",
+    "description": "Local-first music player with a Python backend, available on Web and native Tauri desktop.",
+    "links": [
+      {"text": "Download", "url": "https://github.com/qtremors/tremors-music/releases", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/tremors-music", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "cosmos",
+    "title": "Cosmos",
+    "image": "assets/cosmos-preview.png",
+    "description": "Browser-based 3D space exploration simulator built with Three.js and custom GLSL shaders.",
+    "links": [
+      {"text": "Website", "url": "https://cosmox.vercel.app", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/cosmos", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "localghost",
+    "title": "LocalGhost",
+    "image": "assets/localghost-preview.png",
+    "description": "Local-first security auditing and benchmarking toolkit for development servers.",
+    "links": [
+      {"text": "GitHub", "url": "https://github.com/qtremors/localghost", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "earnslate",
+    "title": "Earnslate",
+    "image": "assets/earnslate-preview.png",
+    "description": "Client-side finance tracking platform built with Next.js and LocalStorage persistence.",
+    "links": [
+      {"text": "Website", "url": "https://earnslate.vercel.app", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/earnslate", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "xcrape",
+    "title": "Xcrape",
+    "image": "assets/xcrape-preview.png",
+    "description": "Asynchronous Python web scraper powered by Playwright with structured data extraction.",
+    "links": [
+      {"text": "GitHub", "url": "https://github.com/qtremors/xcrape", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "amanzon",
+    "title": "Amanzon E-Commerce",
+    "image": "assets/amanzon-preview.png",
+    "description": "Full-stack e-commerce platform built with Django, PostgreSQL, and Razorpay.",
+    "links": [
+      {"text": "Website", "url": "https://amanzon.onrender.com", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/amanzon", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "socnet",
+    "status": "wip",
+    "title": "Social Network Platform",
+    "image": "assets/socnet-preview.jpeg",
+    "description": "Frontend prototype of a social networking platform with direct messaging and public feeds.",
+    "links": [
+      {"text": "GitHub", "url": "https://github.com/qtremors/social-network", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "material-design",
+    "title": "Material Design",
+    "image": "assets/material-design-preview.png",
+    "description": "Zero-dependency implementation of Material Design 3 in pure HTML, CSS, and JS.",
+    "links": [
+      {"text": "Website", "url": "https://qtremors.github.io/material-design", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/material-design", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "recontext",
+    "title": "ReConText",
+    "image": "assets/recontext-preview.png",
+    "description": "Statically generated MDX knowledge base for developer cheat sheets and notes.",
+    "links": [
+      {"text": "Website", "url": "https://re-context.vercel.app", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/recontext", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "diffs",
+    "title": "Diff Viewer",
+    "image": "assets/diff-preview.png",
+    "description": "GitHub-style side-by-side diff viewer built with Next.js and jsdiff.",
+    "links": [
+      {"text": "Website", "url": "https://diffs.vercel.app", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/diffs", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "gtrmrs",
+    "title": "GTRMRS",
+    "image": "assets/gtrmrs-preview.png",
+    "description": "A unified suite of dependency-free, Git-aware Python CLI developer tools.",
+    "links": [
+      {"text": "GitHub", "url": "https://github.com/qtremors/gtrmrs", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "plant-disease-detector",
+    "title": "Plant Disease Detector",
+    "image": "assets/plant-disease-detector-preview.jpg",
+    "description": "Django web application using TensorFlow to classify apple leaf diseases.",
+    "links": [
+      {"text": "GitHub", "url": "https://github.com/qtremors/plant-disease-detector", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "pc-remote-control",
+    "title": "PC Remote Control",
+    "image": "assets/pcrc-preview.png",
+    "description": "Turn any mobile browser into a remote control for a desktop workstation via FastAPI.",
+    "links": [
+      {"text": "GitHub", "url": "https://github.com/qtremors/pc-rc", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "eshopper",
+    "status": "archive",
+    "title": "E-commerce Website",
+    "image": "assets/eshopper-preview.jpg",
+    "description": "Archived monolithic Django e-commerce application (Superseded by Amanzon).",
+    "links": [
+      {"text": "Website", "url": "https://tremors.pythonanywhere.com", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/eshopper", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "tremors",
+    "title": "Tremors",
+    "image": "assets/tremors-preview.png",
+    "description": "Multi-mode personal portfolio built with Next.js, featuring an interactive CLI terminal.",
+    "links": [
+      {"text": "Website", "url": "https://tremors.vercel.app", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/tremors", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "scrapped-projects",
+    "title": "The Scrapyard",
+    "image": "assets/scrapyard-preview.png",
+    "description": "Cyberpunk-themed digital archive for abandoned and unfinished web projects.",
+    "links": [
+      {"text": "Website", "url": "https://qtremors.github.io/scrap", "class": "link-primary"},
+      {"text": "GitHub", "url": "https://github.com/qtremors/scrap", "class": "link-secondary"}
+    ]
+  }
+];
+
+        const container = document.getElementById('links-container');
+
+        // Status styling map
+        const statusStyles = {
+            'beta': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+            'wip': 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+            'archive': 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20',
+        };
+
+        function urlFix(url) {
+            if (!url.startsWith('http') && !url.startsWith('/')) return `https://${url}`;
+            return url;
+        }
+
+        function renderDirectory() {
+            container.innerHTML = projectData.map((project, index) => {
+                
+                // Identify the main action link (prefer primary, fallback to secondary)
+                const primaryLink = project.links.find(l => l.class === 'link-primary');
+                const secondaryLink = project.links.find(l => l.class === 'link-secondary' || l.text.toLowerCase().includes('github'));
+                
+                // Determine the main URL for the entire card to be clickable
+                const mainUrl = primaryLink ? primaryLink.url : (secondaryLink ? secondaryLink.url : '#');
+                
+                const statusHtml = project.status ? 
+                    `<span class="ml-2 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border ${statusStyles[project.status]}">${project.status}</span>` : '';
+
+                return `
+                    <div class="animate-fade-in group relative flex items-center p-3 sm:p-4 rounded-2xl bg-surface border border-border hover:border-textSecondary/40 transition-all duration-300 hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)]" style="animation-delay: ${index * 40}ms;">
+                        
+                        <!-- Thumbnail -->
+                        <a href="${urlFix(mainUrl)}" target="_blank" rel="noopener noreferrer" class="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-border relative block">
+                            <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" onerror="this.onerror=null; this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                            <div class="hidden img-fallback w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                                <i data-lucide="layers" class="w-5 h-5 text-textSecondary opacity-50"></i>
+                            </div>
+                        </a>
+
+                        <!-- Text Content -->
+                        <div class="ml-4 flex-grow min-w-0 pr-4">
+                            <a href="${urlFix(mainUrl)}" target="_blank" rel="noopener noreferrer" class="block focus:outline-none">
+                                <h2 class="text-sm sm:text-base font-medium text-textPrimary truncate flex items-center">
+                                    ${project.title} ${statusHtml}
+                                </h2>
+                                <p class="text-xs sm:text-sm text-textSecondary truncate mt-0.5 sm:mt-1">${project.description}</p>
+                            </a>
+                        </div>
+
+                        <!-- Action Links -->
+                        <div class="shrink-0 flex items-center gap-2 relative z-10">
+                            ${primaryLink ? `
+                                <a href="${urlFix(primaryLink.url)}" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-background bg-textPrimary rounded-lg hover:bg-white transition-colors">
+                                    ${primaryLink.text}
+                                </a>
+                                <a href="${urlFix(primaryLink.url)}" target="_blank" rel="noopener noreferrer" class="flex sm:hidden items-center justify-center w-8 h-8 rounded-lg bg-textPrimary text-background hover:bg-white transition-colors">
+                                    <i data-lucide="external-link" class="w-4 h-4"></i>
+                                </a>
+                            ` : ''}
+                            
+                            ${secondaryLink ? `
+                                <a href="${urlFix(secondaryLink.url)}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center w-8 h-8 rounded-lg border border-border text-textSecondary hover:text-textPrimary hover:bg-border/50 transition-colors" title="${secondaryLink.text}">
+                                    <i data-lucide="${secondaryLink.text.toLowerCase().includes('github') ? 'github' : 'folder-git-2'}" class="w-4 h-4"></i>
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+
+        document.addEventListener('DOMContentLoaded', renderDirectory);
+    </script>
+</body>
+</html>

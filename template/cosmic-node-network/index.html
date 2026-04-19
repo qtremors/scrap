@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Node Network</title>
+    <style>
+        /* ==========================================================================
+           CSS RESET & BASE STYLES
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: #050505; /* Deep space black */
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling, we want a fixed canvas */
+            color: #e0e0e0;
+        }
+
+        /* ==========================================================================
+           CANVAS STYLES
+           ========================================================================== */
+        #networkCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Keep canvas in the background */
+            /* Add a subtle radial gradient behind the canvas for depth */
+            background: radial-gradient(circle at center, #111827 0%, #000000 100%);
+        }
+
+        /* ==========================================================================
+           UI CONTROL PANEL (GLASSMORPHISM)
+           ========================================================================== */
+        #ui-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 10; /* Keep UI above canvas */
+            width: 320px;
+            background: rgba(20, 20, 30, 0.6); /* Semi-transparent dark background */
+            backdrop-filter: blur(12px); /* Glass blur effect */
+            -webkit-backdrop-filter: blur(12px); /* Safari support */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* Mobile responsiveness for the UI panel */
+        @media (max-width: 600px) {
+            #ui-panel {
+                top: auto;
+                bottom: 20px;
+                right: 50%;
+                transform: translateX(50%);
+                width: calc(100% - 40px);
+                max-width: 400px;
+                max-height: 40vh;
+                overflow-y: auto;
+            }
+        }
+
+        /* Typography inside UI */
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        p.subtitle {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Control Groups */
+        .control-group {
+            margin-bottom: 16px;
+        }
+
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .value-display {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        /* Chrome/Safari Slider Track */
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        /* Chrome/Safari Slider Thumb */
+        input[type=range]::-webkit-slider-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #4facfe;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -5px; /* Centers thumb on the track */
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+            transition: transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Firefox Slider Track */
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 6px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        /* Firefox Slider Thumb */
+        input[type=range]::-moz-range-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #4facfe;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.5);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: rgba(79, 172, 254, 0.2);
+            border-color: #4facfe;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.3);
+        }
+
+        button:active {
+            transform: translateY(2px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Main Canvas Element -->
+    <canvas id="networkCanvas"></canvas>
+
+    <!-- UI Overlay Panel -->
+    <main id="ui-panel">
+        <h1>Cosmic Nodes</h1>
+        <p class="subtitle">Interact with the canvas to repel particles. Click to add bursts of energy.</p>
+
+        <!-- Particle Density Control -->
+        <div class="control-group">
+            <label for="densitySlider">
+                <span>Density</span>
+                <span id="densityVal" class="value-display">150</span>
+            </label>
+            <input type="range" id="densitySlider" min="50" max="400" value="150" step="10">
+        </div>
+
+        <!-- Connection Distance Control -->
+        <div class="control-group">
+            <label for="distanceSlider">
+                <span>Connect Distance</span>
+                <span id="distanceVal" class="value-display">120</span>
+            </label>
+            <input type="range" id="distanceSlider" min="50" max="250" value="120" step="5">
+        </div>
+
+        <!-- Particle Speed Control -->
+        <div class="control-group">
+            <label for="speedSlider">
+                <span>Kinetic Energy</span>
+                <span id="speedVal" class="value-display">1.5</span>
+            </label>
+            <input type="range" id="speedSlider" min="0.1" max="5.0" value="1.5" step="0.1">
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button id="btnRandomize">Randomize Color</button>
+            <button id="btnClear">Clear Field</button>
+        </div>
+    </main>
+
+    <!-- Application Logic -->
+    <script>
+        /**
+         * ==========================================================================
+         * INITIALIZATION & SETUP
+         * ==========================================================================
+         */
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Configuration object to hold application state
+        const config = {
+            particleCount: 150,
+            maxDistance: 120, // Distance at which lines begin to draw
+            speedMultiplier: 1.5,
+            mouseRepelRadius: 150, // How close mouse needs to be to push particles
+            mouseRepelForce: 3,
+            colorHue: 200, // Starting hue (blueish)
+            isMobile: window.innerWidth < 600
+        };
+
+        // Arrays to hold our particle objects
+        let particles = [];
+        
+        // Mouse object to track user interaction
+        const mouse = {
+            x: null,
+            y: null,
+            isActive: false
+        };
+
+        /**
+         * Handles resizing the canvas to fit the window exactly.
+         * Adjusts particle density slightly on mobile to maintain performance.
+         */
+        function resizeCanvas() {
+            // Support for high DPI displays to make lines crisp
+            const dpr = window.devicePixelRatio || 1;
+            
+            // Set actual internal dimensions
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
+            
+            // Set CSS display dimensions
+            canvas.style.width = `${window.innerWidth}px`;
+            canvas.style.height = `${window.innerHeight}px`;
+            
+            // Normalize coordinate system to use CSS pixels
+            ctx.scale(dpr, dpr);
+
+            // Re-evaluate mobile status
+            config.isMobile = window.innerWidth < 600;
+        }
+
+        // Initialize sizes
+        resizeCanvas();
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            // Re-initialize particles if window changes drastically to prevent them getting stuck off-screen
+            initParticles();
+        });
+
+        /**
+         * ==========================================================================
+         * PARTICLE CLASS DEFINITION
+         * ==========================================================================
+         */
+        class Particle {
+            constructor(x, y, isBurst = false) {
+                // Initial position (random if not provided)
+                this.x = x !== undefined ? x : Math.random() * (window.innerWidth);
+                this.y = y !== undefined ? y : Math.random() * (window.innerHeight);
+                
+                // Base velocities
+                const angle = Math.random() * Math.PI * 2;
+                const speed = (Math.random() * 0.5 + 0.1);
+                
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+
+                // Burst particles start much faster
+                if (isBurst) {
+                    this.vx *= 5;
+                    this.vy *= 5;
+                }
+
+                // Size of the particle dot
+                this.radius = Math.random() * 2 + 0.5;
+                
+                // Give each particle a slight offset in color for variety
+                this.hueOffset = Math.random() * 40 - 20;
+            }
+
+            /**
+             * Updates particle position and handles boundary collisions & mouse interaction
+             */
+            update() {
+                // 1. Move based on velocity and global speed setting
+                this.x += this.vx * config.speedMultiplier;
+                this.y += this.vy * config.speedMultiplier;
+
+                // 2. Boundary Collision (Bounce off walls)
+                if (this.x < 0 || this.x > window.innerWidth) {
+                    this.vx *= -1;
+                    // Nudge back inside to prevent getting stuck
+                    this.x = this.x < 0 ? 0 : window.innerWidth; 
+                }
+                if (this.y < 0 || this.y > window.innerHeight) {
+                    this.vy *= -1;
+                    this.y = this.y < 0 ? 0 : window.innerHeight;
+                }
+
+                // 3. Mouse Interaction (Repel)
+                if (mouse.isActive && mouse.x !== null) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < config.mouseRepelRadius) {
+                        // Calculate force based on how close the mouse is (closer = stronger push)
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (config.mouseRepelRadius - distance) / config.mouseRepelRadius;
+
+                        // Apply force to velocity (push away)
+                        this.vx -= forceDirectionX * force * config.mouseRepelForce;
+                        this.vy -= forceDirectionY * force * config.mouseRepelForce;
+                    }
+                }
+
+                // 4. Friction (slowly return to normal speed after being pushed)
+                // We clamp the maximum velocity to prevent them flying off infinitely
+                const maxSpeed = 2;
+                const currentSpeed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (currentSpeed > maxSpeed) {
+                    this.vx *= 0.98; // Apply drag
+                    this.vy *= 0.98;
+                }
+            }
+
+            /**
+             * Renders the individual particle on the canvas
+             */
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `hsl(${config.colorHue + this.hueOffset}, 80%, 60%)`;
+                ctx.fill();
+            }
+        }
+
+        /**
+         * ==========================================================================
+         * CORE ENGINE FUNCTIONS
+         * ==========================================================================
+         */
+
+        /**
+         * Populates the particles array based on config.particleCount
+         */
+        function initParticles() {
+            particles = [];
+            // Reduce count on mobile to maintain 60FPS
+            const actualCount = config.isMobile ? Math.floor(config.particleCount * 0.5) : config.particleCount;
+            
+            for (let i = 0; i < actualCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        /**
+         * Loops through all particle pairs to draw connecting lines if close enough
+         */
+        function drawConnections() {
+            // Using globalCompositeOperation 'lighter' creates nice glowing overlaps
+            ctx.globalCompositeOperation = 'lighter';
+
+            // O(n^2) loop, but optimized by starting j at i+1 to avoid duplicate checks and self-checks
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < config.maxDistance) {
+                        // Opacity scales based on distance (closer = more opaque)
+                        const opacity = 1 - (distance / config.maxDistance);
+                        
+                        ctx.beginPath();
+                        ctx.strokeStyle = `hsla(${config.colorHue}, 70%, 50%, ${opacity * 0.5})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            
+            // Reset composite operation to normal for the dots and next frame
+            ctx.globalCompositeOperation = 'source-over';
+        }
+
+        /**
+         * The main game/animation loop
+         */
+        function animate() {
+            // Clear previous frame (using a semi-transparent fill creates a slight trail effect)
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+            // Draw connections first so they appear beneath the particles
+            drawConnections();
+
+            // Update and draw each particle
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+
+            // Request next frame
+            requestAnimationFrame(animate);
+        }
+
+        /**
+         * ==========================================================================
+         * EVENT LISTENERS & INTERACTION
+         * ==========================================================================
+         */
+
+        // Track mouse movement
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            mouse.isActive = true;
+        });
+
+        // Mouse leaves canvas area
+        window.addEventListener('mouseout', () => {
+            mouse.isActive = false;
+        });
+
+        // Click to create a burst of particles at mouse location
+        window.addEventListener('click', (e) => {
+            // Prevent burst if clicking on the UI panel
+            if(e.target.closest('#ui-panel')) return;
+
+            const burstCount = 10;
+            for(let i=0; i<burstCount; i++) {
+                // Add new burst particles
+                particles.push(new Particle(e.clientX, e.clientY, true));
+            }
+
+            // Optional: Trim array if it gets too large to prevent lag
+            if (particles.length > config.particleCount * 2) {
+                particles.splice(0, burstCount);
+            }
+        });
+
+        // --- Touch Support for Mobile ---
+        window.addEventListener('touchstart', (e) => {
+            if(e.target.closest('#ui-panel')) return;
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+            mouse.isActive = true;
+        }, {passive: false});
+
+        window.addEventListener('touchmove', (e) => {
+            if(e.target.closest('#ui-panel')) return;
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
+        }, {passive: false});
+
+        window.addEventListener('touchend', () => {
+            mouse.isActive = false;
+        });
+
+        /**
+         * ==========================================================================
+         * UI CONTROL BINDINGS
+         * ==========================================================================
+         */
+
+        // Density Control
+        const densitySlider = document.getElementById('densitySlider');
+        const densityVal = document.getElementById('densityVal');
+        densitySlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            config.particleCount = val;
+            densityVal.textContent = val;
+            // Dynamically adjust array size
+            const actualTarget = config.isMobile ? Math.floor(val * 0.5) : val;
+            
+            if (particles.length < actualTarget) {
+                const diff = actualTarget - particles.length;
+                for(let i=0; i<diff; i++) particles.push(new Particle());
+            } else if (particles.length > actualTarget) {
+                particles.splice(0, particles.length - actualTarget);
+            }
+        });
+
+        // Connect Distance Control
+        const distanceSlider = document.getElementById('distanceSlider');
+        const distanceVal = document.getElementById('distanceVal');
+        distanceSlider.addEventListener('input', (e) => {
+            config.maxDistance = parseInt(e.target.value);
+            distanceVal.textContent = config.maxDistance;
+        });
+
+        // Speed Control
+        const speedSlider = document.getElementById('speedSlider');
+        const speedVal = document.getElementById('speedVal');
+        speedSlider.addEventListener('input', (e) => {
+            config.speedMultiplier = parseFloat(e.target.value);
+            speedVal.textContent = config.speedMultiplier.toFixed(1);
+        });
+
+        // Randomize Color Button
+        document.getElementById('btnRandomize').addEventListener('click', () => {
+            // Jump to a random hue on the color wheel (0-360)
+            config.colorHue = Math.floor(Math.random() * 360);
+        });
+
+        // Clear Field Button (Shrinks particles to 0 temporarily)
+        document.getElementById('btnClear').addEventListener('click', () => {
+            particles = [];
+            setTimeout(() => {
+                initParticles();
+            }, 300); // Wait 300ms before respawning for dramatic effect
+        });
+
+        /**
+         * ==========================================================================
+         * BOOTSTRAP APPLICATION
+         * ==========================================================================
+         */
+        initParticles();
+        animate();
+
+    </script>
+</body>
+</html>

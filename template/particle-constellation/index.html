@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Interactive Particle Constellation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0f172a; /* Fallback */
+        }
+        
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: radial-gradient(circle at center, #1e293b 0%, #020617 100%);
+            transition: background 0.5s ease;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Glassmorphism UI */
+        #ui-panel {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            max-width: calc(100vw - 3rem);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #ui-panel.collapsed {
+            transform: translateX(calc(100% + 1.5rem));
+        }
+
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        /* Toggle button for mobile */
+        #toggle-ui {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 9;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: background 0.2s;
+        }
+        #toggle-ui:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="text-slate-200 font-sans antialiased">
+
+    <div id="canvas-container">
+        <canvas id="particleCanvas"></canvas>
+    </div>
+
+    <!-- Mobile UI Toggle Button -->
+    <button id="toggle-ui" aria-label="Toggle Controls" class="md:hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+    </button>
+
+    <!-- Glassmorphism Control Panel -->
+    <div id="ui-panel" class="p-6 flex flex-col gap-5">
+        <div class="flex justify-between items-center mb-2">
+            <h1 class="text-lg font-semibold tracking-wide text-white">Simulation Engine</h1>
+            <button id="close-ui" class="md:hidden text-slate-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <!-- Controls -->
+        <div class="space-y-4">
+            <!-- Particle Count -->
+            <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                    <label for="particleCount">Density</label>
+                    <span id="countVal">150</span>
+                </div>
+                <input type="range" id="particleCount" min="30" max="400" value="150">
+            </div>
+
+            <!-- Particle Speed -->
+            <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                    <label for="particleSpeed">Velocity</label>
+                    <span id="speedVal">2.0</span>
+                </div>
+                <input type="range" id="particleSpeed" min="0.1" max="10" step="0.1" value="2.0">
+            </div>
+
+            <!-- Connection Distance -->
+            <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                    <label for="connectDist">Network Radius</label>
+                    <span id="distVal">120</span>
+                </div>
+                <input type="range" id="connectDist" min="50" max="300" value="120">
+            </div>
+            
+            <!-- Mouse Repel Radius -->
+            <div class="space-y-1">
+                <div class="flex justify-between text-xs text-slate-300 font-medium">
+                    <label for="mouseRadius">Repel Force</label>
+                    <span id="mouseVal">150</span>
+                </div>
+                <input type="range" id="mouseRadius" min="0" max="300" value="150">
+            </div>
+        </div>
+
+        <!-- Theme Selector -->
+        <div class="pt-2 border-t border-white/10">
+            <label class="text-xs text-slate-300 font-medium block mb-3">Color Profile</label>
+            <div class="grid grid-cols-4 gap-2">
+                <button class="theme-btn w-full h-8 rounded-md bg-gradient-to-br from-cyan-400 to-blue-600 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50" data-theme="cyber" title="Cyberpunk"></button>
+                <button class="theme-btn w-full h-8 rounded-md bg-gradient-to-br from-emerald-400 to-teal-700 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50" data-theme="bio" title="Bioluminescence"></button>
+                <button class="theme-btn w-full h-8 rounded-md bg-gradient-to-br from-orange-400 to-rose-600 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50" data-theme="sunset" title="Sunset"></button>
+                <button class="theme-btn w-full h-8 rounded-md bg-gradient-to-br from-slate-300 to-slate-600 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50" data-theme="mono" title="Monochrome"></button>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="flex gap-2 pt-2">
+            <button id="pauseBtn" class="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                <span id="pauseText">Pause</span>
+            </button>
+            <button id="resetBtn" class="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>Reset</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        const container = document.getElementById('canvas-container');
+
+        let particlesArray = [];
+        let animationFrameId;
+        let isPaused = false;
+
+        // Configuration State
+        let config = {
+            count: 150,
+            baseSpeed: 2.0,
+            connectDistance: 120,
+            mouseRadius: 150,
+            theme: 'cyber', // cyber, bio, sunset, mono
+            colors: {
+                particles: ['#38bdf8', '#818cf8', '#c084fc'],
+                lines: 'rgba(56, 189, 248, {opacity})', // {opacity} will be replaced
+                bg: 'radial-gradient(circle at center, #1e293b 0%, #020617 100%)'
+            }
+        };
+
+        const themes = {
+            cyber: {
+                particles: ['#38bdf8', '#818cf8', '#c084fc'],
+                lines: 'rgba(129, 140, 248, {opacity})',
+                bg: 'radial-gradient(circle at center, #1e293b 0%, #020617 100%)'
+            },
+            bio: {
+                particles: ['#34d399', '#10b981', '#059669'],
+                lines: 'rgba(52, 211, 153, {opacity})',
+                bg: 'radial-gradient(circle at center, #064e3b 0%, #022c22 100%)'
+            },
+            sunset: {
+                particles: ['#fb923c', '#f43f5e', '#e11d48'],
+                lines: 'rgba(244, 63, 94, {opacity})',
+                bg: 'radial-gradient(circle at center, #4c0519 0%, #2a040f 100%)'
+            },
+            mono: {
+                particles: ['#f8fafc', '#cbd5e1', '#94a3b8'],
+                lines: 'rgba(203, 213, 225, {opacity})',
+                bg: 'radial-gradient(circle at center, #334155 0%, #0f172a 100%)'
+            }
+        };
+
+        // Mouse Object
+        let mouse = {
+            x: null,
+            y: null,
+            radius: config.mouseRadius
+        };
+
+        // Initialize Canvas Size
+        function setCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Adjust particle count based on screen size to maintain performance on mobile
+            const screenArea = canvas.width * canvas.height;
+            const standardArea = 1920 * 1080;
+            const densityFactor = Math.min(screenArea / standardArea, 1);
+            
+            // Only auto-adjust on first load or manual reset, not on every resize
+            if(particlesArray.length === 0) {
+                 config.count = Math.floor(150 * densityFactor);
+                 document.getElementById('particleCount').value = config.count;
+                 document.getElementById('countVal').innerText = config.count;
+            }
+        }
+
+        // Particle Class
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                // Normalize speed vector to match baseSpeed exactly
+                const length = Math.sqrt(directionX * directionX + directionY * directionY);
+                this.directionX = (directionX / length) * config.baseSpeed;
+                this.directionY = (directionY / length) * config.baseSpeed;
+                
+                // Keep original unscaled direction for dynamic speed updates
+                this.baseDirX = directionX / length;
+                this.baseDirY = directionY / length;
+                
+                this.size = size;
+                this.color = color;
+                this.originalColor = color;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                
+                // Add a slight glow
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+            }
+
+            update() {
+                // Bounce off edges
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                    this.baseDirX = -this.baseDirX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                    this.baseDirY = -this.baseDirY;
+                }
+
+                // Check collision/interaction with mouse
+                if (mouse.x != null && mouse.y != null) {
+                    let dx = mouse.x - this.x;
+                    let dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        // Repel logic
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        
+                        // Force inversely proportional to distance
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        
+                        const repelX = forceDirectionX * force * 5;
+                        const repelY = forceDirectionY * force * 5;
+
+                        this.x -= repelX;
+                        this.y -= repelY;
+                    }
+                }
+
+                // Move particle
+                this.x += this.directionX;
+                this.y += this.directionY;
+
+                this.draw();
+            }
+            
+            // Used when global speed changes
+            updateSpeed(newBaseSpeed) {
+                this.directionX = this.baseDirX * newBaseSpeed;
+                this.directionY = this.baseDirY * newBaseSpeed;
+            }
+        }
+
+        // Initialize Particles
+        function init() {
+            particlesArray = [];
+            let colors = config.colors.particles;
+            
+            for (let i = 0; i < config.count; i++) {
+                let size = (Math.random() * 2) + 1.5;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 2) - 1;
+                let directionY = (Math.random() * 2) - 1;
+                let color = colors[Math.floor(Math.random() * colors.length)];
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Connect Particles with Lines
+        function connect() {
+            let opacityValue = 1;
+            const maxDistance = config.connectDistance;
+            const maxDistSquared = maxDistance * maxDistance;
+
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let dx = particlesArray[a].x - particlesArray[b].x;
+                    let dy = particlesArray[a].y - particlesArray[b].y;
+                    let distanceSquared = dx * dx + dy * dy;
+
+                    if (distanceSquared < maxDistSquared) {
+                        // Calculate opacity based on distance
+                        opacityValue = 1 - (Math.sqrt(distanceSquared) / maxDistance);
+                        
+                        ctx.strokeStyle = config.colors.lines.replace('{opacity}', opacityValue);
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Animation Loop
+        function animate() {
+            if (isPaused) return;
+            
+            // Clear canvas but leave a slight trail
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            
+            // Reset shadow to prevent entire canvas from glowing
+            ctx.shadowBlur = 0;
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            
+            ctx.shadowBlur = 0; // Turn off shadow for lines
+            connect();
+            
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        // Apply Theme
+        function applyTheme(themeName) {
+            config.theme = themeName;
+            config.colors = themes[themeName];
+            container.style.background = config.colors.bg;
+            
+            // Update existing particles colors randomly from new theme
+            let colors = config.colors.particles;
+            particlesArray.forEach(p => {
+                p.color = colors[Math.floor(Math.random() * colors.length)];
+            });
+            
+            // Update UI sliders thumb color based on theme
+            const root = document.documentElement;
+            const thumbColor = themes[themeName].particles[0];
+            const style = document.createElement('style');
+            style.innerHTML = `input[type=range]::-webkit-slider-thumb { background: ${thumbColor}; box-shadow: 0 0 10px ${thumbColor}80; }`;
+            document.head.appendChild(style);
+        }
+
+        // --- Event Listeners ---
+
+        window.addEventListener('resize', () => {
+            setCanvasSize();
+            // Don't re-init automatically to prevent jumpiness, just let them bounce off new walls
+        });
+
+        // Mouse interactions
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Touch interactions
+        window.addEventListener('touchstart', (event) => {
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
+        });
+
+        window.addEventListener('touchmove', (event) => {
+            mouse.x = event.touches[0].clientX;
+            mouse.y = event.touches[0].clientY;
+        });
+
+        window.addEventListener('touchend', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // UI Controls Events
+        document.getElementById('particleCount').addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            document.getElementById('countVal').innerText = val;
+            config.count = val;
+            init(); // Re-initialize to update count
+        });
+
+        document.getElementById('particleSpeed').addEventListener('input', (e) => {
+            const val = parseFloat(e.target.value);
+            document.getElementById('speedVal').innerText = val.toFixed(1);
+            config.baseSpeed = val;
+            particlesArray.forEach(p => p.updateSpeed(val));
+        });
+
+        document.getElementById('connectDist').addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            document.getElementById('distVal').innerText = val;
+            config.connectDistance = val;
+        });
+
+        document.getElementById('mouseRadius').addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            document.getElementById('mouseVal').innerText = val;
+            config.mouseRadius = val;
+            mouse.radius = val;
+        });
+
+        // Theme Buttons
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                applyTheme(e.target.dataset.theme);
+            });
+        });
+
+        // Pause/Play Button
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            isPaused = !isPaused;
+            const btnText = document.getElementById('pauseText');
+            const icon = document.getElementById('pauseIcon');
+            
+            if (isPaused) {
+                btnText.innerText = 'Play';
+                // Play Icon SVG
+                icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+                cancelAnimationFrame(animationFrameId);
+            } else {
+                btnText.innerText = 'Pause';
+                // Pause Icon SVG
+                icon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+                animate();
+            }
+        });
+
+        // Reset Button
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            init();
+            if(isPaused) {
+                // Draw once to show reset state
+                ctx.clearRect(0, 0, innerWidth, innerHeight);
+                particlesArray.forEach(p => p.draw());
+                connect();
+            }
+        });
+
+        // Mobile UI Toggle Logic
+        const uiPanel = document.getElementById('ui-panel');
+        const toggleBtn = document.getElementById('toggle-ui');
+        const closeBtn = document.getElementById('close-ui');
+
+        // Initially hide UI on small screens
+        if (window.innerWidth < 768) {
+            uiPanel.classList.add('collapsed');
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            uiPanel.classList.remove('collapsed');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            uiPanel.classList.add('collapsed');
+        });
+
+        // Boot up
+        setCanvasSize();
+        applyTheme('cyber'); // Set initial theme properly
+        init();
+        animate();
+
+    </script>
+</body>
+</html>

@@ -1,8 +1,48 @@
 # Scrapyard Changelog
 
 > **Project:** Scrapyard  
-> **Version:** 2.5.1  
-> **Last Updated:** 2026-01-13
+> **Version:** 2.6.0  
+> **Last Updated:** 2026-04-19
+
+---
+
+## [2.6.0] - 2026-04-19
+
+### Changed
+- **Directory Restructuring**: Moved all category folders (e.g., `demo/`, `portfolio/`) from `projects/` to the root directory to create shorter URLs.
+- **Project Renaming**: Trimmed redundant category prefixes from project folder names (e.g., `demo-git-nexus` → `git-nexus`).
+- **Build System**: Updated `build.js` to support the new flat directory structure and handle root-level scanning.
+
+### Removed
+- **Projects Directory**: Deleted the `projects/` folder as it is no longer part of the project hierarchy.
+
+---
+
+## [2.5.3] - 2026-03-03
+
+### Removed
+- **Live Preview Feature**: Removed iframe-based live preview on card hover (HTML, CSS, JS).
+
+### Changed
+- **Documentation Overhaul**: Aligned all docs (README, DEVELOPMENT, LICENSE) with latest templates.
+- **README**: Fixed version badge, completed project structure diagram, added TASKS.md to docs table, added license web link.
+- **DEVELOPMENT.md**: Added build artifact warning for `index.html`, expanded audit categories (Security, Architecture, Infrastructure), added TASKS.md to project structure, removed stale iframe references.
+- **LICENSE.md**: Added email contact for commercial licensing.
+
+### Added
+- **Comprehensive Audit**: Full codebase audit with 40+ findings across correctness, security, performance, architecture, maintainability, documentation, and infrastructure recorded in TASKS.md.
+
+---
+
+## [2.5.2] - 2026-03-03
+
+### Added
+- **New Template: Constellation Nexus**: Interactive constellation particle ecosystem.
+- **New Template: Cosmic Node Network**: Generative network with repel forces.
+- **New Template: Deep Sea Luminescence**: Bioluminescent particle interactions.
+- **New Template: Particle Constellation**: Multi-theme particle constellation simulation.
+- **New Template: Stellar Kinetic**: Interactive stellar kinetic garden fragment.
+- **New Portfolio: Selected Works & App Directory**: Integrated portfolio directories.
 
 ---
 

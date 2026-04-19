@@ -313,43 +313,4 @@ document.addEventListener('DOMContentLoaded', () => {
         animateCanvas(0);
     }
 
-    // --- Live Preview Logic ---
-    const previewBackdrop = document.getElementById('preview-backdrop');
-    const previewFrame = document.getElementById('preview-frame');
-    let previewTimeout;
-    let clearFrameTimeout;
-    let isPreviewActive = false;
-
-    if (previewBackdrop && previewFrame) {
-        papers.forEach(paper => {
-            paper.addEventListener('mouseenter', () => {
-                if (window.innerWidth < CONFIG.MOBILE_BREAKPOINT) return;
-                const url = paper.getAttribute('href');
-
-                // Cancel any pending clear
-                clearTimeout(clearFrameTimeout);
-                clearTimeout(previewTimeout);
-
-                // Set new timeout to load preview
-                previewTimeout = setTimeout(() => {
-                    isPreviewActive = true;
-                    previewFrame.src = url;
-                    previewBackdrop.style.opacity = '1';
-                }, 1000); // 1s delay to prevent distraction
-            });
-
-            paper.addEventListener('mouseleave', () => {
-                clearTimeout(previewTimeout);
-                previewBackdrop.style.opacity = '0';
-                isPreviewActive = false;
-
-                // Clear src only if not re-entering another card
-                clearFrameTimeout = setTimeout(() => {
-                    if (!isPreviewActive) {
-                        previewFrame.src = 'about:blank';
-                    }
-                }, 500);
-            });
-        });
-    }
 });

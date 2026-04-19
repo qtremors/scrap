@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected Works | Software & Systems</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for Premium Dark Mode -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        background: '#0a0a0a',
+                        surface: '#121212',
+                        surfaceHover: '#1a1a1a',
+                        border: '#262626',
+                        textPrimary: '#ededed',
+                        textSecondary: '#a1a1aa',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                        'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(16px) scale(0.98)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base styles and custom scrollbar */
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.textPrimary');
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::selection {
+            background-color: theme('colors.textPrimary');
+            color: theme('colors.background');
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.border');
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.textSecondary');
+        }
+
+        /* Subtle background glow */
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 500px;
+            background: radial-gradient(circle at top, rgba(255,255,255,0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Image fallback pattern */
+        .img-fallback {
+            background-image: radial-gradient(theme('colors.border') 1px, transparent 1px);
+            background-size: 12px 12px;
+            background-color: theme('colors.surface');
+        }
+        
+        .hide-scroll {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24">
+    <div class="bg-glow"></div>
+
+    <header class="pt-24 pb-16 px-6 max-w-7xl mx-auto">
+        <div class="max-w-2xl">
+            <h1 class="text-4xl md:text-5xl font-medium tracking-tight mb-4 textPrimary">
+                Selected Works
+            </h1>
+            <p class="text-lg text-textSecondary leading-relaxed">
+                A curated collection of software systems, web applications, and technical explorations. Built with focus, precision, and zero compromises.
+            </p>
+        </div>
+    </header>
+
+    <main class="px-6 max-w-7xl mx-auto">
+        <!-- Grid Container -->
+        <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Projects will be injected here -->
+        </div>
+    </main>
+
+    <!-- Modal Backdrop -->
+    <div id="modal-backdrop" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        
+        <!-- Modal Content -->
+        <div id="modal-content" class="bg-surface border border-border rounded-2xl w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl transform scale-95 transition-transform duration-300">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-border shrink-0">
+                <div class="flex items-center gap-3">
+                    <h2 id="modal-title" class="text-2xl font-medium text-textPrimary"></h2>
+                    <span id="modal-status" class="hidden px-2.5 py-0.5 rounded-full text-xs font-medium border uppercase tracking-wider"></span>
+                </div>
+                <button id="close-modal" class="p-2 rounded-lg text-textSecondary hover:text-textPrimary hover:bg-white/5 transition-colors focus:outline-none">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 md:p-8 overflow-y-auto flex-grow custom-scrollbar">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <!-- Left Col: Description & Features -->
+                    <div class="lg:col-span-2 space-y-8">
+                        <div>
+                            <h3 class="text-sm font-semibold text-textSecondary uppercase tracking-wider mb-3">Overview</h3>
+                            <div id="modal-description" class="prose prose-invert max-w-none text-textPrimary/90 leading-relaxed space-y-4"></div>
+                            <div id="modal-recommended" class="hidden mt-4 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-sm flex items-start gap-3">
+                                <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+                                <span></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="text-sm font-semibold text-textSecondary uppercase tracking-wider mb-4">Key Features</h3>
+                            <ul id="modal-features" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- Features injected here -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Right Col: Tech Stack & Installation -->
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-sm font-semibold text-textSecondary uppercase tracking-wider mb-3">Technologies</h3>
+                            <div id="modal-badges" class="flex flex-wrap gap-2">
+                                <!-- Badges injected here -->
+                            </div>
+                        </div>
+
+                        <div id="modal-install-container">
+                            <h3 class="text-sm font-semibold text-textSecondary uppercase tracking-wider mb-3">Installation</h3>
+                            <div class="rounded-xl overflow-hidden border border-border bg-[#0d0d0d]">
+                                <div class="flex items-center gap-2 px-4 py-3 border-b border-border bg-[#141414]">
+                                    <div class="w-3 h-3 rounded-full bg-border"></div>
+                                    <div class="w-3 h-3 rounded-full bg-border"></div>
+                                    <div class="w-3 h-3 rounded-full bg-border"></div>
+                                    <span class="ml-2 text-xs font-mono text-textSecondary">terminal</span>
+                                </div>
+                                <div class="p-4 overflow-x-auto">
+                                    <pre><code id="modal-install-code" class="text-sm font-mono text-textPrimary/80 leading-relaxed"></code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer (Links) -->
+            <div class="p-6 border-t border-border shrink-0 bg-surfaceHover/50 flex flex-wrap gap-3 rounded-b-2xl" id="modal-links">
+                <!-- Links injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Injecting Data -->
+    <script>
+        const projectData = [
+  {
+    "id": "quizzer-ai",
+    "title": "Quizzer AI",
+    "image": "assets/qtrmrs-preview.png",
+    "description": "An AI-powered adaptive learning platform that generates unlimited, tailored programming quizzes using Google Gemini. Features a 3-step generative pipeline, context-aware explanations, and a gamified progression system built on a Service-Oriented Django architecture.",
+    "longDescription": "Quizzer AI replaces static question banks with dynamically generated programming quizzes powered by the Google Gemini API. A custom 3-step AI pipeline handles intent parsing from natural language prompts, structured quiz generation with strict JSON enforcement, and targeted mistake analysis that provides context-aware explanations for incorrect answers.\n\nBuilt on a Service-Oriented Django backend with HTMX and Alpine.js on the frontend, the platform delivers SPA-like interactivity without a separate JavaScript framework. It includes a full gamification system with XP progression, leveling, daily streaks, and 9 unlockable achievement badges. Authentication is handled through a custom user model with email as the primary identifier, complete with email verification, password recovery, and CSP header enforcement in production. Code snippets are rendered with Prism.js syntax highlighting, and the interface supports both dark and light themes with persistent user preferences.",
+    "features": [
+      "3-Step AI Pipeline (Intent Parsing, Generation, Explanations)",
+      "Context-Aware Mistake Analysis and Guided Explanations",
+      "Gamification System (XP, Levels, Streaks, 9 Badges)",
+      "HTMX & Alpine.js SPA-like Interactive UI",
+      "Service-Oriented Django Architecture with Modular Apps",
+      "Email Verification, Password Recovery & CSP Enforcement"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/quizzer-ai.git\ncd quizzer-ai\n\n# Setup environment\ncp .env.example .env\n# Add your GEMINI_API_KEY to .env\n\n# Enter project folder and install dependencies\ncd qtrmrs\nuv sync\n\n# Run migrations and start server\nuv run python manage.py migrate\nuv run python manage.py runserver",
+    "badges": ["tech-python", "tech-django", "tech-gemini", "tech-htmx", "tech-html-css-js"],
+    "links": [
+      {"text": "Website", "url": "https://qtrmrs.onrender.com", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/quizzer-ai", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "algorithm-visualizer",
+    "title": "Algorithm Visualizer",
+    "image": "assets/algorithm-preview.png",
+    "description": "An interactive educational platform that executes sorting and pathfinding algorithms on a Python FastAPI backend and streams execution states in real-time to a React frontend via WebSockets.",
+    "longDescription": "AlgoVisualizer runs algorithm code on an asynchronous Python backend using generator-based execution, streaming each step to the React frontend over persistent WebSocket connections. This approach avoids pre-calculated browser-side animations and enables true real-time visualization with accurate state representation.\n\nThe platform supports Bubble Sort, Insertion Sort, and Selection Sort alongside Dijkstra, BFS, and DFS pathfinding algorithms. Pathfinding operates in a dual-mode hybrid view, allowing users to toggle between 2D grid layouts and physics-based node-link graph layouts with semantic zoom. A VCR-style playback engine provides play, pause, step-through, and adjustable speed controls (10ms to 500ms), with synchronized pseudocode line highlighting and an auto-scrolling execution log.",
+    "features": [
+      "Real-Time WebSocket Algorithm Streaming",
+      "Sorting & Pathfinding with Interactive Grids and Graphs",
+      "Dual-Mode View: 2D Grid and Physics-Based Node-Link Graph",
+      "VCR-Style Playback with Keyboard Shortcuts",
+      "Synchronized Pseudocode Highlighting & Execution Log",
+      "Dynamic Maze Generation & Custom Dataset Input"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/algorithm-visualizer.git\ncd algorithm-visualizer\n\n# Install dependencies\ncd backend && uv sync && cd ..\ncd frontend && npm install && cd ..\n\n# Terminal 1: Backend\ncd backend && uv run uvicorn app.main:api --reload\n\n# Terminal 2: Frontend\ncd frontend && npm run dev",
+    "badges": ["tech-react", "tech-ts", "tech-python", "tech-fastapi", "tech-tailwind"],
+    "links": [
+      {"text": "Website", "url": "https://tremors-algoviz.netlify.app", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/algorithm-visualizer", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "git-nexus",
+    "title": "GitNexus",
+    "image": "assets/git-nexus-preview.png",
+    "description": "A self-hosted GitHub companion dashboard for developers. Browse user profiles and bulk-download repositories, track release assets across watched repos, and time-travel through commit history with isolated dev servers.",
+    "longDescription": "GitNexus is a local-first developer tool built with a decoupled React SPA frontend and an async Python FastAPI backend, backed by SQLite with Fernet symmetric encryption for securely persisting GitHub API tokens and scoped environment variables on the local machine.\n\nThe Repo Replay module clones repositories, syncs their full commit history, and uses Git worktrees to browse the codebase at any point in time. Scoped environment variables (global, project, or commit-level) can be attached before spawning isolated HTTP dev servers for any commit. The Discovery Engine fetches GitHub user profiles, renders contribution graphs, and supports multi-repo bulk downloads. The Asset Watchtower monitors tracked repositories for new releases and enables direct asset downloads.",
+    "features": [
+      "Repo Replay: Browse Commit History via Git Worktrees",
+      "Isolated HTTP Dev Servers per Commit State",
+      "Asset Watchtower: GitHub Release Tracking & Downloads",
+      "Discovery Engine: User Profiles & Bulk Repo Downloads",
+      "Fernet Symmetric Encryption for Tokens & Env Vars",
+      "Decoupled Async Architecture (React SPA + FastAPI)"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/git-nexus.git\ncd git-nexus\n\n# Install dependencies\ncd backend && uv sync && cd ..\ncd frontend && npm install && cd ..\n\n# Terminal 1: Backend\ncd backend && uv run uvicorn main:app --reload\n\n# Terminal 2: Frontend\ncd frontend && npm run dev",
+    "badges": ["tech-python", "tech-fastapi", "tech-react", "tech-ts", "tech-tailwind", "tech-sqlite"],
+    "links": [
+      {"text": "Live Demo", "url": "https://qtremors.github.io/scrap/projects/demo/demo-git-nexus", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/git-nexus", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "arcade-nexus",
+    "status": "beta",
+    "title": "Arcade Nexus",
+    "image": "assets/arcade-nexus-preview.png",
+    "description": "A browser-based gaming console built with React and FastAPI, featuring an offline-first SQLite backend, a typed TypeScript Game SDK for 2D and 3D game development, local profiles, save states, and gamepad support.",
+    "longDescription": "Arcade Nexus is a web application designed to replicate a console-like gaming experience in the desktop browser. It uses a decoupled architecture with a React frontend managed by Zustand and a Python FastAPI backend backed by async SQLite via SQLAlchemy.\n\nThe platform operates entirely offline with local profiles for multi-user access. A typed TypeScript Game SDK provides a unified interface for building 2D Canvas and 3D Three.js games, handling game loops, keyboard and gamepad input, and state persistence. Games support multiple save slots, playtime and high score tracking, and a global achievement system. The interface uses a premium console aesthetic with charcoal and zinc tones, immersive boot sequences, and fullscreen gameplay.",
+    "features": [
+      "Typed TypeScript Game SDK (2D Canvas & 3D Three.js)",
+      "Offline-First FastAPI + Async SQLite Architecture",
+      "Local Save States & Global Achievement System",
+      "Local Profiles with Statistics Dashboard",
+      "Premium Console UI with Gamepad Support",
+      "Zustand State Management & Pydantic Validation"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/arcade-nexus.git\ncd arcade-nexus\n\n# Install dependencies\ncd backend && uv sync && cd ..\ncd frontend && npm install && cd ..\n\n# Terminal 1: Backend\ncd backend && uv run uvicorn app.main:app --reload\n\n# Terminal 2: Frontend\ncd frontend && npm run dev",
+    "badges": ["tech-react", "tech-ts", "tech-python", "tech-fastapi", "tech-sqlite", "tech-threejs", "tech-framermotion"],
+    "links": [
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/arcade-nexus", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "tremors-music",
+    "title": "Tremors Music",
+    "image": "assets/tremors-music-app-preview.png",
+    "description": "A local-first music player available as both a web application and a native Tauri desktop app. Features a Python FastAPI backend for metadata extraction and audio streaming, a React frontend, and an Apple Music-inspired UI.",
+    "longDescription": "Tremors Music is a privacy-focused music player that runs as a web app or a native desktop application. The Python FastAPI backend handles ID3 metadata parsing via Mutagen, library scanning, and range-based audio streaming, while the React frontend provides virtualized lists for handling libraries of 10,000+ songs, synchronized LRC lyrics display, and smart playlists.\n\nThe desktop version uses Tauri with the Python backend compiled as a sidecar process, achieving a ~100-200MB RAM footprint compared to ~700-900MB in a browser tab. The application supports MP3, FLAC, M4A, WAV, OGG, WMA, AAC, and ALAC formats. All music data stays locally on the user's machine with no cloud dependencies.",
+    "features": [
+      "Native Desktop App via Tauri with Python Sidecar",
+      "Virtualized Lists for 10,000+ Song Libraries",
+      "Synchronized LRC Lyrics & ID3 Metadata Extraction",
+      "SQLite Database with Smart Playlists",
+      "Range-Based Audio Streaming & Multi-Format Support",
+      "~100-200MB Desktop Memory Footprint"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/tremors-music.git\ncd tremors-music\n\n# Install Dependencies\ncd backend && uv sync && cd ..\ncd frontend && npm install && cd ..\n\n# Run Web Version\n# Terminal 1: Backend\ncd backend && uv run uvicorn main:app --reload\n# Terminal 2: Frontend\ncd frontend && npm run dev\n\n# Run Desktop Version (Tauri)\ncd tauri && npm install && npm run dev",
+    "badges": ["tech-python", "tech-fastapi", "tech-react", "tech-ts", "tech-tauri", "tech-framermotion", "tech-sqlite"],
+    "links": [
+      {"text": "Download", "url": "https://github.com/qtremors/tremors-music/releases", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/tremors-music", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "cosmos",
+    "title": "Cosmos",
+    "image": "assets/cosmos-preview.png",
+    "description": "A browser-based 3D space exploration simulator built with Three.js and React. Features a Solar System with 2K NASA textures, a secondary Quantumania dimension with 38 lazy-loaded 3D models, and custom GLSL shaders.",
+    "longDescription": "Cosmos is a WebGL-based 3D universe exploration engine built with Three.js, React, and TypeScript. It features a multi-system architecture with a Solar System and a secondary Quantumania realm, navigated through 6-DOF flight controls with progressive boost mechanics and full gamepad support.\n\nThe Solar System contains 9 planets with 2K NASA textures, 4 moons, 2,000 instanced asteroid meshes, and a GLSL raymarched black hole. A radar minimap enables teleportation to the Quantumania dimension, which contains 38 lazy-loaded GLB models including floating mountains, structures, and the Arishem celestial entity with interior multi-point lighting. Custom GLSL shaders handle sun granulation, Earth day/night cycles, and atmospheric glow effects. A centralized physics SDK manages orbital mechanics with Kepler-based calculations.",
+    "features": [
+      "Multi-System Architecture (Solar System + Quantumania)",
+      "6-DOF Flight Controls with Keyboard & Gamepad Support",
+      "2,000 Instanced Asteroids & 2K NASA Planet Textures",
+      "Custom GLSL Shaders (Sun, Earth Cycle, Raymarched Black Hole)",
+      "38 Lazy-Loaded GLB Models in Quantumania",
+      "Radar Minimap with Entity Tracking & Teleportation"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/cosmos.git\ncd cosmos/cosmos-app\n\n# Install dependencies and run\nnpm install\nnpm run dev",
+    "badges": ["tech-react", "tech-ts", "tech-threejs", "tech-css"],
+    "links": [
+      {"text": "Website", "url": "https://cosmox.vercel.app", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/cosmos", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "localghost",
+    "title": "LocalGhost",
+    "image": "assets/localghost-preview.png",
+    "description": "A local-first security auditing and benchmarking toolkit for development servers. Runs 11 asynchronous scanners covering port discovery, security headers, SSL/TLS analysis, CORS auditing, and load testing.",
+    "longDescription": "LocalGhost is a Python-based security auditing CLI tool built with FastAPI, designed for hardening local development environments. It executes 11 concurrent asynchronous scanners: port scanning with service identification across 35+ known services, vulnerability detection for 7 security headers and 18 sensitive file paths, SSL/TLS certificate and cipher suite analysis, CORS misconfiguration detection, cookie security auditing, technology fingerprinting, DNS enumeration, and XSS scanning.\n\nBeyond security auditing, it performs configurable load testing with percentile latency metrics (p50/p95/p99) and DDoS resilience testing including connection flood and slowloris scenarios. Results are scored on a weighted 0-100 scale with letter grades (A+ through F) and category breakdowns. All scans are persisted to a local SQLite database for historical comparison, with JSON report export capability. The frontend uses a Material Design 3 dashboard built with Vanilla HTML, CSS, and ES Modules.",
+    "features": [
+      "11 Concurrent Asynchronous Security Scanners",
+      "Weighted 0-100 Scoring Engine with Letter Grades",
+      "Configurable Load Testing & DDoS Resilience Testing",
+      "Material Design 3 Dashboard (Vanilla HTML/CSS/JS)",
+      "SQLite Scan History with JSON Report Export",
+      "XSS Detection, CORS Audit & SSL/TLS Analysis"
+    ],
+    "installation": "# Clone and navigate\ngit clone https://github.com/qtremors/localghost.git\ncd localghost/localghost\n\n# Install dependencies\nuv sync\n\n# Run the project\nuv run python -m backend.main",
+    "badges": ["tech-python", "tech-fastapi", "tech-sqlite", "tech-html-css-js"],
+    "links": [
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/localghost", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "earnslate",
+    "title": "Earnslate",
+    "image": "assets/earnslate-preview.png",
+    "description": "A client-side finance tracking platform built with Next.js and TypeScript. Manage transactions, set budgets with auto-reset, and track subscriptions with treemap visualizations all persisted locally via browser storage.",
+    "longDescription": "Earnslate is a personal finance management application built entirely on Next.js (App Router) with TypeScript and CSS Modules. All data is persisted in the browser via Zustand with localStorage, ensuring financial data never leaves the user's device.\n\nThe dashboard renders real-time spending breakdowns with interactive pie and donut charts. A transaction ledger supports search, multi-variable filtering, date presets, pagination, and batch deletion. The budgeting system tracks progress per category and automatically resets on period expiry. A subscription manager includes 100+ pre-loaded service templates and uses treemap visualizations to show recurring cost distribution. Data can be exported and imported via CSV/JSON for backup and portability.",
+    "features": [
+      "Client-Side Next.js App with Zustand State",
+      "100% LocalStorage Persistence (No Backend)",
+      "Monochrome UI with Dark/Light Mode Toggle",
+      "Budget Tracking with Automated Period Expiry",
+      "Transaction Ledger with Multi-Variable Filtering",
+      "Subscription Treemaps & CSV/JSON Data Export"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/earnslate.git\ncd earnslate/earnslate-app\n\n# Install dependencies and run\nnpm install\nnpm run dev",
+    "badges": ["tech-nextjs", "tech-ts", "tech-react", "tech-css"],
+    "links": [
+      {"text": "Website", "url": "https://earnslate.vercel.app", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/earnslate", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "xcrape",
+    "title": "Xcrape",
+    "image": "assets/xcrape-preview.png",
+    "description": "An asynchronous Python web scraper powered by Playwright and BeautifulSoup4. Extracts structured data, detects 15+ technologies, captures screenshots, and archives results to SQLite all through a Material Design 3 terminal-themed UI.",
+    "longDescription": "Xcrape is a locally-hosted web scraping tool built with FastAPI that uses headless Chromium via Playwright for JavaScript-rendered page extraction. It parses pages using BeautifulSoup4 to extract meta tags, headings, links, tables, images, JSON-LD, OpenGraph metadata, and social media profiles. A technology detection module fingerprints 15+ frameworks and CMS platforms.\n\nEach scrape job captures a JPEG screenshot and archives all extracted data to a local SQLite database via aiosqlite. Users can filter historical jobs, trigger one-click re-scrapes, download scraped images individually or as bulk ZIP archives, and export results in CSV or JSON formats. The interface uses a terminal-themed Material Design 3 aesthetic with JetBrains Mono typography.",
+    "features": [
+      "Playwright Engine with BeautifulSoup4 Parsing",
+      "Material Design 3 Terminal UI with JetBrains Mono",
+      "Technology Detection for 15+ Frameworks & CMS",
+      "Structured Data Extraction (JSON-LD, OpenGraph, Meta)",
+      "JPEG Screenshot Capture & Bulk Image Downloads",
+      "SQLite Archival with CSV/JSON Report Export"
+    ],
+    "installation": "# Clone and navigate\ngit clone https://github.com/qtremors/xcrape.git\ncd xcrape/xcrape\n\n# Install dependencies\nuv sync\n\n# Install Playwright browsers\nuv run playwright install chromium\n\n# Run the project\nuv run uvicorn app.main:app --reload",
+    "badges": ["tech-python", "tech-fastapi", "tech-playwright", "tech-sqlite"],
+    "links": [
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/xcrape", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "amanzon",
+    "title": "Amanzon E-Commerce",
+    "image": "assets/amanzon-preview.png",
+    "description": "A full-stack e-commerce platform built with Django and PostgreSQL (Supabase). Handles product catalogs, Razorpay payments, order lifecycle management, discount coupons, user reviews, and email-verified authentication.",
+    "longDescription": "Amanzon is a full-featured e-commerce application built on Django with a Supabase PostgreSQL database. It uses server-side rendering with Bootstrap for a responsive storefront interface with dark mode support.\n\nThe platform implements the complete purchase lifecycle: product browsing with category filtering and search, persistent cart and wishlist, multi-address management, discount coupon validation, and checkout via the Razorpay API with a demo mode for testing. Order management supports status tracking, cancellation, and refund processing. Authentication uses email-verified registration with OTP-based password recovery and rate limiting. Administrative features include product management, coupon creation, and order oversight through the Django admin panel.",
+    "features": [
+      "Django + PostgreSQL (Supabase) Architecture",
+      "Razorpay Checkout with Demo Mode",
+      "Order Lifecycle (Status Tracking, Cancellation, Refunds)",
+      "Discount Coupon System with Usage Tracking",
+      "Email-Verified Auth with OTP Password Reset",
+      "Product Reviews, Multi-Address Management & Dark Mode"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/amanzon\ncd amanzon/app\n\n# Setup with uv\nuv sync\ncp .env.example .env\n# Edit .env with your credentials\n\n# Initialize Database\nuv run python manage.py migrate\nuv run python manage.py createsuperuser\n\n# Run Server\nuv run python manage.py runserver",
+    "badges": ["tech-django", "tech-python", "tech-html-css-js", "tech-bootstrap", "tech-sql"],
+    "links": [
+      {"text": "Website", "url": "https://amanzon.onrender.com", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/amanzon", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "socnet",
+    "status": "wip",
+    "title": "Social Network Platform",
+    "image": "assets/socnet-preview.jpeg",
+    "description": "A frontend prototype of a social networking platform built with React, Tailwind CSS, and Zustand. Features public feeds, direct messaging, community channels, user profiles, and a dual-mode navigation sidebar.",
+    "longDescription": "SocNet is a frontend prototype that combines public broadcast feeds and community-based channel spaces within a unified interface. Users can compose posts, interact through likes and replies, engage in direct and group messaging, and discover trending topics and communities.\n\nBuilt with React, TypeScript, Vite, and Tailwind CSS, the application uses Zustand for client-side state management with simulated mock data. A dual-mode navigation sidebar contextually switches between global navigation and community channel lists depending on the active route. Community spaces support text and voice channels. The interface includes user profiles, notification center, settings panel, and an explore page.",
+    "features": [
+      "Dual-Mode Navigation Sidebar (Global & Community)",
+      "Public Feed with Posts, Likes, Replies & Reposts",
+      "Direct & Group Messaging Interface",
+      "Community Spaces with Text & Voice Channels",
+      "User Profiles, Notifications & Settings",
+      "React + Vite + Tailwind CSS + Zustand"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/social-network.git\ncd social-network/frontend\n\n# Install dependencies and run\nnpm install\nnpm run dev",
+    "badges": ["tech-react", "tech-ts", "tech-tailwind"],
+    "links": [
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/social-network", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "material-design",
+    "title": "Material Design",
+    "image": "assets/material-design-preview.png",
+    "description": "A zero-dependency implementation of Material Design 3, Material You, and Material 3 Expressive specifications in pure HTML, CSS custom properties, and vanilla JavaScript.",
+    "longDescription": "This project recreates Google's Material Design 3 component system entirely with vanilla web technologies and no build tools or framework dependencies. It uses CSS custom properties for theming, with a dynamic color engine supporting light/dark modes and multiple color seed palettes.\n\nThe implementation includes Buttons, Cards, Input fields, Dialogs, Bottom Sheets, Chips, and responsive Navigation components (Rail and Drawer), all injected dynamically via JavaScript. A custom ripple effect system replicates the material interaction pattern natively. An interactive playground page exposes all 300+ generated design tokens for real-time inspection and testing.",
+    "features": [
+      "Zero Dependencies (No Build Tools or Frameworks)",
+      "Dynamic Light/Dark Mode & Color Seed Generation",
+      "Custom JavaScript Ripple Effect System",
+      "MD3 Components (Buttons, Cards, Dialogs, Sheets, Chips)",
+      "Responsive Navigation Rail & Drawer",
+      "Developer Playground with 300+ CSS Design Tokens"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/material-design.git\ncd material-design\n\n# Serve locally (requires a live server for modules/CORS)\n# Option 1: Python\npython -m http.server\n# Option 2: Node\nnpx serve",
+    "badges": ["tech-html-css-js"],
+    "links": [
+      {"text": "Website", "url": "https://qtremors.github.io/material-design", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/material-design", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "recontext",
+    "title": "ReConText",
+    "image": "assets/recontext-preview.png",
+    "description": "A statically generated knowledge base for developer cheat sheets and research notes. Built with Next.js and MDX, featuring auto-inferred metadata, interactive React components within markdown, and a dark \"Cosmic Night\" theme.",
+    "longDescription": "ReConText is a static knowledge management site built on Next.js with MDX content support via next-mdx-remote and rehype-pretty-code for syntax highlighting. Content files are dropped into a directory structure and processed with auto-inferred titles, dates, difficulty levels, and reading time estimates.\n\nThe platform supports MDX, allowing embedded React components such as tabbed code blocks and alert callouts within standard markdown documents. Navigation is handled through auto-generated breadcrumb trails and dynamically rendered Tables of Contents. The interface uses a \"Cosmic Night\" dark theme with glassmorphism accents and Framer Motion page transitions. The site is fully responsive and statically generated for fast load times.",
+    "features": [
+      "MDX Content with Embedded React Components",
+      "Auto-Inferred Metadata (Title, Date, Difficulty, Reading Time)",
+      "Auto-Generated Table of Contents & Breadcrumbs",
+      "Static Site Generation via Next.js App Router",
+      "Cosmic Night Dark Theme with Framer Motion Transitions",
+      "Responsive Layout for Mobile, Tablet & Desktop"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/recontext.git\ncd recontext/recontext\n\n# Install dependencies\nnpm install\n\n# Run in development mode\nnpm run dev",
+    "badges": ["tech-nextjs", "tech-react", "tech-ts", "tech-tailwind", "tech-framermotion"],
+    "links": [
+      {"text": "Website", "url": "https://re-context.vercel.app", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/recontext", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "diffs",
+    "title": "Diff Viewer",
+    "image": "assets/diff-preview.png",
+    "description": "A GitHub-style side-by-side diff viewer built with Next.js. Compares text and files with character-level intra-line highlighting, synchronized dual-panel scrolling, and drag-and-drop file upload support.",
+    "longDescription": "Diff Viewer is a browser-based text comparison tool built on Next.js and React. It uses the jsdiff library (Myers' diff algorithm) to perform character-level intra-line diffing, highlighting exact insertions and deletions within modified lines rather than marking entire lines as changed.\n\nThe interface presents original and modified content in side-by-side panels with synchronized scrolling. Users can paste raw text directly or drag and drop files for comparison. The UI uses a high-contrast dark theme inspired by GitHub Desktop.",
+    "features": [
+      "Character-Level Intra-Line Diff Highlighting",
+      "Synchronized Dual-Panel Scrolling",
+      "Drag-and-Drop File Upload & Raw Text Pasting",
+      "GitHub Desktop-Inspired Dark Theme",
+      "jsdiff Engine (Myers' Diff Algorithm)",
+      "Next.js App Router with React"
+    ],
+    "installation": "# Clone and navigate\ngit clone https://github.com/qtremors/diff.git\ncd diff/web\n\n# Install dependencies\nnpm install\n\n# Run the project\nnpm run dev",
+    "badges": ["tech-nextjs", "tech-react", "tech-ts", "tech-tailwind"],
+    "links": [
+      {"text": "Website", "url": "https://diffs.vercel.app", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/diffs", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "gtrmrs",
+    "title": "GTRMRS",
+    "image": "assets/gtrmrs-preview.png",
+    "description": "A unified suite of dependency-free, Git-aware Python CLI tools. Includes rtree (directory tree visualization), locr (lines-of-code counting with language breakdown), and gitmig (clean repository migration).",
+    "longDescription": "GTRMRS is a Python CLI toolchain that bundles three development utilities into a single installable package with zero third-party dependencies. It uses only the standard library, ensuring cross-platform compatibility.\n\nThe suite includes: rtree, which generates plain-text ASCII directory trees with configurable depth and automatic .gitignore-aware pruning; locr, which counts lines of code per file with language identification, percentage breakdowns, and JSON output; and gitmig, which copies repository directories while stripping .git history, node_modules, and virtual environments, with support for dry-run previews and ZIP archival.",
+    "features": [
+      "Zero Dependencies (Python Standard Library Only)",
+      "Git-Aware with Automatic .gitignore Pruning",
+      "rtree: ASCII Directory Tree Visualization",
+      "locr: Lines of Code Counting with Language Breakdown",
+      "gitmig: Repository Copy with Bloat Stripping",
+      "Cross-Platform (Windows, macOS, Linux)"
+    ],
+    "installation": "# Clone and install\ngit clone https://github.com/qtremors/gtrmrs.git\ncd gtrmrs\npip install -e .\n\n# Usage\nrtree\nlocr\ngitmig ./backup --dry-run",
+    "badges": ["tech-python", "tech-cli", "tech-git"],
+    "links": [
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/gtrmrs", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "plant-disease-detector",
+    "title": "Plant Disease Detector",
+    "image": "assets/plant-disease-detector-preview.jpg",
+    "description": "A Django web application that uses TensorFlow and a fine-tuned MobileNetV2 model to classify apple leaf diseases from uploaded images. Renders prediction confidence via Plotly.js charts and persists scan history in SQLite.",
+    "longDescription": "This application demonstrates deploying a deep learning image classification model within a Django web framework. A MobileNetV2 convolutional neural network, pre-trained on ImageNet and fine-tuned via transfer learning on the PlantVillage dataset, classifies apple leaf images into four categories: Apple Scab, Black Rot, Cedar Apple Rust, and Healthy.\n\nThe interface provides a drag-and-drop image upload zone built with Bootstrap. Uploaded images are processed through the TensorFlow inference pipeline, and prediction probabilities are rendered as interactive charts via Plotly.js. All scans are automatically saved to a local SQLite database for historical reference. The model is scoped to apple leaves only and is designed as an educational proof of concept.",
+    "features": [
+      "Fine-Tuned MobileNetV2 Transfer Learning Model",
+      "TensorFlow Inference for 4 Apple Leaf Classes",
+      "Interactive Plotly.js Probability Charts",
+      "Drag-and-Drop Image Upload (Bootstrap)",
+      "SQLite Scan History with Past Results",
+      "Django + Python Backend"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/plant-disease-detector.git\ncd plant-disease-detector\n\n# Install dependencies\nuv sync\n\n# Setup environment\ncp .env.example .env\n\n# Run migrations and start server\nuv run python manage.py migrate\nuv run python manage.py runserver",
+    "badges": ["tech-python", "tech-django", "tech-tensorflow", "tech-pillow", "tech-numpy", "tech-plotly", "tech-sqlite"],
+    "links": [
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/plant-disease-detector", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "pc-remote-control",
+    "title": "PC Remote Control",
+    "image": "assets/pcrc-preview.png",
+    "description": "A Python FastAPI server that turns any mobile browser into a remote control for a desktop workstation. Supports media playback, volume control, system power operations, remote screenshots, and browser launching.",
+    "longDescription": "PC Remote Control runs a lightweight FastAPI server on the desktop that serves a vanilla HTML/JS mobile interface accessible from any device on the same Wi-Fi network. It uses PyAutoGUI for simulating keyboard inputs and MSS for screen capture.\n\nThe mobile interface provides media playback controls (play/pause, volume, track navigation), system power operations (lock, sleep, reboot, shutdown), and a remote screenshot feature that captures the desktop screen and serves it as a compressed JPEG to the mobile display. A browser launcher button can open the default web browser on the PC remotely. The application runs with minimal resource overhead (~40-60MB RAM).",
+    "features": [
+      "FastAPI Local Network Control Server",
+      "Vanilla HTML/JS Mobile Web Interface",
+      "Media Playback & Volume Control via PyAutoGUI",
+      "System Power Operations (Sleep, Lock, Reboot, Shutdown)",
+      "Remote Desktop Screenshot Capture via MSS",
+      "Cross-Platform Support (Windows, macOS, Linux)"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/pc-rc.git\ncd pc-rc\n\n# Install dependencies and run\nuv sync\nuv run main.py",
+    "badges": ["tech-python", "tech-fastapi", "tech-html-css-js", "tech-cli"],
+    "links": [
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/pc-rc", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "eshopper",
+    "status": "archive",
+    "title": "E-commerce Website",
+    "image": "assets/eshopper-preview.jpg",
+    "description": "An archived Django e-commerce platform with hierarchical product catalogs, Razorpay payment integration, wishlist management, OTP email verification, and Bootstrap-based server-side rendering.",
+    "longDescription": "EShopper is a monolithic Django e-commerce application that manages the full purchasing lifecycle through server-side rendering. It routes users from categorized product catalogs through a discount coupon system to a multi-stage checkout flow integrated with the Razorpay API.\n\nThe platform uses Django's session management for transient shopping carts and persistent wishlists. Account registration and password recovery are secured behind email-delivered OTP verification. The frontend is built with Django templates and Bootstrap for server-side rendered product listings, 5-star reviews, and multi-parameter search results. This project has been superseded by Amanzon.",
+    "features": [
+      "Hierarchical Product Catalog with Category Navigation",
+      "Razorpay API Payment Integration",
+      "Email OTP Account Verification",
+      "Discount Coupon Validation System",
+      "Advanced Search & Price Filtering",
+      "Persistent Wishlist & Session-Based Cart"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/eshopper\ncd shopping\n\n# Setup Python Environment\npython -m venv venv\n# Activate venv (Windows: venv\\Scripts\\activate, Linux: source venv/bin/activate)\npip install -r requirements.txt\n\n# Initialize Database\npython manage.py migrate\npython manage.py createsuperuser\n\n# Run Server\npython manage.py runserver",
+    "recommended": "amanzon",
+    "badges": ["tech-django", "tech-html-css-js", "tech-bootstrap", "tech-sql"],
+    "links": [
+      {"text": "Website", "url": "https://tremors.pythonanywhere.com", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/eshopper", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "tremors",
+    "title": "Tremors",
+    "image": "assets/tremors-preview.png",
+    "description": "A multi-mode personal portfolio website built with Next.js. Features 5 distinct viewing modes (Cards, Terminal, AI Newspaper, Resume, Nexus Space), GitHub integration, AI-generated content via Google Gemini.",
+    "longDescription": "Tremors is a personal portfolio application built on Next.js with React, TypeScript, Tailwind CSS, and Framer Motion. It offers five distinct viewing modes: a modern card grid (Default), an interactive CLI terminal with 30+ commands (Terminal), an AI-generated newspaper mode (Newspaper), a professional resume view (Paper), and a 3D space landing (Nexus).\n\nThe Newspaper mode uses the Google Gemini Flash API with a \"Skye\" news agent that generates content in 4 distinct personalities (Tabloid, Senior, Scholar, Hacker) based on real GitHub activity. A PostgreSQL database managed by Prisma ORM stores project metadata, cached GitHub API data, and admin sessions. A hidden admin interface accessible through the Terminal mode provides CMS-style controls for managing project visibility, feature flags, and content editing with HMAC-signed authentication.",
+    "features": [
+      "5 Viewing Modes (Cards, Terminal, Newspaper, Resume, Nexus)",
+      "Interactive Terminal with 30+ Commands & Autocomplete",
+      "AI Content Generation via Google Gemini (4 Personalities)",
+      "GitHub Integration for Repository Stats & Activity",
+      "Hidden Admin CMS with HMAC-Signed Authentication",
+      "PostgreSQL + Prisma ORM Backend"
+    ],
+    "installation": "# Clone repository\ngit clone https://github.com/qtremors/tremors.git\ncd tremors/app\n\n# Setup Environment\nnpm install\ncp .env.example .env.local\n# Edit .env.local with your values\n\n# Initialize Database\nnpx prisma generate\nnpx prisma db push\n\n# Run Development Server\nnpm run dev",
+    "badges": ["tech-nextjs", "tech-ts", "tech-tailwind", "tech-prisma", "tech-framermotion", "tech-tsparticles", "tech-gemini"],
+    "links": [
+      {"text": "Website", "url": "https://tremors.vercel.app", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/tremors", "class": "link-secondary"}
+    ]
+  },
+  {
+    "id": "scrapped-projects",
+    "title": "The Scrapyard",
+    "image": "assets/scrapyard-preview.png",
+    "description": "A cyberpunk-themed digital archive for abandoned and unfinished web projects. Built with a custom Node.js static site generator that scans project directories and compiles HTML pages.",
+    "longDescription": "The Scrapyard is an interactive digital archive that showcases abandoned and scrapped web project prototypes in a cyberpunk-themed interface. A custom Node.js build script scans a projects directory, reads metadata, and compiles static HTML pages with template injection.\n\nThe interface features terminal-style search filtering, live preview iframes triggered on card hover, and a throttled HTML5 Canvas digital rain background animation. Projects are organized into categories (Portfolio, Games, 3D Models, Components, Demos) with color-coded visual indicators. The site is deployed via GitHub Actions to GitHub Pages.",
+    "features": [
+      "Custom Node.js Static Site Generator",
+      "HTML5 Canvas Digital Rain Animation (30fps Throttled)",
+      "Terminal-Style Search Filtering",
+      "Live Preview Iframes on Card Hover",
+      "Cyberpunk UI with Glitch Effects & Neon Accents",
+      "Automated GitHub Pages Deployment"
+    ],
+    "installation": "# Clone and build\ngit clone https://github.com/qtremors/scrap.git\ncd scrap\n\n# Install dependencies\nnpm install\n\n# Build the site\nnpm run build\n\n# Serve locally\nnpx serve",
+    "badges": ["tech-html-css-js", "tech-github"],
+    "links": [
+      {"text": "Website", "url": "https://qtremors.github.io/scrap", "class": "link-primary"},
+      {"text": "View on GitHub", "url": "https://github.com/qtremors/scrap", "class": "link-secondary"}
+    ]
+  }
+];
+
+        // Format Tech Badge Text
+        const formatBadge = (badge) => {
+            return badge
+                .replace('tech-', '')
+                .split('-')
+                .map(word => word === 'js' ? 'JS' : word === 'ts' ? 'TS' : word === 'css' ? 'CSS' : word === 'html' ? 'HTML' : word.charAt(0).toUpperCase() + word.slice(1))
+                .join(' ');
+        };
+
+        // Format Paragraphs
+        const formatText = (text) => {
+            return text.split('\n\n').map(p => `<p>${p}</p>`).join('');
+        };
+
+        // Status styling map
+        const statusStyles = {
+            'beta': 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+            'wip': 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+            'archive': 'bg-zinc-500/10 text-zinc-400 border-zinc-500/20',
+        };
+
+        // DOM Elements
+        const grid = document.getElementById('projects-grid');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalContent = document.getElementById('modal-content');
+        const closeModalBtn = document.getElementById('close-modal');
+
+        // Render Projects
+        function renderProjects() {
+            grid.innerHTML = projectData.map((project, index) => {
+                const statusHtml = project.status ? 
+                    `<span class="absolute top-4 right-4 z-10 px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded shadow-sm border ${statusStyles[project.status] || ''}">${project.status}</span>` : '';
+                
+                // Truncate badges to fit design (max 3 visible on card, rest in +N)
+                const visibleBadges = project.badges.slice(0, 3);
+                const extraBadgesCount = project.badges.length - 3;
+
+                return `
+                    <article class="group bg-surface border border-border rounded-xl overflow-hidden hover:border-textSecondary/40 transition-all duration-300 flex flex-col cursor-pointer hover:-translate-y-1 shadow-sm hover:shadow-2xl animate-fade-in" style="animation-delay: ${index * 50}ms;" onclick="openModal('${project.id}')">
+                        <!-- Image Container with Fallback Script inline -->
+                        <div class="h-48 relative overflow-hidden bg-surface border-b border-border">
+                            ${statusHtml}
+                            <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                                onerror="this.onerror=null; this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');">
+                            
+                            <!-- Sleek fallback if image path is broken (assets folder missing) -->
+                            <div class="hidden img-fallback w-full h-full flex flex-col items-center justify-center text-border transition-transform duration-700 group-hover:scale-105">
+                                <i data-lucide="layout" class="w-12 h-12 mb-2 opacity-50"></i>
+                                <span class="text-sm font-mono opacity-50 tracking-widest uppercase">${project.title.substring(0,10)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h2 class="text-lg font-semibold text-textPrimary tracking-tight mb-2 group-hover:text-white transition-colors">${project.title}</h2>
+                            <p class="text-sm text-textSecondary line-clamp-3 mb-6 flex-grow leading-relaxed">${project.description}</p>
+                            
+                            <div class="flex items-center gap-2 mt-auto pt-4 border-t border-border border-dashed">
+                                ${visibleBadges.map(b => `<span class="text-[11px] font-mono px-2 py-1 bg-border/50 text-textSecondary rounded-md">${formatBadge(b)}</span>`).join('')}
+                                ${extraBadgesCount > 0 ? `<span class="text-[11px] font-mono px-2 py-1 text-textSecondary/50">+${extraBadgesCount}</span>` : ''}
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+            
+            // Re-initialize Lucide icons for injected HTML
+            lucide.createIcons();
+        }
+
+        // Modal Logic
+        function openModal(projectId) {
+            const project = projectData.find(p => p.id === projectId);
+            if (!project) return;
+
+            // Populate Modal
+            document.getElementById('modal-title').textContent = project.title;
+            document.getElementById('modal-description').innerHTML = formatText(project.longDescription);
+            
+            // Handle Status
+            const statusEl = document.getElementById('modal-status');
+            if (project.status) {
+                statusEl.className = `px-2.5 py-0.5 rounded-full text-[10px] font-bold border uppercase tracking-widest ${statusStyles[project.status]}`;
+                statusEl.textContent = project.status;
+                statusEl.classList.remove('hidden');
+            } else {
+                statusEl.classList.add('hidden');
+            }
+
+            // Handle Recommended Warning
+            const recEl = document.getElementById('modal-recommended');
+            if (project.recommended) {
+                const recProject = projectData.find(p => p.id === project.recommended);
+                recEl.querySelector('span').innerHTML = `This project has been archived. It is superseded by <button class="underline font-semibold text-yellow-400 hover:text-yellow-300 transition-colors" onclick="openModal('${project.recommended}')">${recProject ? recProject.title : project.recommended}</button>.`;
+                recEl.classList.remove('hidden');
+            } else {
+                recEl.classList.add('hidden');
+            }
+
+            // Populate Features
+            const featuresHtml = project.features.map(f => `
+                <li class="flex items-start gap-3 text-sm text-textPrimary/80 bg-background/50 border border-border rounded-lg p-3">
+                    <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i>
+                    <span class="leading-relaxed">${f}</span>
+                </li>
+            `).join('');
+            document.getElementById('modal-features').innerHTML = featuresHtml;
+
+            // Populate Badges
+            document.getElementById('modal-badges').innerHTML = project.badges.map(b => 
+                `<span class="text-xs font-mono px-2.5 py-1.5 bg-border/30 border border-border text-textSecondary rounded-lg flex items-center gap-1.5 shadow-sm">
+                    <div class="w-1.5 h-1.5 rounded-full bg-textSecondary/40"></div>
+                    ${formatBadge(b)}
+                </span>`
+            ).join('');
+
+            // Populate Installation Code
+            if (project.installation) {
+                document.getElementById('modal-install-code').textContent = project.installation;
+                document.getElementById('modal-install-container').classList.remove('hidden');
+            } else {
+                document.getElementById('modal-install-container').classList.add('hidden');
+            }
+
+            // Populate Links
+            document.getElementById('modal-links').innerHTML = project.links.map(link => {
+                const isPrimary = link.class === 'link-primary';
+                const baseClasses = "flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-background";
+                const classes = isPrimary 
+                    ? `${baseClasses} bg-textPrimary text-background hover:bg-white focus:ring-textPrimary shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]`
+                    : `${baseClasses} border border-border text-textPrimary hover:bg-border/50 hover:border-textSecondary/50 focus:ring-border`;
+                
+                const icon = link.text.toLowerCase().includes('github') ? 'github' : 
+                             link.text.toLowerCase().includes('download') ? 'download' : 'external-link';
+
+                return `
+                    <a href="${urlFix(link.url)}" target="_blank" rel="noopener noreferrer" class="${classes}">
+                        <span>${link.text}</span>
+                        <i data-lucide="${icon}" class="w-4 h-4"></i>
+                    </a>
+                `;
+            }).join('');
+
+            // Re-initialize icons inside modal
+            lucide.createIcons();
+
+            // Show Modal
+            document.body.classList.add('hide-scroll');
+            modalBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+            
+            // Reset scroll position
+            modalContent.querySelector('.overflow-y-auto').scrollTop = 0;
+        }
+
+        function closeModal() {
+            modalBackdrop.classList.add('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                document.body.classList.remove('hide-scroll');
+            }, 300); // Wait for transition
+        }
+
+        // Helper to ensure URLs are properly formatted
+        function urlFix(url) {
+            if (!url.startsWith('http') && !url.startsWith('/')) {
+                return `https://${url}`;
+            }
+            return url;
+        }
+
+        // Event Listeners
+        closeModalBtn.addEventListener('click', closeModal);
+        modalBackdrop.addEventListener('click', (e) => {
+            if (e.target === modalBackdrop) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modalBackdrop.classList.contains('opacity-0')) {
+                closeModal();
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects();
+        });
+
+    </script>
+</body>
+</html>
