@@ -1,8 +1,20 @@
 # Scrapyard Changelog
 
 > **Project:** Scrapyard  
-> **Version:** 2.5.3  
-> **Last Updated:** 2026-03-03
+> **Version:** 2.6.0  
+> **Last Updated:** 2026-04-19
+
+---
+
+## [2.6.0] - 2026-04-19
+
+### Changed
+- **Directory Restructuring**: Moved all category folders (e.g., `demo/`, `portfolio/`) from `projects/` to the root directory to create shorter URLs.
+- **Project Renaming**: Trimmed redundant category prefixes from project folder names (e.g., `demo-git-nexus` → `git-nexus`).
+- **Build System**: Updated `build.js` to support the new flat directory structure and handle root-level scanning.
+
+### Removed
+- **Projects Directory**: Deleted the `projects/` folder as it is no longer part of the project hierarchy.
 
 ---
 

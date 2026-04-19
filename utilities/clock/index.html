@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-100 min-h-screen font-sans text-slate-800 flex items-center justify-center p-4">
+
+    <main class="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+        <header class="bg-indigo-600 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold mb-1 flex items-center justify-center gap-2">
+                <i data-lucide="clock" class="w-6 h-6"></i>
+                Shift Calculator
+            </h1>
+        </header>
+
+        <div class="p-6 bg-indigo-50 border-b border-indigo-100 text-center">
+            <p class="text-sm text-indigo-600 font-semibold uppercase tracking-wider mb-1">Clock Out At</p>
+            <div id="resultDisplay" class="text-5xl font-black text-indigo-900 tracking-tight">--:--</div>
+            <p id="totalDurationText" class="text-sm text-slate-500 mt-2 font-medium">Paste your logs below...</p>
+        </div>
+
+        <div class="p-6 space-y-4">
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-2">Paste All Logs Here</label>
+                <textarea id="quickPaste" placeholder="9:54 AM, 12:00 PM, 12:30 PM, 3:00 PM, 3:15 PM..." 
+                    class="w-full bg-white border-2 border-dashed border-slate-300 rounded-xl p-3 h-32 focus:border-indigo-500 focus:ring-0 transition-all resize-none text-sm"></textarea>
+            </div>
+
+            <div id="breakSummary" class="space-y-2">
+                </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const quickPaste = document.getElementById('quickPaste');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const totalDurationText = document.getElementById('totalDurationText');
+        const breakSummary = document.getElementById('breakSummary');
+
+        quickPaste.addEventListener('input', calculate);
+
+        function calculate() {
+            const text = quickPaste.value;
+            const timeRegex = /(\d{1,2}:\d{2}(?::\d{2})?\s?(?:AM|PM)?)/gi;
+            const matches = text.match(timeRegex);
+
+            if (!matches || matches.length === 0) {
+                resetDisplay();
+                return;
+            }
+
+            // Convert all matches to total minutes from midnight
+            const timePoints = matches.map(t => {
+                const d = new Date(`2000/01/01 ${t.trim()}`);
+                return (d.getHours() * 60) + d.getMinutes();
+            });
+
+            const startMins = timePoints[0];
+            let totalBreakMins = 0;
+            let breakHtml = '<p class="text-[10px] font-bold text-slate-400 uppercase">Break Breakdown</p>';
+
+            // Loop through pairs starting from index 1 (Break 1 Out, Break 1 In, Break 2 Out...)
+            for (let i = 1; i < timePoints.length; i += 2) {
+                const bOut = timePoints[i];
+                const bIn = timePoints[i + 1];
+
+                if (bOut !== undefined && bIn !== undefined) {
+                    let diff = bIn - bOut;
+                    if (diff < 0) diff += 1440; // Handle midnight
+                    totalBreakMins += diff;
+                    
+                    breakHtml += `
+                        <div class="flex justify-between text-xs bg-slate-50 p-2 rounded border border-slate-100">
+                            <span class="text-slate-500">Break ${Math.ceil(i/2)}</span>
+                            <span class="font-mono font-bold text-slate-700">${diff} mins</span>
+                        </div>`;
+                }
+            }
+
+            breakSummary.innerHTML = timePoints.length > 1 ? breakHtml : '';
+
+            const targetWorkMins = 480; // 8 hours
+            const endMins = startMins + targetWorkMins + totalBreakMins;
+
+            resultDisplay.innerText = minsToTimeStr(endMins);
+            totalDurationText.innerHTML = `
+                <span class="font-bold text-slate-700">8h</span> Work + 
+                <span class="font-bold text-amber-600">${totalBreakMins}m</span> Total Breaks
+            `;
+        }
+
+        function minsToTimeStr(totalMins) {
+            let h = Math.floor(totalMins / 60) % 24;
+            let m = totalMins % 60;
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12 || 12;
+            m = m < 10 ? '0' + m : m;
+            return `${h}:${m} ${ampm}`;
+        }
+
+        function resetDisplay() {
+            resultDisplay.innerText = "--:--";
+            totalDurationText.innerText = "Waiting for logs...";
+            breakSummary.innerHTML = "";
+        }
+    </script>
+</body>
+</html>

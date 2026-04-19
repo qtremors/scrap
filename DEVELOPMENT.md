@@ -2,7 +2,7 @@
 
 > Comprehensive documentation for developers working on the Scrapyard Digital Graveyard.
 
-**Version:** 2.5.3 | **Last Updated:** 2026-03-03
+**Version:** 2.6.0 | **Last Updated:** 2026-04-19
 
 ---
 
@@ -34,7 +34,7 @@ Scrapyard follows a **Static Site Generation (SSG)** pattern driven by a Node.js
                                ▼
 ┌──────────────────────────────────────────────────────────────┐
 │                        build.js                              │
-│       (Filesystem scanning & Category Mapping)               │
+│       (Recursive Scanning of Category Folders)               │
 └──────────────────────────────────────────────────────────────┘
                                │
                                ▼
@@ -60,12 +60,8 @@ Scrapyard follows a **Static Site Generation (SSG)** pattern driven by a Node.js
 ```
 scrap/
 ├── public/               # Static assets
-│   ├── index.css         # Main styles (Cyberpunk theme)
-│   ├── index.js          # Layout logic & Canvas animation
-│   └── favicon.svg       # Project logo
-├── projects/             # Organized project storage
-│   ├── [category]/       # archive, component, demo, gallery, game, models, portfolio, showcase, template
-│   │   └── [project]/    # Individual project files (index.html, meta.json)
+├── [category]/           # archive, component, demo, gallery, game, models, portfolio, showcase, template, utilities
+│   └── [project]/        # Individual project folders (index.html, meta.json)
 ├── build.js              # SSG logic
 ├── _template.html        # Base HTML skeleton
 ├── README.md             # User-facing documentation
@@ -85,14 +81,14 @@ scrap/
 
 | Type | Convention | Good Example |
 |------|-----------|--------------|
-| **Project Folders** | `category-project-name` | `portfolio-terminal` |
+| **Project Folders** | `project-name` | `terminal-portfolio` |
 
 ---
 
 ## Build System
 
 The build script (`build.js`) performs the following steps:
-1. **Scans**: Looks through the `projects/` directory for subfolders matching known categories.
+1. **Scans**: Looks through the root directory for category folders and scans their subfolders.
 2. **Metadata**: Parses `meta.json` if available; otherwise, infers metadata from filenames.
 3. **Template**: Reads `_template.html` and replaces placeholders (`{{PROJECT_CARDS}}`, `{{VERSION}}`).
 4. **Output**: Writes the final `index.html` and updates `metadata.json`.
@@ -135,7 +131,7 @@ The project is automatically deployed via GitHub Actions when changes are pushed
 | Component / Feature | Deliberate Weirdness | Rationalization |
 |---------------------|-----------------------|-----------------|
 | **Canvas Loop**     | Throttling `requestAnimationFrame` to 30 FPS instead of the monitor's natural refresh rate. | Prevents high GPU loads and laptop battery drain for an aesthetic background where 60+ FPS isn't strictly necessary. |
-| **Vanilla JS**      | Avoiding modern bundlers and frontend frameworks (React/Vue/Svelte). | Prioritizing decades-long archivel stability without framework rot or dependency deprecation. |
+| **Vanilla JS**      | Avoiding modern bundlers and frontend frameworks (React/Vue/Svelte). | Prioritizing decades-long archival stability without framework rot or dependency deprecation. |
 
 ### Technical Debt
 
@@ -189,19 +185,18 @@ Identify and resolve anything that is:
 
 | Issue | Solution |
 |-------|----------|
-| **Projects not showing** | Verify that `npm run build` completed without errors and the project folder starts with an approved category prefix. |
+| **Projects not showing** | Verify that `npm run build` completed without errors and the project is inside a valid category folder. |
 
 ---
 
 ## Contributing
 
 ### Folder Conventions
-- All project folders must move to their respective category folder in `projects/`.
-- Project folders should ideally follow the `category-name` naming convention for clarity.
+- All project folders must be placed in their respective category folder in the root (e.g., `demo/my-project`).
 - Always include an `index.html` or specify a `mainFile` in `meta.json`.
 
 ### Pull Request Process
-1. Add your project to the correct `projects/` subfolder.
+1. Add your project to the correct category folder.
 2. Run `node build.js` to verify it registers correctly.
 3. Commit and push.
 
