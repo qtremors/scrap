@@ -2,7 +2,7 @@
 
 > Comprehensive documentation for developers working on the Scrapyard Digital Graveyard.
 
-**Version:** 2.5.1 | **Last Updated:** 2026-01-13
+**Version:** 2.6.0 | **Last Updated:** 2026-04-19
 
 ---
 
@@ -10,9 +10,13 @@
 
 - [Architecture Overview](#architecture-overview)
 - [Project Structure](#project-structure)
+- [Naming Conventions](#naming-conventions)
 - [Build System](#build-system)
 - [Search Implementation](#search-implementation)
 - [Deployment](#deployment)
+- [Intended Changes](#intended-changes)
+- [Project Auditing](#project-auditing--quality-standards)
+- [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 
 ---
@@ -30,7 +34,7 @@ Scrapyard follows a **Static Site Generation (SSG)** pattern driven by a Node.js
                                ▼
 ┌──────────────────────────────────────────────────────────────┐
 │                        build.js                              │
-│       (Filesystem scanning & Category Mapping)               │
+│       (Recursive Scanning of Category Folders)               │
 └──────────────────────────────────────────────────────────────┘
                                │
                                ▼
@@ -56,29 +60,41 @@ Scrapyard follows a **Static Site Generation (SSG)** pattern driven by a Node.js
 ```
 scrap/
 ├── public/               # Static assets
-│   ├── index.css         # Main styles (Cyberpunk theme)
-│   ├── index.js          # Layout logic & Canvas animation
-│   └── favicon.svg       # Project logo
-├── projects/             # Organized project storage
-│   ├── [category]/       # archive, component, demo, game, models, portfolio, etc.
-│   │   └── [project]/    # Individual project files (index.html, meta.json)
+├── [category]/           # archive, component, demo, gallery, game, models, portfolio, showcase, template, utilities
+│   └── [project]/        # Individual project folders (index.html, meta.json)
 ├── build.js              # SSG logic
 ├── _template.html        # Base HTML skeleton
 ├── README.md             # User-facing documentation
 ├── DEVELOPMENT.md        # This file
 ├── CHANGELOG.md          # Version history
+├── TASKS.md              # Planned features and known issues
 └── LICENSE.md            # License terms
 ```
+
+---
+
+## Naming Conventions
+
+> Names should be self-documenting. A reader should understand what a file, function, or component does without opening it.
+
+### Files & Directories
+
+| Type | Convention | Good Example |
+|------|-----------|--------------|
+| **Project Folders** | `project-name` | `terminal-portfolio` |
 
 ---
 
 ## Build System
 
 The build script (`build.js`) performs the following steps:
-1. **Scans**: Looks through the `projects/` directory for subfolders matching known categories.
+1. **Scans**: Looks through the root directory for category folders and scans their subfolders.
 2. **Metadata**: Parses `meta.json` if available; otherwise, infers metadata from filenames.
 3. **Template**: Reads `_template.html` and replaces placeholders (`{{PROJECT_CARDS}}`, `{{VERSION}}`).
 4. **Output**: Writes the final `index.html` and updates `metadata.json`.
+
+> [!CAUTION]
+> **`index.html` is a generated build artifact.** Never edit it directly — your changes will be overwritten on the next build. All markup changes should be made in `_template.html`, then regenerated with `npm run build`.
 
 ```bash
 # Run the build
@@ -108,15 +124,79 @@ The project is automatically deployed via GitHub Actions when changes are pushed
 
 ---
 
+## Intended Changes
+
+> A log of deliberate but unconventional code, design decisions, or structure choices that might look like bugs or bad practices to an outside observer. If a change is weird, it's documented here so it isn't accidentally "fixed".
+
+| Component / Feature | Deliberate Weirdness | Rationalization |
+|---------------------|-----------------------|-----------------|
+| **Canvas Loop**     | Throttling `requestAnimationFrame` to 30 FPS instead of the monitor's natural refresh rate. | Prevents high GPU loads and laptop battery drain for an aesthetic background where 60+ FPS isn't strictly necessary. |
+| **Vanilla JS**      | Avoiding modern bundlers and frontend frameworks (React/Vue/Svelte). | Prioritizing decades-long archival stability without framework rot or dependency deprecation. |
+
+### Technical Debt
+
+- [ ] Accessibility: Improve keyboard navigation for project cards.
+
+---
+
+## Project Auditing & Quality Standards
+
+> A structured approach to ensuring the project is correct, secure, and maintainable.
+
+### System Understanding
+
+Before making significant changes, ensure a deep understanding of:
+- **Core Architecture**: Workflows, data flow, and overall purpose.
+- **Implicit Design**: Assumptions and hidden coupling between components.
+- **Edge Cases**: UNintended behaviors and alternative use cases.
+
+### Audit Categories
+
+Evaluate changes and existing code against these dimensions:
+
+| Category | Focus Areas |
+|----------|-------------|
+| **Correctness** | Logical errors, edge-case failures, silent failures, data integrity |
+| **Security** | Vulnerabilities, auth flaws, input weaknesses, sensitive data exposure |
+| **Performance** | Algorithm efficiency, query optimization, resource overuse (CPU/RAM) |
+| **Architecture** | Bottlenecks, tight coupling, structural mismatches, scalability |
+| **Maintainability** | Readability, naming consistency, technical debt, dead code |
+| **Documentation** | Accuracy, completeness, implementation-spec matching |
+| **Infrastructure** | Environment config, deployment risks, secret management |
+
+### General Anomalies
+
+Identify and resolve anything that is:
+- **Confusing**: Inconsistent or unjustified logic.
+- **Out of place**: Contextually surprising behavior.
+- **Undocumented**: Implicit assumptions that aren't spelled out.
+
+### Reporting Process
+
+- All audit findings must be added to [TASKS.md](TASKS.md).
+- Ensure entries are **Clear**, **Actionable**, and **Concisely described**.
+- Avoid vague statements; provide concrete context and impact.
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| **Projects not showing** | Verify that `npm run build` completed without errors and the project is inside a valid category folder. |
+
+---
+
 ## Contributing
 
 ### Folder Conventions
-- All project folders must move to their respective category folder in `projects/`.
-- Project folders should ideally follow the `category-name` naming convention for clarity.
+- All project folders must be placed in their respective category folder in the root (e.g., `demo/my-project`).
 - Always include an `index.html` or specify a `mainFile` in `meta.json`.
 
 ### Pull Request Process
-1. Add your project to the correct `projects/` subfolder.
+1. Add your project to the correct category folder.
 2. Run `node build.js` to verify it registers correctly.
 3. Commit and push.
 

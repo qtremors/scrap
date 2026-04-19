@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Kinetic Garden</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        .glass {
+            background: rgba(15, 15, 20, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+        .control-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #a0a0a0;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+        input[type="range"] {
+            accent-color: #6366f1;
+        }
+        /* Custom scrollbar for the UI if needed */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Canvas for the simulation -->
+    <canvas id="canvas"></canvas>
+
+    <!-- UI Overlay -->
+    <div class="fixed top-6 left-6 z-10 pointer-events-none">
+        <h1 class="text-2xl font-light tracking-widest text-white mb-1">STELLAR KINETIC</h1>
+        <p class="text-xs text-indigo-400 font-medium tracking-wider uppercase">Interactive Art Fragment</p>
+    </div>
+
+    <!-- Controls Panel -->
+    <div class="fixed bottom-6 right-6 left-6 md:left-auto md:w-72 glass p-6 transition-all duration-300 transform translate-y-0 opacity-100" id="ui-panel">
+        <div class="space-y-4 pointer-events-auto">
+            <div>
+                <label class="control-label">Density</label>
+                <input type="range" id="particleCount" min="50" max="300" value="120" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div>
+                <label class="control-label">Link Distance</label>
+                <input type="range" id="linkDistance" min="0" max="250" value="150" class="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div class="flex items-center justify-between pt-2">
+                <span class="control-label m-0">Gravity Well</span>
+                <button id="toggleGravity" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 rounded text-[10px] font-bold transition-colors">ACTIVE</button>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-white/10">
+                <button id="resetBtn" class="w-full text-xs text-gray-400 hover:text-white transition-colors">Clear Simulation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const uiPanel = document.getElementById('ui-panel');
+        
+        let width, height;
+        let particles = [];
+        let mouse = { x: -1000, y: -1000, active: false };
+        let settings = {
+            count: 120,
+            linkDist: 150,
+            gravity: true,
+            hue: 220
+        };
+
+        // Resize handler
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            init();
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 1.5;
+                this.vy = (Math.random() - 0.5) * 1.5;
+                this.radius = Math.random() * 2 + 1;
+                this.color = `hsla(${settings.hue + (Math.random() * 40 - 20)}, 70%, 70%, 0.8)`;
+            }
+
+            update() {
+                // Natural movement
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Mouse interaction
+                if (mouse.active && settings.gravity) {
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 300) {
+                        const force = (300 - dist) / 3000;
+                        this.vx += dx * force;
+                        this.vy += dy * force;
+                    }
+                }
+
+                // Friction
+                this.vx *= 0.98;
+                this.vy *= 0.98;
+
+                // Edge bounce
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particles = [];
+            for (let i = 0; i < settings.count; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(5, 5, 8, 0.15)';
+            ctx.fillRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                const p1 = particles[i];
+                p1.update();
+                p1.draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+
+                    if (dist < settings.linkDist) {
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        const alpha = 1 - (dist / settings.linkDist);
+                        ctx.strokeStyle = `rgba(130, 140, 255, ${alpha * 0.25})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Input Handling
+        const handleMove = (e) => {
+            const pos = e.touches ? e.touches[0] : e;
+            mouse.x = pos.clientX;
+            mouse.y = pos.clientY;
+            mouse.active = true;
+        };
+
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('touchstart', handleMove);
+        window.addEventListener('touchend', () => mouse.active = false);
+        window.addEventListener('mousedown', () => {
+            // Burst effect on click
+            particles.forEach(p => {
+                const dx = p.x - mouse.x;
+                const dy = p.y - mouse.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                const force = 1000 / (dist + 1);
+                p.vx += (dx/dist) * force;
+                p.vy += (dy/dist) * force;
+            });
+        });
+
+        // UI Listeners
+        document.getElementById('particleCount').addEventListener('input', (e) => {
+            settings.count = parseInt(e.target.value);
+            init();
+        });
+
+        document.getElementById('linkDistance').addEventListener('input', (e) => {
+            settings.linkDist = parseInt(e.target.value);
+        });
+
+        document.getElementById('toggleGravity').addEventListener('click', (e) => {
+            settings.gravity = !settings.gravity;
+            e.target.innerText = settings.gravity ? 'ACTIVE' : 'DISABLED';
+            e.target.classList.toggle('bg-indigo-600');
+            e.target.classList.toggle('bg-gray-600');
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            init();
+        });
+
+        window.addEventListener('resize', resize);
+        
+        // Initial setup
+        window.onload = () => {
+            resize();
+            animate();
+        };
+    </script>
+</body>
+</html>

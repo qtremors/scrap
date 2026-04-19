@@ -1,0 +1,5 @@
+{
+  "title": "Shift Calculator",
+  "note": "A handy tool to calculate clock-out times based on logs and breaks.",
+  "mainFile": "index.html"
+}
